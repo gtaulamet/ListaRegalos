@@ -13,6 +13,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class Administracion extends JFrame {
 
@@ -76,6 +78,12 @@ public class Administracion extends JFrame {
 		scrollPane.setViewportView(table);
 		
 		JButton btnNuevoUsuario = new JButton("Nuevo Usuario");
+		btnNuevoUsuario.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JFrame abmUsuario = new ABMUsuario();
+				abmUsuario.setVisible(true);
+			}
+		});
 		btnNuevoUsuario.setBounds(369, 85, 133, 25);
 		contentPane.add(btnNuevoUsuario);
 		
@@ -102,6 +110,12 @@ public class Administracion extends JFrame {
 		scrollPane_1.setViewportView(table_1);
 		
 		JButton btnNuevoAdministrador = new JButton("Nuevo Administrador");
+		btnNuevoAdministrador.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JFrame abmadmin = new ABMAdministrador();
+				abmadmin.setVisible(true);
+			}
+		});
 		btnNuevoAdministrador.setBounds(369, 263, 157, 25);
 		contentPane.add(btnNuevoAdministrador);
 	}

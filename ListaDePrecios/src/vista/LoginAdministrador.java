@@ -75,6 +75,8 @@ public class LoginAdministrador extends JFrame {
 		btnIngresar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//Login de Administrador
+				JFrame administracion = new Administracion();
+				administracion.setVisible(true);
 			}
 		});
 		btnIngresar.setBounds(248, 181, 97, 25);

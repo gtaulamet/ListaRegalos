@@ -13,6 +13,8 @@ import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JScrollPane;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class MainUsuario extends JFrame {
 
@@ -83,6 +85,12 @@ public class MainUsuario extends JFrame {
 		tfEmail.setColumns(10);
 		
 		JButton btnCrearLista = new JButton("Crear Lista");
+		btnCrearLista.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JFrame altaListaRegalos = new AltaListaRegalos();
+				altaListaRegalos.setVisible(true);
+			}
+		});
 		btnCrearLista.setBounds(360, 102, 97, 25);
 		contentPane.add(btnCrearLista);
 		

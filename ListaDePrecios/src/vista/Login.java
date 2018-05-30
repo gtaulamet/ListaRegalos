@@ -12,6 +12,8 @@ import javax.swing.JButton;
 import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class Login extends JFrame {
 
@@ -68,12 +70,23 @@ public class Login extends JFrame {
 		btnIngresar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//Logueo
+				JFrame mainUsuario = new MainUsuario();
+				mainUsuario.setVisible(true);
+				dispose();
 			}
 		});
 		btnIngresar.setBounds(305, 215, 97, 25);
 		contentPane.add(btnIngresar);
 		
 		JLabel lblAdministracin = new JLabel("Administraci\u00F3n");
+		lblAdministracin.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				JFrame loginAdmin = new LoginAdministrador();
+				loginAdmin.setVisible(true);
+				dispose();
+			}
+		});
 		lblAdministracin.setFont(new Font("Tahoma", Font.BOLD, 13));
 		lblAdministracin.setBounds(31, 219, 128, 16);
 		contentPane.add(lblAdministracin);
