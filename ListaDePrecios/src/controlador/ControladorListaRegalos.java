@@ -14,9 +14,6 @@ import modelo.ListaDeRegalos;
 //
 //
 
-
-
-
 public class ControladorListaRegalos {
 	public ControladorListaRegalos controladorListaRegalos;
 	public ListaDeRegalos GetListaRegalos(int l) {
