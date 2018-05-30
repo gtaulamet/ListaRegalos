@@ -8,12 +8,15 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import java.awt.Font;
+import java.awt.Point;
+
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JScrollPane;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
 import java.awt.event.ActionEvent;
 
 public class MainUsuario extends JFrame {
@@ -102,14 +105,41 @@ public class MainUsuario extends JFrame {
 		scrollPane.setViewportView(table);
 		table.setModel(new DefaultTableModel(
 			new Object[][] {
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
+				{new Integer(1), "Juan Gomez", "25/05/2018", "25/06/2018", "Activo", "No"},
+				{new Integer(2), "Carlos Garcia", "30/05/2018", "30/06/2018", "Activo", "S\u00EC"},
 				{null, null, null, null, null, null},
 			},
 			new String[] {
 				"C\u00F3digo", "Agasajado", "F. Inicio", "F. Fin", "Estado", "Pag\u00F3"
 			}
-		));
+		) {
+			Class[] columnTypes = new Class[] {
+				Integer.class, String.class, String.class, String.class, String.class, String.class
+			};
+			public Class getColumnClass(int columnIndex) {
+				return columnTypes[columnIndex];
+			}
+			boolean[] columnEditables = new boolean[] {
+				false, false, false, false, false, false
+			};
+			public boolean isCellEditable(int row, int column) {
+				return columnEditables[column];
+			}
+		});
+		
+		table.addMouseListener(new java.awt.event.MouseAdapter() {
+		    public void mousePressed(MouseEvent me) {
+		    	JTable table =(JTable) me.getSource();
+		    	Point p = me.getPoint();
+		    	int row = table.rowAtPoint(p);
+		    	
+		    	if (me.getClickCount() == 2) {
+	    			int linea = table.getSelectedRow();
+	    			String codigo = table.getValueAt(linea, 0).toString();
+	    			//Aca llamamos a la ventana que nos traera el los detalles del registro
+		    	}
+		    }
+		});		
 		
 		JLabel lblListasDeRegalo = new JLabel("Listas de Regalo - Participante");
 		lblListasDeRegalo.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 13));
@@ -128,16 +158,43 @@ public class MainUsuario extends JFrame {
 		table_1 = new JTable();
 		table_1.setModel(new DefaultTableModel(
 			new Object[][] {
-				{null, null, null, null, null, null},
+				{new Integer(3), "Ruben Ruiz", "26/05/2018", "26/06/2018", "Activo", new Float(1500.0f)},
 				{null, null, null, null, null, null},
 				{null, null, null, null, null, null},
 			},
 			new String[] {
 				"C\u00F3digo", "Agasajado", "F. Inicio", "F. Fin", "Estado", "Monto Recaudado"
 			}
-		));
+		) {
+			Class[] columnTypes = new Class[] {
+				Integer.class, Object.class, Object.class, Object.class, Object.class, Float.class
+			};
+			public Class getColumnClass(int columnIndex) {
+				return columnTypes[columnIndex];
+			}
+			boolean[] columnEditables = new boolean[] {
+				false, false, false, false, false, false
+			};
+			public boolean isCellEditable(int row, int column) {
+				return columnEditables[column];
+			}
+		});
 		table_1.getColumnModel().getColumn(1).setPreferredWidth(130);
 		table_1.getColumnModel().getColumn(5).setPreferredWidth(123);
 		scrollPane_1.setViewportView(table_1);
+		
+		table_1.addMouseListener(new java.awt.event.MouseAdapter() {
+		    public void mousePressed(MouseEvent me) {
+		    	JTable table =(JTable) me.getSource();
+		    	Point p = me.getPoint();
+		    	int row = table.rowAtPoint(p);
+		    	
+		    	if (me.getClickCount() == 2) {
+	    			int linea = table.getSelectedRow();
+	    			String codigo = table.getValueAt(linea, 0).toString();
+	    			//Aca llamamos a la ventana que nos traera el los detalles del registro
+		    	}
+		    }
+		});			
 	}
 }
