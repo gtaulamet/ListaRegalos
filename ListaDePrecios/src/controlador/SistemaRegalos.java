@@ -1,3 +1,4 @@
+package controlador;
 import java.awt.EventQueue;
 
 import vista.Login;
@@ -17,22 +18,14 @@ import vista.Login;
 
 
 public class SistemaRegalos {
-	private static SistemaRegalos sistemaRegalos;
+	public SistemaRegalos sistemaRegalos;
 	public int diasProximoAVencer;
-	
 	public boolean Login(String user, String pass) {
 		return false;
 	}
 	
 	public SistemaRegalos GetInstance() {
-		if (this.sistemaRegalos != null) {
-			this.sistemaRegalos = new SistemaRegalos();
-		}
 		return this.sistemaRegalos;
-	}
-	
-	private SistemaRegalos() {
-		this.diasProximoAVencer = 1;
 	}
 	
 	public static void main(String[] args) {
