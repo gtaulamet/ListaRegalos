@@ -90,7 +90,7 @@ public class MainUsuario extends JFrame {
 		JButton btnCrearLista = new JButton("Crear Lista");
 		btnCrearLista.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JFrame altaListaRegalos = new AltaListaRegalos();
+				JFrame altaListaRegalos = new ABMListaRegalosParticipante();
 				altaListaRegalos.setVisible(true);
 			}
 		});
@@ -136,7 +136,7 @@ public class MainUsuario extends JFrame {
 		    	if (me.getClickCount() == 2) {
 	    			int linea = table.getSelectedRow();
 	    			String codigo = table.getValueAt(linea, 0).toString();
-	    			//Aca llamamos a la ventana que nos traera el los detalles del registro
+	    			//Aca llamamos a la ventana que nos traera  los detalles del registro
 		    	}
 		    }
 		});		
@@ -192,7 +192,7 @@ public class MainUsuario extends JFrame {
 		    	if (me.getClickCount() == 2) {
 	    			int linea = table.getSelectedRow();
 	    			String codigo = table.getValueAt(linea, 0).toString();
-	    			//Aca llamamos a la ventana que nos traera el los detalles del registro
+	    			//Aca llamamos a la ventana que nos traera  los detalles del registro
 		    	}
 		    }
 		});			

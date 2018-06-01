@@ -1,5 +1,5 @@
 package controlador;
-import java.util.List;
+import java.util.Vector;
 
 import modelo.ListaDeRegalos;
 
@@ -14,21 +14,31 @@ import modelo.ListaDeRegalos;
 //
 //
 
+
+
+
 public class ControladorListaRegalos {
-	public ControladorListaRegalos controladorListaRegalos;
-	public ListaDeRegalos GetListaRegalos(int l) {
-		return null;
-	}
+	private static ControladorListaRegalos controladorListaRegalos;
+	public Vector<ListaDeRegalos> listasDeRegalos;
 	
 	public ControladorListaRegalos GetInstance() {
 		return this.controladorListaRegalos;
+	}
+	
+	private ControladorListaRegalos() {
+		this.listasDeRegalos = new Vector<ListaDeRegalos>(); 
+	}
+	
+	
+	public ListaDeRegalos GetListaRegalos(int l) {
+		return null;
 	}
 	
 	public void VerificarEstadoListas(int dias) {
 		
 	}
 	
-	public List<ListaDeRegalos> GetListasDelParticipante(int u) {
+	public Vector<ListaDeRegalos> GetListasDelParticipante(int u) {
 		return null;
 	}
 	
