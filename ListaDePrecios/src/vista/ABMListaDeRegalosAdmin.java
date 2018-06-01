@@ -1,18 +1,23 @@
 package vista;
 
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
-
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
-import java.awt.Font;
-import javax.swing.JTextField;
-import javax.swing.JScrollPane;
+import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.JScrollPane;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+import javax.swing.border.EmptyBorder;
+import javax.swing.JTextField;
 import javax.swing.JButton;
+import javax.swing.UIManager;
+import javax.swing.border.LineBorder;
+import java.awt.Color;
 
 public class ABMListaDeRegalosAdmin extends JFrame {
 
@@ -139,10 +144,10 @@ public class ABMListaDeRegalosAdmin extends JFrame {
 		table = new JTable();
 		table.setModel(new DefaultTableModel(
 			new Object[][] {
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
+				{null, null, ">>"},
+				{null, null, ">>"},
+				{null, null, ">>"},
+				{null, null, ">>"},
 			},
 			new String[] {
 				"Apellido", "Nombre", ""
@@ -154,14 +159,22 @@ public class ABMListaDeRegalosAdmin extends JFrame {
 			public Class getColumnClass(int columnIndex) {
 				return columnTypes[columnIndex];
 			}
-			boolean[] columnEditables = new boolean[] {
-				true, true, false
-			};
-			public boolean isCellEditable(int row, int column) {
-				return columnEditables[column];
-			}
 		});
+		table.getColumnModel().getColumn(2).setPreferredWidth(15);
 		scrollPane.setViewportView(table);
+		
+		Action add = new AbstractAction()
+		{
+		    public void actionPerformed(ActionEvent e)
+		    {
+		        JTable table = (JTable)e.getSource();
+		        int modelRow = Integer.valueOf( e.getActionCommand() );
+		        //((DefaultTableModel)table.getModel()).removeRow(modelRow);
+		        
+		    }
+		};		
+		ButtonColumn bAdd = new ButtonColumn(table,add,2);
+		bAdd.setMnemonic(KeyEvent.VK_D);
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
 		scrollPane_1.setBounds(354, 230, 326, 181);
@@ -170,10 +183,10 @@ public class ABMListaDeRegalosAdmin extends JFrame {
 		table_1 = new JTable();
 		table_1.setModel(new DefaultTableModel(
 			new Object[][] {
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
-				{null, null, null},
+				{null, null, "<<"},
+				{null, null, "<<"},
+				{null, null, "<<"},
+				{null, null, "<<"},
 			},
 			new String[] {
 				"Apellido", "Nombre", ""
@@ -185,17 +198,31 @@ public class ABMListaDeRegalosAdmin extends JFrame {
 			public Class getColumnClass(int columnIndex) {
 				return columnTypes[columnIndex];
 			}
-			boolean[] columnEditables = new boolean[] {
-				false, false, false
-			};
-			public boolean isCellEditable(int row, int column) {
-				return columnEditables[column];
-			}
 		});
+		table_1.getColumnModel().getColumn(2).setPreferredWidth(15);
 		scrollPane_1.setViewportView(table_1);
+		
+		Action remove = new AbstractAction()
+		{
+		    public void actionPerformed(ActionEvent e)
+		    {
+		        JTable table = (JTable)e.getSource();
+		        int modelRow = Integer.valueOf( e.getActionCommand() );
+		        //((DefaultTableModel)table.getModel()).removeRow(modelRow);
+		        
+		    }
+		};		
+		ButtonColumn bRemove = new ButtonColumn(table_1,remove,2);
+		bRemove.setMnemonic(KeyEvent.VK_D);
+				
 		
 		JButton btnGuardar = new JButton("Guardar");
 		btnGuardar.setBounds(479, 422, 97, 25);
 		contentPane.add(btnGuardar);
+		
+		JPanel panel = new JPanel();
+		panel.setBorder(new LineBorder(new Color(0, 0, 0)));
+		panel.setBounds(12, 37, 668, 148);
+		contentPane.add(panel);
 	}
 }
