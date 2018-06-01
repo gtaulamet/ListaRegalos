@@ -142,17 +142,18 @@ public class ABMListaDeRegalosAdmin extends JFrame {
 		contentPane.add(scrollPane);
 		
 		table = new JTable();
-		table.setModel(new DefaultTableModel(
-			new Object[][] {
-				{null, null, ">>"},
-				{null, null, ">>"},
-				{null, null, ">>"},
-				{null, null, ">>"},
-			},
-			new String[] {
+		
+		Object[][] dataUsuarios= new Object[][] {
+			{"Garcia", "Carlos", ">>"},
+			{"Gomez", "Claudia", ">>"},
+			{"Perez", "Adrian", ">>"},
+			{"Smith", "Jorge", ">>"},
+		}; 
+		String[] columnaUsuarios = new String[] {
 				"Apellido", "Nombre", ""
-			}
-		) {
+			};
+		
+		table.setModel(new DefaultTableModel(dataUsuarios,columnaUsuarios) {
 			Class[] columnTypes = new Class[] {
 				String.class, String.class, Object.class
 			};
@@ -160,6 +161,7 @@ public class ABMListaDeRegalosAdmin extends JFrame {
 				return columnTypes[columnIndex];
 			}
 		});
+		
 		table.getColumnModel().getColumn(2).setPreferredWidth(15);
 		scrollPane.setViewportView(table);
 		
@@ -170,6 +172,8 @@ public class ABMListaDeRegalosAdmin extends JFrame {
 		        JTable table = (JTable)e.getSource();
 		        int modelRow = Integer.valueOf( e.getActionCommand() );
 		        //((DefaultTableModel)table.getModel()).removeRow(modelRow);
+		        Object row = ((DefaultTableModel)table.getModel()).getDataVector().elementAt(modelRow);
+		        
 		        
 		    }
 		};		
@@ -181,17 +185,14 @@ public class ABMListaDeRegalosAdmin extends JFrame {
 		contentPane.add(scrollPane_1);
 		
 		table_1 = new JTable();
-		table_1.setModel(new DefaultTableModel(
-			new Object[][] {
-				{null, null, "<<"},
-				{null, null, "<<"},
-				{null, null, "<<"},
-				{null, null, "<<"},
-			},
-			new String[] {
+		
+		Object[][] dataParticipantes= new Object[][] {}; 
+		String[] columnaParticipantes = new String[] {
 				"Apellido", "Nombre", ""
-			}
-		) {
+			};
+				
+		
+		table_1.setModel(new DefaultTableModel(dataParticipantes,columnaParticipantes) {
 			Class[] columnTypes = new Class[] {
 				String.class, String.class, Object.class
 			};

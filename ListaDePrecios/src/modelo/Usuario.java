@@ -1,5 +1,7 @@
 package modelo;
 
+import java.util.Vector;
+
 public class Usuario {
 	private int codigo;
 	private String user;
@@ -92,14 +94,20 @@ public class Usuario {
 	}
 
 	
-	public void insert(int codigo, String user, String pass, String nombre, String apellido, int dNI, String mail) {
-
-	}
-	public void delete(int codigo) {
+	public static void insert() {
 		
 	}
-	public void update(int codigo, String user, String pass, String nombre, String apellido, int dNI, String mail) {
+	public static void delete(int codigo) {
 		
 	}
-
+	public static void update() {
+		
+	}
+	public static Usuario buscarUsuario(int codigo){
+		return null;
+	}
+	public static Vector<Usuario> buscarTodos(){
+		return null;
+	}
+		
 }

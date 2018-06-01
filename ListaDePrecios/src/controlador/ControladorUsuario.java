@@ -22,11 +22,25 @@ public class ControladorUsuario {
 	}
 	
 	public Usuario GetUsuario(int u) {
-		return null;
+		boolean encuentra = false;
+		
+		for (Usuario usuario : usuarios){
+			if (usuario.getCodigo() == u) {
+				encuentra = true;
+				return usuario;
+			} 
+		}
+		Usuario aux = null;
+		if (!encuentra) {
+			aux = Usuario.buscarUsuario(u); 
+			usuarios.add(aux);
+		}
+		return aux;
 	}
 	
 	public Vector<Usuario> GetUsuarios(){
-		return this.usuarios;
+		this.usuarios = Usuario.buscarTodos();
+		return usuarios;
 	}
 	
 	public Vector<Administrador> GetAdministradores(){
