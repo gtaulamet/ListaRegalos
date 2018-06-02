@@ -30,7 +30,7 @@ public class AdmPersistenciaUsuario extends AdministradorPersistencia
 			Usuario u = (Usuario)d;
 			Connection con = PoolConnection.getPoolConnection().getConnection();
 			PreparedStatement s = con.prepareStatement("delete from BD_ListaRegalos.dbo.Usuario where codigo = ?");
-			s.setLong(1, u.getCodigo());
+			s.setInt(1, u.getCodigo());
 			s.execute();
 			PoolConnection.getPoolConnection().realeaseConnection(con);
 		}
@@ -50,7 +50,7 @@ public class AdmPersistenciaUsuario extends AdministradorPersistencia
 			Connection con = PoolConnection.getPoolConnection().getConnection();
 			PreparedStatement s = con.prepareStatement("insert into BD_ListaRegalos.dbo.Usuario values (?,?,?,?,?,?,?)");
 			//agregar campos
-			s.setLong(1,a.getCodigo());
+			s.setInt(1,a.getCodigo());
 			s.setString(2, a.getUser());
 			s.setString(3,a.getPass());
 			s.setString(4, a.getNombre());

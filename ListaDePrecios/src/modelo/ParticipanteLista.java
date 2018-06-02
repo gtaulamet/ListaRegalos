@@ -5,9 +5,25 @@ import java.util.List;
 
 public class ParticipanteLista {
 	private Usuario usuario;
+	private ListaDeRegalos listaDeRegalos;
 	private boolean pago;
 	private String estado;
-	
+
+	public ParticipanteLista(Usuario usuario, ListaDeRegalos listaDeRegalos, boolean pago, String estado) {
+		super();
+		this.usuario = usuario;
+		this.listaDeRegalos = listaDeRegalos;
+		this.pago = pago;
+		this.estado = estado;
+	}
+
+	public ListaDeRegalos getListaDeRegalos() {
+		return listaDeRegalos;
+	}
+
+	public void setListaDeRegalos(ListaDeRegalos listaDeRegalos) {
+		this.listaDeRegalos = listaDeRegalos;
+	}
 	
 	public Usuario getUsuario() {
 		return usuario;

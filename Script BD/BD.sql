@@ -36,7 +36,7 @@ REFERENCES Usuario(codigo)
 create table ParticipanteLista (
 	usuarioId int not null,
 	listaDeRegalosId int not null,
-	pago char(2) check (pago in ('Si','No')),
+	pago bit not null,
 	estado varchar (8) check (estado in ('Activo','Inactivo'))
 
 )
