@@ -56,7 +56,8 @@ public class PoolConnection
 	}
 	public void getConfiguration()
 	{
-		String configuracion = "ConfigBD.txt";
+		String configuracion = ".\\ConfigBD.txt";
+	    		
 	    Properties propiedades;
 	 
 	    // Carga del fichero de propiedades 

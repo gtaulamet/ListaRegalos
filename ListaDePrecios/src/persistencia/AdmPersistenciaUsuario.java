@@ -143,12 +143,15 @@ public class AdmPersistenciaUsuario extends AdministradorPersistencia
 	}
 
 	public Vector<Usuario> buscarTodos(){
+		Vector<Usuario> usuarios = new Vector<Usuario>();
+		
 		try {
 			Connection con = PoolConnection.getPoolConnection().getConnection();
 			PreparedStatement s = con.prepareStatement("select * from BD_ListaRegalos.dbo.Usuario");
 			
 			ResultSet result = s.executeQuery();
 			Usuario u = null;
+			
 			while (result.next())
 			{
 				int cod = result.getInt(1);
@@ -159,6 +162,7 @@ public class AdmPersistenciaUsuario extends AdministradorPersistencia
 				int dni = result.getInt(6);
 				String mail = result.getString(7);
 				u = new Usuario(cod,user,pass,nombre,apellido,dni,mail);
+				usuarios.add(u);
 			}
 			
 			PoolConnection.getPoolConnection().realeaseConnection(con);
@@ -166,6 +170,6 @@ public class AdmPersistenciaUsuario extends AdministradorPersistencia
 		catch(Exception e) {
 			System.out.println();
 		}
-		return null;
+		return usuarios;
 	}
 }

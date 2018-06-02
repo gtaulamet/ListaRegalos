@@ -2,6 +2,8 @@ package modelo;
 
 import java.util.Vector;
 
+import persistencia.AdmPersistenciaUsuario;
+
 public class Usuario {
 	private int codigo;
 	private String user;
@@ -94,20 +96,20 @@ public class Usuario {
 	}
 
 	
-	public static void insert() {
-		
+	public static void insert(Usuario u) {
+		AdmPersistenciaUsuario.getInstancia().insert(u);
 	}
-	public static void delete(int codigo) {
-		
+	public static void delete(Usuario u) {
+		AdmPersistenciaUsuario.getInstancia().delete(u);
 	}
-	public static void update() {
-		
+	public static void update(Usuario u) {
+		AdmPersistenciaUsuario.getInstancia().update(u);
 	}
 	public static Usuario buscarUsuario(int codigo){
-		return null;
+		return AdmPersistenciaUsuario.getInstancia().buscarAUsuario(codigo);
 	}
 	public static Vector<Usuario> buscarTodos(){
-		return null;
+		return AdmPersistenciaUsuario.getInstancia().buscarTodos();
 	}
 		
 }
