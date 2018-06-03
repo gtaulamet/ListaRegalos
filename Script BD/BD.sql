@@ -1,7 +1,7 @@
 --drop table ListaDeRegalos;
 --drop table Usuario;
 create table ListaDeRegalos (
-	codigo int not null,
+	codigo int not null identity(1,1),
 	nombreAgasajado varchar(100),
 	fechaAgasajo datetime,
 	mailAgasajado varchar(50),
@@ -14,7 +14,7 @@ create table ListaDeRegalos (
 )
 
 create table Usuario (
-	codigo int not null,
+	codigo int not null identity(1,1),
 	username varchar(30),
 	pass varchar(100),
 	nombre varchar(50),
