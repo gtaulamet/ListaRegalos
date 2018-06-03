@@ -16,5 +16,5 @@ import java.util.Date;
 
 
 public interface IObserverMedioPago {
-	public void NotiicarPago(int listaDeRegalos, Date fecha, int usuario, float monto);
+	public void NotificarPago(int listaDeRegalos, Date fecha, int usuario, float monto);
 }

@@ -1,5 +1,6 @@
 package modelo;
 
+import java.util.Map;
 import java.util.Vector;
 
 import persistencia.AdmPersistenciaUsuario;
@@ -108,8 +109,10 @@ public class Usuario {
 	public static Usuario buscarUsuario(int codigo){
 		return AdmPersistenciaUsuario.getInstancia().buscarAUsuario(codigo);
 	}
-	public static Vector<Usuario> buscarTodos(){
+	public static Map<Integer,Usuario> buscarTodos(){
 		return AdmPersistenciaUsuario.getInstancia().buscarTodos();
 	}
-		
+	public static Usuario buscarUsuario(String user) {
+		return AdmPersistenciaUsuario.getInstancia().buscarAUsuario(user);
+	}
 }

@@ -4,7 +4,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
+
+import modelo.Administrador;
 import modelo.Usuario;
 
 public class AdmPersistenciaUsuario extends AdministradorPersistencia 
@@ -141,16 +145,46 @@ public class AdmPersistenciaUsuario extends AdministradorPersistencia
 		}
 		return null;
 	}
+	public Usuario buscarAUsuario(String username)
+	{
+		try
+		{
+			Usuario a = null;
+			Connection con = PoolConnection.getPoolConnection().getConnection();
+			PreparedStatement s = con.prepareStatement("select * from BD_ListaRegalos.dbo.Usuario where username = ?");			
+			//agregar campos
+			s.setString(1,username);
+			ResultSet result = s.executeQuery();
+			while (result.next())
+			{
+				int cod = result.getInt(1);
+				String user = result.getString(2);
+				String pass = result.getString(3);
+				String nombre = result.getString(4);
+				String apellido = result.getString(5);
+				int dni = result.getInt(6);
+				String mail = result.getString(7);
+				a = new Usuario(cod,user,pass,nombre,apellido,dni,mail);
+			}
+			
+			PoolConnection.getPoolConnection().realeaseConnection(con);
+			return a;
+		}
+		catch (Exception e)
+		{
+			System.out.println();
+		}
+		return null;
+	}
 
-	public Vector<Usuario> buscarTodos(){
-		Vector<Usuario> usuarios = new Vector<Usuario>();
-		
+	public Map<Integer,Usuario> buscarTodos(){
 		try {
 			Connection con = PoolConnection.getPoolConnection().getConnection();
 			PreparedStatement s = con.prepareStatement("select * from BD_ListaRegalos.dbo.Usuario");
 			
 			ResultSet result = s.executeQuery();
 			Usuario u = null;
+			Map<Integer,Usuario> usuarios = new HashMap<Integer,Usuario>();
 			
 			while (result.next())
 			{
@@ -162,14 +196,104 @@ public class AdmPersistenciaUsuario extends AdministradorPersistencia
 				int dni = result.getInt(6);
 				String mail = result.getString(7);
 				u = new Usuario(cod,user,pass,nombre,apellido,dni,mail);
-				usuarios.add(u);
+				usuarios.put(cod,u);
 			}
 			
 			PoolConnection.getPoolConnection().realeaseConnection(con);
+			return usuarios;
 		}
 		catch(Exception e) {
 			System.out.println();
 		}
-		return usuarios;
+		return null;
+	}
+	
+	public Administrador buscarAdministrador(String user) {
+		try
+		{
+			Administrador a = null;
+			Connection con = PoolConnection.getPoolConnection().getConnection();
+			PreparedStatement s = con.prepareStatement("select * from BD_ListaRegalos.dbo.Administrador where username = ?");			
+			//agregar campos
+			s.setString(1,user);
+			ResultSet result = s.executeQuery();
+			while (result.next())
+			{
+				String us = result.getString(1);
+				String pw = result.getString(2);
+				a = new Administrador(us, pw);
+			}
+			
+			PoolConnection.getPoolConnection().realeaseConnection(con);
+			return a;
+		}
+		catch (Exception e)
+		{
+			System.out.println();
+		}
+		return null;
+	}
+	
+	public Map<String,Administrador> buscarAdministradores() {
+		try
+		{
+			Administrador a = null;
+			Connection con = PoolConnection.getPoolConnection().getConnection();
+			PreparedStatement s = con.prepareStatement("select * from BD_ListaRegalos.dbo.Administrador");			
+
+			ResultSet result = s.executeQuery();
+			Map<String,Administrador> admins = new HashMap<String, Administrador>();
+			while (result.next())
+			{
+				String us = result.getString(1);
+				String pw = result.getString(2);
+				a = new Administrador(us, pw);
+				admins.put(us, a);
+			}
+			
+			PoolConnection.getPoolConnection().realeaseConnection(con);
+			return admins;
+		}
+		catch (Exception e)
+		{
+			System.out.println();
+		}
+		return null;
+	}
+	
+	public void insertAdmin(Object o) 
+	{
+		try
+		{
+			Administrador a = (Administrador)o;
+			Connection con = PoolConnection.getPoolConnection().getConnection();
+			PreparedStatement s = con.prepareStatement("insert into BD_ListaRegalos.dbo.Administrador values (?,?)");
+			//agregar campos
+			s.setString(1, a.getUser());
+			s.setString(2, a.getPass());
+			s.execute();
+			PoolConnection.getPoolConnection().realeaseConnection(con);
+		}
+		catch (Exception e)
+		{
+			System.out.println();
+		}
+	}
+	public void deleteAdmin(Object d) 
+	{
+		try
+		{
+			Administrador u = (Administrador)d;
+			Connection con = PoolConnection.getPoolConnection().getConnection();
+			PreparedStatement s = con.prepareStatement("delete from BD_ListaRegalos.dbo.Administrador where username = ?");
+			s.setString(1, u.getUser());
+			s.execute();
+			PoolConnection.getPoolConnection().realeaseConnection(con);
+		}
+		catch (Exception e)
+		{
+			System.out.println();
+		}
+		
 	}
 }

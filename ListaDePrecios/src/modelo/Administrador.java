@@ -1,5 +1,9 @@
 package modelo;
 
+import java.util.Map;
+
+import persistencia.AdmPersistenciaUsuario;
+
 public class Administrador {
 	private String user;
 	private String pass;
@@ -23,12 +27,19 @@ public class Administrador {
 		this.pass = pass;
 	}
 	
-	public void insert(String user, String pass) {
-	
+	public static void insert(Administrador a) {
+		AdmPersistenciaUsuario.getInstancia().insertAdmin(a);
 	}
 	
-	public void delete(String user) {
-		
+	public static void delete(Administrador a) {
+		AdmPersistenciaUsuario.getInstancia().deleteAdmin(a);
 	}
 
+	public static Map<String,Administrador> buscarTodos(){
+		return AdmPersistenciaUsuario.getInstancia().buscarAdministradores();
+	}
+	
+	public static Administrador buscarAdministrador(String user) {
+		return AdmPersistenciaUsuario.getInstancia().buscarAdministrador(user);
+	}
 }

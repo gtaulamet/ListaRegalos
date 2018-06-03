@@ -14,6 +14,10 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+
+import controlador.SistemaRegalos;
+import modelo.Usuario;
+
 import javax.swing.JScrollPane;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -48,6 +52,8 @@ public class MainUsuario extends JFrame {
 	 * Create the frame.
 	 */
 	public MainUsuario() {
+		Usuario u = SistemaRegalos.GetInstance().getUsuarioLogueado();
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 615, 521);
 		contentPane = new JPanel();
@@ -73,16 +79,22 @@ public class MainUsuario extends JFrame {
 		contentPane.add(lblEmail);
 		
 		tfNombre = new JTextField();
+		tfNombre.setEnabled(false);
+		tfNombre.setEditable(false);
 		tfNombre.setBounds(90, 44, 116, 22);
 		contentPane.add(tfNombre);
 		tfNombre.setColumns(10);
 		
 		tfApellido = new JTextField();
+		tfApellido.setEnabled(false);
+		tfApellido.setEditable(false);
 		tfApellido.setBounds(90, 73, 116, 22);
 		contentPane.add(tfApellido);
 		tfApellido.setColumns(10);
 		
 		tfEmail = new JTextField();
+		tfEmail.setEnabled(false);
+		tfEmail.setEditable(false);
 		tfEmail.setBounds(90, 103, 116, 22);
 		contentPane.add(tfEmail);
 		tfEmail.setColumns(10);

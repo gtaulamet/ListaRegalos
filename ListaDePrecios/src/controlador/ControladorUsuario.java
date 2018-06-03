@@ -1,4 +1,6 @@
 package controlador;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
 
 import modelo.Administrador;
@@ -7,45 +9,53 @@ import modelo.Usuario;
 
 public class ControladorUsuario {
 	private static ControladorUsuario controladorUsuario;
-	private Vector<Usuario> usuarios;
-	private Vector<Administrador> administradores;
+	private Map<Integer,Usuario> usuarios;
+	private Map<String,Administrador> administradores;
 
-	public ControladorUsuario GetInstance() {
-		if (this.controladorUsuario == null) {
-			this.controladorUsuario = new ControladorUsuario();
+	public static ControladorUsuario GetInstance() {
+		if (controladorUsuario == null) {
+			controladorUsuario = new ControladorUsuario();
 		}
-		return this.controladorUsuario;
+		return controladorUsuario;
 	}	
 	
 	private ControladorUsuario() {
-		this.usuarios = new Vector<Usuario>(); 
+		this.usuarios = new HashMap<Integer,Usuario>(); 
 	}
 	
 	public Usuario GetUsuario(int u) {
-		boolean encuentra = false;
-		
-		for (Usuario usuario : usuarios){
-			if (usuario.getCodigo() == u) {
-				encuentra = true;
-				return usuario;
-			} 
+		if (usuarios.containsKey((Object)u)) {
+			return usuarios.get((Object)u);
 		}
+				
 		Usuario aux = null;
-		if (!encuentra) {
-			aux = Usuario.buscarUsuario(u); 
-			usuarios.add(aux);
-		}
-		return aux;
+		aux = Usuario.buscarUsuario(u); 
+		usuarios.put(aux.getCodigo(),aux);
+		
+		return usuarios.get((Object)u);
 	}
 	
-	public Vector<Usuario> GetUsuarios(){
-		this.usuarios = Usuario.buscarTodos();
+	public static Usuario GetUsuario(String u) {
+		return Usuario.buscarUsuario(u);
+	}
+	
+	public Map<Integer,Usuario> GetUsuarios(){
+		if (usuarios.isEmpty()) {
+			this.usuarios = Usuario.buscarTodos();	
+		}		
 		return usuarios;
 	}
 	
-	public Vector<Administrador> GetAdministradores(){
+	public Map<String,Administrador> GetAdministradores(){
+		if (administradores.isEmpty()) {
+			this.administradores = Administrador.buscarTodos();
+		}
 		return this.administradores;
 	}
 	
-
+	//Esto seria para ejecutar cada x cantidad de tiempo para actualizar las listas internas
+	public void actualizarListas() {
+		this.administradores = Administrador.buscarTodos();
+		this.usuarios = Usuario.buscarTodos();
+	}
 }

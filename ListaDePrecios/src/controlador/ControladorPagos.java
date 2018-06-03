@@ -21,7 +21,7 @@ public class ControladorPagos implements IObserverMedioPago {
 	}
 	
 	@Override
-	public void NotiicarPago(int listaDeRegalos, Date fecha, int usuario, float monto) {
+	public void NotificarPago(int listaDeRegalos, Date fecha, int usuario, float monto) {
 		// TODO Auto-generated method stub
 		
 	}

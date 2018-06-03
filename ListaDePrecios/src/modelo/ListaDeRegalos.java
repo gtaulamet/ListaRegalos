@@ -1,6 +1,10 @@
 package modelo;
 import java.util.Date;
+import java.util.Map;
 import java.util.Vector;
+
+import persistencia.AdmPersistenciaListaRegalos;
+import persistencia.AdmPersistenciaParticipanteLista;
 
 public class ListaDeRegalos implements IObservableMails, IObserverCalendario {
 	private int codigo;
@@ -11,7 +15,7 @@ public class ListaDeRegalos implements IObservableMails, IObserverCalendario {
 	private Date fechaInicio;
 	private Date fechaFin;
 	private String estado;
-	private Vector<ParticipanteLista> participantes;
+	private Map<Integer,ParticipanteLista> participantes;
 	private Usuario administrador;
 	private float montoARecaudarXIntegrante;
 	
@@ -33,35 +37,29 @@ public class ListaDeRegalos implements IObservableMails, IObserverCalendario {
 	}
 
 	public void CrearNuevoPago(Date fecha, Usuario u, float monto) {
-	
+		//todo
 	}
 	
-	public Vector<ParticipanteLista> GetParticipantesImpagos() {
+	public Map<Integer,ParticipanteLista> GetParticipantesImpagos() {
+		//todo
 		return null;
 	}
 	
-	public Vector<ParticipanteLista> GetParticipantes() {
-		return null;
+	public Map<Integer,ParticipanteLista> GetParticipantes() {
+		return ParticipanteLista.buscarTodosXLista(this.getCodigo());
 	}
 	
 	private ParticipanteLista GetParticipante(Usuario u) {
-		return null;
-	}
-	
-	private void ActualizarMontoRecaudado(float monto) {
-	
-	}
-	
-	public void SetEstado(String estado) {
-	
+		return ParticipanteLista.buscarParticipante(u.getCodigo(), this.getCodigo());
 	}
 	
 	public void BajarParticipanteLista(Usuario u) {
-	
+		ParticipanteLista.darDeBaja(u.getCodigo(), this.getCodigo());
 	}
 	
 	public void AgregarParticipanteLista(Usuario ul) {
-	
+		ParticipanteLista pl = new ParticipanteLista(ul, this, false, "Activo");
+		ParticipanteLista.insert(pl);
 	}
 
 	@Override
@@ -165,9 +163,19 @@ public class ListaDeRegalos implements IObservableMails, IObserverCalendario {
 		return codigo;
 	}
 	
-	public void insert(int codigo, String nombreAgasajado, Date fechaAgasajo, String mailAgasajado,float montoRecaudado,Date fechaInicio,Date fechaFin,String estado, Usuario administrador, float montoARecaudarXIntegrante) {
-		
+	public static void insert(ListaDeRegalos lr) {
+		AdmPersistenciaListaRegalos.getInstancia().insert(lr);
 	}
-
-	//ver si va un delete listaderegalos
+	public static void delete(ListaDeRegalos lr) {
+		AdmPersistenciaListaRegalos.getInstancia().delete(lr);
+	}
+	public static void update(ListaDeRegalos lr) {
+		AdmPersistenciaListaRegalos.getInstancia().update(lr);
+	}
+	public static Map<Integer,ListaDeRegalos> buscarTodas(){
+		return AdmPersistenciaListaRegalos.getInstancia().buscarTodos();
+	}
+	public static ListaDeRegalos buscarLista(int codigo) {
+		return AdmPersistenciaListaRegalos.getInstancia().buscarAListaDeRegalos(codigo);
+	}
 }

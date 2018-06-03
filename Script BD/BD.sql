@@ -16,7 +16,7 @@ create table ListaDeRegalos (
 create table Usuario (
 	codigo int not null,
 	username varchar(30),
-	pass varchar(8),
+	pass varchar(100),
 	nombre varchar(50),
 	apellido varchar(50),
 	DNI int,
@@ -67,3 +67,9 @@ references ParticipanteLista (usuarioId,listaDeRegalosId)
 alter table Pago
 add constraint PK_Pago primary key (codigo,usuarioId,listaDeRegalosId)
 
+create table Administrador (
+	username varchar(10) not null,
+	pass varchar(100) not null
+)
+alter table Administrador
+add constraint PK_Administrador primary key (username)

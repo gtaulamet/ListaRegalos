@@ -5,6 +5,8 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
 
 import modelo.ListaDeRegalos;
@@ -77,6 +79,7 @@ public class AdmPersistenciaParticipanteLista extends AdministradorPersistencia
 		return null;
 	}
 
+	//updatea si pagó o no y el estado
 	@Override
 	public void update(Object o) 
 	{
@@ -85,15 +88,14 @@ public class AdmPersistenciaParticipanteLista extends AdministradorPersistencia
 			ParticipanteLista p = (ParticipanteLista)o;
 			Connection con = PoolConnection.getPoolConnection().getConnection();
 			PreparedStatement s = con.prepareStatement("update BD_ListaRegalos.dbo.ParticipanteLista " +
-					"set usuarioId = ?," +
-					"set listaDeRegalosId = ?," +
 					"set pago =?," +
-					"set estado = ?)");
+					"set estado = ?) where usuarioId = ? and listaDeRegalosId = ?");
 			//agregar campos
-			s.setInt(1, p.getUsuario().getCodigo());
-			s.setInt(2, p.getListaDeRegalos().getCodigo());
-			s.setBoolean(3, p.isPago());
-			s.setString(4, p.getEstado());			
+			s.setBoolean(1, p.isPago());
+			s.setString(2, p.getEstado());
+			s.setInt(3, p.getUsuario().getCodigo());
+			s.setInt(4, p.getListaDeRegalos().getCodigo());
+			
 			s.execute();
 			PoolConnection.getPoolConnection().realeaseConnection(con);
 		}
@@ -102,9 +104,8 @@ public class AdmPersistenciaParticipanteLista extends AdministradorPersistencia
 			System.out.println();
 		}
 		
-
-
 	}
+	
 	public ParticipanteLista buscarAParticipanteLista(int usuario, int listaDeRegalos)
 	{
 		try
@@ -139,15 +140,16 @@ public class AdmPersistenciaParticipanteLista extends AdministradorPersistencia
 		return null;
 	}
 
-	public Vector<ParticipanteLista> buscarTodos(){
-		Vector<ParticipanteLista> participantes = new Vector<ParticipanteLista>();
-		
+	public Map<Integer,ParticipanteLista> buscarTodos(int codigo){
 		try {
 			Connection con = PoolConnection.getPoolConnection().getConnection();
-			PreparedStatement s = con.prepareStatement("select * from BD_ListaRegalos.dbo.ParticipanteLista");
+			PreparedStatement s = con.prepareStatement("select * from BD_ListaRegalos.dbo.ParticipanteLista where listaDeRegalosId = ?");
+			s.setInt(1,codigo);
 			
 			ResultSet result = s.executeQuery();
 			ParticipanteLista p = null;
+			
+			Map<Integer,ParticipanteLista> participantes = new HashMap<Integer,ParticipanteLista>();
 			
 			while (result.next())
 			{
@@ -161,14 +163,70 @@ public class AdmPersistenciaParticipanteLista extends AdministradorPersistencia
 				
 				p = new  ParticipanteLista(us, li, pago, estado);
 				
-				participantes.add(p);
+				participantes.put(usuario,p);
 			}
 			
 			PoolConnection.getPoolConnection().realeaseConnection(con);
+			return participantes;
 		}
 		catch(Exception e) {
 			System.out.println();
 		}
-		return participantes;
+		return null;
+	}
+
+	public Map<Integer,ParticipanteLista> buscarTodosXUsuario(int codigo){
+		try {
+			Connection con = PoolConnection.getPoolConnection().getConnection();
+			PreparedStatement s = con.prepareStatement("select * from BD_ListaRegalos.dbo.ParticipanteLista where usuarioId = ?");
+			s.setInt(1,codigo);
+			
+			ResultSet result = s.executeQuery();
+			ParticipanteLista p = null;
+			
+			Map<Integer,ParticipanteLista> participantes = new HashMap<Integer,ParticipanteLista>();
+			
+			while (result.next())
+			{
+				int usuario = result.getInt(1);
+				int lista = result.getInt(2);
+				boolean pago = result.getBoolean(3);
+				String estado= result.getString(4);
+				
+				Usuario us = AdmPersistenciaUsuario.getInstancia().buscarAUsuario(usuario);
+				ListaDeRegalos li = AdmPersistenciaListaRegalos.getInstancia().buscarAListaDeRegalos(lista);
+				
+				p = new  ParticipanteLista(us, li, pago, estado);
+				
+				participantes.put(lista,p);
+			}
+			
+			PoolConnection.getPoolConnection().realeaseConnection(con);
+			return participantes;
+		}
+		catch(Exception e) {
+			System.out.println();
+		}
+		return null;
+	}
+	
+	
+	public void darBajaParticipanteLista(int u, int lr) {
+		try
+		{
+			Connection con = PoolConnection.getPoolConnection().getConnection();
+			PreparedStatement s = con.prepareStatement("update BD_ListaRegalos.dbo.ParticipanteLista " +
+					"set estado = 'Inactivo') where usuarioId = ? and listaDeRegalosId = ?");
+			//agregar campos
+			s.setInt(1, u);
+			s.setInt(2, lr);
+			
+			s.execute();
+			PoolConnection.getPoolConnection().realeaseConnection(con);
+		}
+		catch (Exception e)
+		{
+			System.out.println();
+		}
 	}
 }

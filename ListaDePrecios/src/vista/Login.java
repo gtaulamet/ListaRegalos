@@ -7,6 +7,9 @@ import java.awt.FlowLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import controlador.SistemaRegalos;
+
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.ImageIcon;
@@ -16,6 +19,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.Color;
 
 public class Login extends JFrame {
 
@@ -73,13 +77,27 @@ public class Login extends JFrame {
 		contentPane.add(tfContrasenia);
 		tfContrasenia.setColumns(10);
 		
+		JLabel lblContraseaIncorrecta = new JLabel("Usuario y/o Contrase\u00F1a Incorrectos!");
+		lblContraseaIncorrecta.setFont(new Font("Tahoma", Font.BOLD, 13));
+		lblContraseaIncorrecta.setForeground(Color.RED);
+		lblContraseaIncorrecta.setBounds(93, 177, 222, 16);
+		lblContraseaIncorrecta.setVisible(false);
+		contentPane.add(lblContraseaIncorrecta);		
+
+		
 		JButton btnIngresar = new JButton("Ingresar");
 		btnIngresar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				lblContraseaIncorrecta.setVisible(false);
 				//Logueo
-				JFrame mainUsuario = new MainUsuario();
-				mainUsuario.setVisible(true);
-				dispose();
+				if (SistemaRegalos.GetInstance().Login(tfUsuario.getText(), tfContrasenia.getText())) {
+					JFrame mainUsuario = new MainUsuario();
+					mainUsuario.setVisible(true);
+					dispose();	
+				}else {
+					lblContraseaIncorrecta.setVisible(true);
+				}
+				
 			}
 		});
 		btnIngresar.setBounds(305, 215, 97, 25);
@@ -102,5 +120,7 @@ public class Login extends JFrame {
 		lblLoginSistema.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 18));
 		lblLoginSistema.setBounds(31, 23, 359, 40);
 		contentPane.add(lblLoginSistema);
+		
+
 	}
 }

@@ -1,6 +1,9 @@
 package modelo;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+
+import persistencia.AdmPersistenciaParticipanteLista;
 
 
 public class ParticipanteLista {
@@ -56,6 +59,28 @@ public class ParticipanteLista {
 
 	
 	public void CrearNuevoPago(Date fecha, float monto) {
+		//todo
+	}
 	
+	public static void insert(ParticipanteLista pl) {
+		AdmPersistenciaParticipanteLista.getInstancia().insert(pl);
+	}
+	public static void delete(ParticipanteLista pl) {
+		AdmPersistenciaParticipanteLista.getInstancia().delete(pl);
+	}
+	public static void update(ParticipanteLista pl) {
+		AdmPersistenciaParticipanteLista.getInstancia().update(pl);
+	}
+	public static Map<Integer,ParticipanteLista> buscarTodosXLista(int lista){
+		return AdmPersistenciaParticipanteLista.getInstancia().buscarTodos(lista);
+	}
+	public static Map<Integer,ParticipanteLista> buscarTodosXUsuario(int usuario){
+		return AdmPersistenciaParticipanteLista.getInstancia().buscarTodosXUsuario(usuario);
+	}
+	public static ParticipanteLista buscarParticipante(int u,int lr) {
+		return AdmPersistenciaParticipanteLista.getInstancia().buscarAParticipanteLista(u, lr);
+	}
+	public static void darDeBaja(int u, int lr) {
+		AdmPersistenciaParticipanteLista.getInstancia().darBajaParticipanteLista(u, lr);
 	}
 }

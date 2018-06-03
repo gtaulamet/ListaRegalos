@@ -5,6 +5,8 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
 
 import modelo.ListaDeRegalos;
@@ -89,7 +91,6 @@ public class AdmPersistenciaListaRegalos extends AdministradorPersistencia
 			ListaDeRegalos l = (ListaDeRegalos)o;
 			Connection con = PoolConnection.getPoolConnection().getConnection();
 			PreparedStatement s = con.prepareStatement("update BD_ListaRegalos.dbo.ListaDeRegalos " +
-					"set codigo = ?," +
 					"set nombreAgasajado = ?," +
 					"set fechaAgasajo =?," +
 					"set mailAgasajado =?," +
@@ -98,20 +99,20 @@ public class AdmPersistenciaListaRegalos extends AdministradorPersistencia
 					"set fechaFin =?," +
 					"set estado =?," +
 					"set montoARecaudarXInteg =?," +
-					"set administradorId = ?)");
-			//agregar campos
-			s.setInt(1,l.getCodigo());
-			s.setString(2, l.getNombreAgasajado());
-			s.setDate(3,(Date) l.getFechaAgasajo());
-			s.setString(4, l.getMailAgasajado());
-			s.setFloat(5, l.getMontoRecaudado());
-			s.setDate(6,(Date) l.getFechaInicio());
-			s.setDate(7,(Date) l.getFechaFin());
-			s.setString(8, l.getEstado());
-			s.setFloat(9, l.getMontoARecaudarXIntegrante());
-			s.setInt(10, l.getAdministrador().getCodigo());
+					"set administradorId = ?) where codigo = ?");
 			
+			s.setString(1, l.getNombreAgasajado());
+			s.setDate(2,(Date) l.getFechaAgasajo());
+			s.setString(3, l.getMailAgasajado());
+			s.setFloat(4, l.getMontoRecaudado());
+			s.setDate(5,(Date) l.getFechaInicio());
+			s.setDate(6,(Date) l.getFechaFin());
+			s.setString(7, l.getEstado());
+			s.setFloat(8, l.getMontoARecaudarXIntegrante());
+			s.setInt(9, l.getAdministrador().getCodigo());
+			s.setInt(10,l.getCodigo());
 			s.execute();
+			
 			PoolConnection.getPoolConnection().realeaseConnection(con);
 		}
 		catch (Exception e)
@@ -158,15 +159,14 @@ public class AdmPersistenciaListaRegalos extends AdministradorPersistencia
 		return null;
 	}
 
-	public Vector<ListaDeRegalos> buscarTodos(){
-		Vector<ListaDeRegalos> listaRegalos = new Vector<ListaDeRegalos>();
-		
+	public Map<Integer,ListaDeRegalos> buscarTodos(){
 		try {
 			Connection con = PoolConnection.getPoolConnection().getConnection();
 			PreparedStatement s = con.prepareStatement("select * from BD_ListaRegalos.dbo.ListaDeRegalos");
 			
 			ResultSet result = s.executeQuery();
 			ListaDeRegalos l = null;
+			Map<Integer,ListaDeRegalos> listaRegalos = new HashMap<Integer,ListaDeRegalos>();
 			
 			while (result.next())
 			{
@@ -183,14 +183,15 @@ public class AdmPersistenciaListaRegalos extends AdministradorPersistencia
 				Usuario admin = AdmPersistenciaUsuario.getInstancia().buscarAUsuario(adminId);
 				l = new ListaDeRegalos(cod, nomAgas, fAgas, mailAgas, montoRec, fInicio, fFin, estado, admin, montoInteg);
 				
-				listaRegalos.add(l);
+				listaRegalos.put(cod,l);
 			}
 			
 			PoolConnection.getPoolConnection().realeaseConnection(con);
+			return listaRegalos;
 		}
 		catch(Exception e) {
 			System.out.println();
 		}
-		return listaRegalos;
+		return null;
 	}
 }
