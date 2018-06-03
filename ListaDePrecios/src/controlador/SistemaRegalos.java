@@ -5,6 +5,7 @@ import java.util.Vector;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+import modelo.Administrador;
 import modelo.Usuario;
 import persistencia.AdmPersistenciaUsuario;
 import vista.Login;
@@ -34,6 +35,22 @@ public class SistemaRegalos {
 		return false;
 	}
 	
+	public boolean LoginAdmin(String user, String pass) {
+		Administrador a = ControladorUsuario.GetInstance().GetAdministrador(user);
+		try {
+			String aux= generarPass(pass);
+			if (aux.equals(a.getPass())) {
+				return true;
+			}
+		}
+		catch(Exception e) {
+			
+		}
+		
+		return false;
+	}
+	
+	
 	public Usuario getUsuarioLogueado() {
 		return usuarioLogueado;
 	}
@@ -44,8 +61,8 @@ public class SistemaRegalos {
 		}
 		return sistemaRegalos;
 	}
-	
-	public static void main(String[] args) {
+	/*
+	 public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -65,7 +82,7 @@ public class SistemaRegalos {
 			}
 		});
 	}
-	
+	*/
 	public static String generarPass(String pass) {
 		String passwordToHash = pass;
 	    String generatedPassword = null;
@@ -92,7 +109,5 @@ public class SistemaRegalos {
 	     }
 	     System.out.println(generatedPassword);
 	     return generatedPassword;
-     }
-	
-	
+     }	
 }

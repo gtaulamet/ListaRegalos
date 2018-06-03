@@ -46,6 +46,10 @@ public class ControladorUsuario {
 		return usuarios;
 	}
 	
+	public static Administrador GetAdministrador(String a) {
+		return Administrador.buscarAdministrador(a);
+	}
+	
 	public Map<String,Administrador> GetAdministradores(){
 		if (administradores.isEmpty()) {
 			this.administradores = Administrador.buscarTodos();

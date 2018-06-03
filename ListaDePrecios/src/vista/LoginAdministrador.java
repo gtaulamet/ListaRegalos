@@ -6,6 +6,9 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import controlador.SistemaRegalos;
+
 import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.Color;
@@ -13,12 +16,13 @@ import javax.swing.JTextField;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JPasswordField;
 
 public class LoginAdministrador extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField tfUsuario;
-	private JTextField tfContrasenia;
+	private JPasswordField tfPass;
 
 	/**
 	 * Launch the application.
@@ -66,21 +70,36 @@ public class LoginAdministrador extends JFrame {
 		contentPane.add(tfUsuario);
 		tfUsuario.setColumns(10);
 		
-		tfContrasenia = new JTextField();
-		tfContrasenia.setBounds(145, 111, 116, 22);
-		contentPane.add(tfContrasenia);
-		tfContrasenia.setColumns(10);
+		tfPass = new JPasswordField();
+		tfPass.setBounds(143, 112, 118, 20);
+		contentPane.add(tfPass);
+		
+		JLabel lblContraseaIncorrecta = new JLabel("Usuario y/o Contrase\u00F1a Incorrectos!");
+		lblContraseaIncorrecta.setFont(new Font("Tahoma", Font.BOLD, 13));
+		lblContraseaIncorrecta.setForeground(Color.RED);
+		lblContraseaIncorrecta.setBounds(96, 144, 222, 16);
+		lblContraseaIncorrecta.setVisible(false);
+		contentPane.add(lblContraseaIncorrecta);
 		
 		JButton btnIngresar = new JButton("Ingresar");
 		btnIngresar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//Login de Administrador
-				JFrame administracion = new Administracion();
-				administracion.setVisible(true);
+				lblContraseaIncorrecta.setVisible(false);
+				//Logueo Administrado
+				if (SistemaRegalos.GetInstance().LoginAdmin(tfUsuario.getText(), new String(tfPass.getPassword()))) {
+					JFrame administracion = new Administracion();
+					administracion.setVisible(true);
+					dispose();	
+				}else {
+					lblContraseaIncorrecta.setVisible(true);
+				}
 			}
 		});
 		btnIngresar.setBounds(248, 181, 97, 25);
 		contentPane.add(btnIngresar);
-	}
+		
 
+		
+		
+	}
 }

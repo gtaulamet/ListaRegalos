@@ -1,5 +1,5 @@
 jdbc=jdbc:sqlserver://
-servidor=DESKTOP-JRBED2D:1433
+servidor=PABLO-PC:1433
 usuario=api
 password=api18
 conexiones=3

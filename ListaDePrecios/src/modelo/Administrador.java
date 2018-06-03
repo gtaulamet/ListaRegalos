@@ -39,7 +39,7 @@ public class Administrador {
 		return AdmPersistenciaUsuario.getInstancia().buscarAdministradores();
 	}
 	
-	public static Administrador buscarAdministrador(String user) {
-		return AdmPersistenciaUsuario.getInstancia().buscarAdministrador(user);
+	public static Administrador buscarAdministrador(String a) {
+		return AdmPersistenciaUsuario.getInstancia().buscarAdministrador(a);
 	}
 }
