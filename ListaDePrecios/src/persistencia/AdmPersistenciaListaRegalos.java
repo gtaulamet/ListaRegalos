@@ -57,11 +57,11 @@ public class AdmPersistenciaListaRegalos extends AdministradorPersistencia
 			//agregar campos
 			s.setInt(1,l.getCodigo());
 			s.setString(2, l.getNombreAgasajado());
-			s.setDate(3,(Date) l.getFechaAgasajo());
+			s.setDate(3, new java.sql.Date(l.getFechaAgasajo().getTime()));
 			s.setString(4, l.getMailAgasajado());
 			s.setFloat(5, l.getMontoRecaudado());
-			s.setDate(6,(Date) l.getFechaInicio());
-			s.setDate(7,(Date) l.getFechaFin());
+			s.setDate(6,new java.sql.Date(l.getFechaInicio().getTime()));
+			s.setDate(7,new java.sql.Date(l.getFechaFin().getTime()));
 			s.setString(8, l.getEstado());
 			s.setFloat(9, l.getMontoARecaudarXIntegrante());
 			s.setInt(10, l.getAdministrador().getCodigo());
@@ -194,4 +194,43 @@ public class AdmPersistenciaListaRegalos extends AdministradorPersistencia
 		}
 		return null;
 	}
+	public Map<Integer,ListaDeRegalos> buscarListasAdministrador(int codigo)
+	{
+		try
+		{
+			ListaDeRegalos l = null;
+			Connection con = PoolConnection.getPoolConnection().getConnection();
+			PreparedStatement s = con.prepareStatement("select * from BD_ListaRegalos.dbo.ListaDeRegalos where administradorid = ?");			
+			
+			s.setInt(1,codigo);
+			ResultSet result = s.executeQuery();
+			Map<Integer,ListaDeRegalos> lista = new HashMap<Integer,ListaDeRegalos>();
+			
+			while (result.next())
+			{
+				int cod = result.getInt(1);
+				String nomAgas= result.getString(2);
+				Date fAgas=result.getDate(3);
+				String mailAgas=result.getString(4);
+				float montoRec= result.getFloat(5);
+				Date fInicio=result.getDate(6);
+				Date fFin=result.getDate(7);
+				String estado= result.getString(8);
+				float montoInteg= result.getFloat(9);
+				int adminId = result.getInt(10);
+				Usuario admin = AdmPersistenciaUsuario.getInstancia().buscarAUsuario(adminId);
+				l = new ListaDeRegalos(cod, nomAgas, fAgas, mailAgas, montoRec, fInicio, fFin, estado, admin, montoInteg);
+				lista.put(cod, l);
+			}
+			
+			PoolConnection.getPoolConnection().realeaseConnection(con);
+			return lista;
+		}
+		catch (Exception e)
+		{
+			System.out.println();
+		}
+		return null;
+	}
+	
 }

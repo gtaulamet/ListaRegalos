@@ -6,11 +6,21 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import controlador.ControladorListaRegalos;
+import controlador.SistemaRegalos;
+import modelo.Usuario;
+
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.JTextField;
+import javax.print.attribute.standard.DateTimeAtCompleted;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import java.awt.event.ActionEvent;
 
 public class ABMListaRegalosParticipante extends JFrame {
@@ -21,7 +31,7 @@ public class ABMListaRegalosParticipante extends JFrame {
 	private JTextField tfMontoPart;
 	private JTextField tfFechaFin;
 	private JTextField tfFechaAgasajo;
-	private JTextField tfEstado;
+	private JTextField tfMailAgasajado;
 
 	/**
 	 * Launch the application.
@@ -44,7 +54,7 @@ public class ABMListaRegalosParticipante extends JFrame {
 	 */
 	public ABMListaRegalosParticipante() {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 347, 351);
+		setBounds(100, 100, 347, 342);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -68,16 +78,12 @@ public class ABMListaRegalosParticipante extends JFrame {
 		contentPane.add(lblMontoPorParticipante);
 		
 		JLabel lblFechaFin = new JLabel("Fecha Fin");
-		lblFechaFin.setBounds(12, 139, 56, 16);
+		lblFechaFin.setBounds(12, 199, 56, 16);
 		contentPane.add(lblFechaFin);
 		
 		JLabel lblFechaAgasajo = new JLabel("Fecha Agasajo");
-		lblFechaAgasajo.setBounds(12, 168, 128, 16);
+		lblFechaAgasajo.setBounds(12, 169, 128, 16);
 		contentPane.add(lblFechaAgasajo);
-		
-		JLabel lblEstado = new JLabel("Estado");
-		lblEstado.setBounds(12, 197, 56, 16);
-		contentPane.add(lblEstado);
 		
 		tfCodigo = new JTextField();
 		tfCodigo.setBounds(152, 52, 116, 22);
@@ -95,26 +101,43 @@ public class ABMListaRegalosParticipante extends JFrame {
 		tfMontoPart.setColumns(10);
 		
 		tfFechaFin = new JTextField();
-		tfFechaFin.setBounds(152, 136, 116, 22);
+		tfFechaFin.setBounds(152, 199, 116, 22);
 		contentPane.add(tfFechaFin);
 		tfFechaFin.setColumns(10);
 		
 		tfFechaAgasajo = new JTextField();
-		tfFechaAgasajo.setBounds(152, 165, 116, 22);
+		tfFechaAgasajo.setBounds(152, 169, 116, 22);
 		contentPane.add(tfFechaAgasajo);
 		tfFechaAgasajo.setColumns(10);
 		
-		tfEstado = new JTextField();
-		tfEstado.setBounds(152, 194, 116, 22);
-		contentPane.add(tfEstado);
-		tfEstado.setColumns(10);
+		JLabel lblMailAgasajado = new JLabel("Mail Agasajado");
+		lblMailAgasajado.setBounds(10, 140, 130, 16);
+		contentPane.add(lblMailAgasajado);
+		
+		tfMailAgasajado = new JTextField();
+		tfMailAgasajado.setBounds(152, 137, 116, 22);
+		contentPane.add(tfMailAgasajado);
+		tfMailAgasajado.setColumns(10);		
 		
 		JButton btnGuardar = new JButton("Guardar");
 		btnGuardar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+
+				try {
+					DateFormat format = new SimpleDateFormat("dd/MM/yyyy", Locale.ROOT);
+					Date fAg = format.parse(tfFechaAgasajo.getText());
+					Date now = new Date();
+					Date fFin = format.parse(tfFechaFin.getText());
+					ControladorListaRegalos.GetInstance().crearListaRegalos(Integer.parseInt(tfCodigo.getText()),tfAgasajado.getText(),
+							fAg, tfMailAgasajado.getText(),0,now,fFin,"Activo",
+							SistemaRegalos.GetInstance().getUsuarioLogueado(),Float.parseFloat(tfMontoPart.getText()));
+				}
+				catch(Exception ex) {
+					System.out.println(ex.getMessage());
+				}
 			}
 		});
-		btnGuardar.setBounds(162, 241, 97, 25);
+		btnGuardar.setBounds(171, 252, 97, 25);
 		contentPane.add(btnGuardar);
 		
 		JButton btnDarDeBaja = new JButton("Dar de Baja");
@@ -122,7 +145,9 @@ public class ABMListaRegalosParticipante extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		btnDarDeBaja.setBounds(12, 241, 116, 25);
+		btnDarDeBaja.setBounds(21, 252, 116, 25);
 		contentPane.add(btnDarDeBaja);
+		
+
 	}
 }

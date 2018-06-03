@@ -8,6 +8,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+
+import modelo.ListaDeRegalos;
+
 import javax.swing.JScrollPane;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -39,7 +42,7 @@ public class ABMListaDeRegalosAdmin extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					ABMListaDeRegalosAdmin frame = new ABMListaDeRegalosAdmin();
+					ABMListaDeRegalosAdmin frame = new ABMListaDeRegalosAdmin(null);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -51,7 +54,7 @@ public class ABMListaDeRegalosAdmin extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public ABMListaDeRegalosAdmin() {
+	public ABMListaDeRegalosAdmin(ListaDeRegalos lr) {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 712, 502);
 		contentPane = new JPanel();
@@ -84,21 +87,25 @@ public class ABMListaDeRegalosAdmin extends JFrame {
 		tfCodigo.setBounds(168, 54, 116, 22);
 		contentPane.add(tfCodigo);
 		tfCodigo.setColumns(10);
+		tfCodigo.setText(String.valueOf(lr.getCodigo()));
 		
 		tfNombreAgasajado = new JTextField();
 		tfNombreAgasajado.setBounds(168, 83, 116, 22);
 		contentPane.add(tfNombreAgasajado);
 		tfNombreAgasajado.setColumns(10);
+		tfNombreAgasajado.setText(lr.getNombreAgasajado());
 		
 		tfMontoParticipante = new JTextField();
 		tfMontoParticipante.setBounds(168, 112, 116, 22);
 		contentPane.add(tfMontoParticipante);
 		tfMontoParticipante.setColumns(10);
+		tfMontoParticipante.setText(String.valueOf(lr.getMontoARecaudarXIntegrante()));
 		
 		tfMontoRecaudado = new JTextField();
 		tfMontoRecaudado.setBounds(169, 141, 116, 22);
 		contentPane.add(tfMontoRecaudado);
 		tfMontoRecaudado.setColumns(10);
+		tfMontoRecaudado.setText(String.valueOf(lr.getMontoRecaudado()));
 		
 		JLabel lblFechaInicio = new JLabel("Fecha Inicio");
 		lblFechaInicio.setBounds(354, 86, 84, 16);
@@ -116,16 +123,19 @@ public class ABMListaDeRegalosAdmin extends JFrame {
 		tfFechaInicio.setBounds(460, 83, 116, 22);
 		contentPane.add(tfFechaInicio);
 		tfFechaInicio.setColumns(10);
+		tfFechaInicio.setText(lr.getFechaInicio().toString());
 		
 		tfFechaFin = new JTextField();
 		tfFechaFin.setBounds(460, 112, 116, 22);
 		contentPane.add(tfFechaFin);
 		tfFechaFin.setColumns(10);
+		tfFechaFin.setText(lr.getFechaFin().toString());
 		
 		tfEstado = new JTextField();
 		tfEstado.setBounds(460, 141, 116, 22);
 		contentPane.add(tfEstado);
 		tfEstado.setColumns(10);
+		tfEstado.setText(lr.getEstado());
 		
 		JLabel lblUsuarios = new JLabel("Usuarios");
 		lblUsuarios.setFont(new Font("Tahoma", Font.BOLD, 13));

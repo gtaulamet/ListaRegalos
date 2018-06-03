@@ -1,4 +1,5 @@
 package controlador;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -61,5 +62,17 @@ public class ControladorListaRegalos {
 		
 		ParticipanteLista pl = new ParticipanteLista(u, lr, false, "Activo");
 		ParticipanteLista.insert(pl);
+	}
+	
+	public Map<Integer,ListaDeRegalos> GetListasAdministrador(int u){
+		return ListaDeRegalos.buscarListasAdministrador(u);
+	}
+	
+	public void crearListaRegalos(int codigo, String nombreAgasajado, Date fechaAgasajo, String mailAgasajado,
+			float montoRecaudado, Date fechaInicio, Date fechaFin, String estado, Usuario administrador,
+			float montoARecaudarXIntegrante) {
+		
+		ListaDeRegalos lr = new ListaDeRegalos(codigo, nombreAgasajado, fechaAgasajo, mailAgasajado, montoRecaudado, fechaInicio, fechaFin, estado, administrador, montoARecaudarXIntegrante);
+		ListaDeRegalos.insert(lr);
 	}
 }
