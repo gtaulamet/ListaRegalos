@@ -1,5 +1,6 @@
 package modelo;
 
+import java.io.Console;
 import java.util.Map;
 import java.util.Vector;
 
@@ -98,7 +99,9 @@ public class Usuario {
 
 	
 	public static void insert(Usuario u) {
-		AdmPersistenciaUsuario.getInstancia().insert(u);
+		int codigo = AdmPersistenciaUsuario.getInstancia().insertDevolucionCodigo(u);
+		System.out.println(codigo);
+		
 	}
 	public static void delete(Usuario u) {
 		AdmPersistenciaUsuario.getInstancia().delete(u);
