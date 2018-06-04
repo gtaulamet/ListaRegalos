@@ -81,6 +81,8 @@ public class Administracion extends JFrame {
 		btnNuevoUsuario.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JFrame abmUsuario = new ABMUsuario();
+				//VER DE HACE DE OTRA FORMA
+				abmUsuario.getContentPane().getComponents()[15].setEnabled(false);
 				abmUsuario.setVisible(true);
 			}
 		});
