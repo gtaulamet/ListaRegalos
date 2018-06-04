@@ -68,11 +68,11 @@ public class ControladorListaRegalos {
 		return ListaDeRegalos.buscarListasAdministrador(u);
 	}
 	
-	public void crearListaRegalos(int codigo, String nombreAgasajado, Date fechaAgasajo, String mailAgasajado,
+	public void crearListaRegalos(String nombreAgasajado, Date fechaAgasajo, String mailAgasajado,
 			float montoRecaudado, Date fechaInicio, Date fechaFin, String estado, Usuario administrador,
 			float montoARecaudarXIntegrante) {
 		
-		ListaDeRegalos lr = new ListaDeRegalos(codigo, nombreAgasajado, fechaAgasajo, mailAgasajado, montoRecaudado, fechaInicio, fechaFin, estado, administrador, montoARecaudarXIntegrante);
+		ListaDeRegalos lr = new ListaDeRegalos(0,nombreAgasajado, fechaAgasajo, mailAgasajado, montoRecaudado, fechaInicio, fechaFin, estado, administrador, montoARecaudarXIntegrante);
 		ListaDeRegalos.insert(lr);
 	}
 }

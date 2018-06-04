@@ -22,11 +22,11 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.awt.event.ActionEvent;
+import java.awt.Color;
 
 public class ABMListaRegalosParticipante extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField tfCodigo;
 	private JTextField tfAgasajado;
 	private JTextField tfMontoPart;
 	private JTextField tfFechaFin;
@@ -40,7 +40,7 @@ public class ABMListaRegalosParticipante extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					ABMListaRegalosParticipante frame = new ABMListaRegalosParticipante();
+					ABMListaRegalosParticipante frame = new ABMListaRegalosParticipante(false);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -52,7 +52,7 @@ public class ABMListaRegalosParticipante extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public ABMListaRegalosParticipante() {
+	public ABMListaRegalosParticipante(boolean nuevo) {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 347, 342);
 		contentPane = new JPanel();
@@ -65,59 +65,57 @@ public class ABMListaRegalosParticipante extends JFrame {
 		lblListaDeRegalos.setBounds(12, 13, 273, 26);
 		contentPane.add(lblListaDeRegalos);
 		
-		JLabel lblCdigo = new JLabel("C\u00F3digo");
-		lblCdigo.setBounds(12, 52, 56, 16);
-		contentPane.add(lblCdigo);
-		
 		JLabel lblNombreAgasajado = new JLabel("Nombre Agasajado");
-		lblNombreAgasajado.setBounds(12, 81, 128, 16);
+		lblNombreAgasajado.setBounds(12, 57, 128, 16);
 		contentPane.add(lblNombreAgasajado);
 		
 		JLabel lblMontoPorParticipante = new JLabel("Monto por Participante");
-		lblMontoPorParticipante.setBounds(12, 110, 201, 16);
+		lblMontoPorParticipante.setBounds(12, 86, 201, 16);
 		contentPane.add(lblMontoPorParticipante);
 		
 		JLabel lblFechaFin = new JLabel("Fecha Fin");
-		lblFechaFin.setBounds(12, 199, 56, 16);
+		lblFechaFin.setBounds(12, 175, 56, 16);
 		contentPane.add(lblFechaFin);
 		
 		JLabel lblFechaAgasajo = new JLabel("Fecha Agasajo");
-		lblFechaAgasajo.setBounds(12, 169, 128, 16);
+		lblFechaAgasajo.setBounds(12, 145, 128, 16);
 		contentPane.add(lblFechaAgasajo);
 		
-		tfCodigo = new JTextField();
-		tfCodigo.setBounds(152, 52, 116, 22);
-		contentPane.add(tfCodigo);
-		tfCodigo.setColumns(10);
-		
 		tfAgasajado = new JTextField();
-		tfAgasajado.setBounds(152, 78, 116, 22);
+		tfAgasajado.setBounds(152, 54, 116, 22);
 		contentPane.add(tfAgasajado);
 		tfAgasajado.setColumns(10);
 		
 		tfMontoPart = new JTextField();
-		tfMontoPart.setBounds(152, 107, 116, 22);
+		tfMontoPart.setBounds(152, 83, 116, 22);
 		contentPane.add(tfMontoPart);
 		tfMontoPart.setColumns(10);
 		
 		tfFechaFin = new JTextField();
-		tfFechaFin.setBounds(152, 199, 116, 22);
+		tfFechaFin.setBounds(152, 175, 116, 22);
 		contentPane.add(tfFechaFin);
 		tfFechaFin.setColumns(10);
 		
 		tfFechaAgasajo = new JTextField();
-		tfFechaAgasajo.setBounds(152, 169, 116, 22);
+		tfFechaAgasajo.setBounds(152, 145, 116, 22);
 		contentPane.add(tfFechaAgasajo);
 		tfFechaAgasajo.setColumns(10);
 		
 		JLabel lblMailAgasajado = new JLabel("Mail Agasajado");
-		lblMailAgasajado.setBounds(10, 140, 130, 16);
+		lblMailAgasajado.setBounds(10, 116, 130, 16);
 		contentPane.add(lblMailAgasajado);
 		
 		tfMailAgasajado = new JTextField();
-		tfMailAgasajado.setBounds(152, 137, 116, 22);
+		tfMailAgasajado.setBounds(152, 113, 116, 22);
 		contentPane.add(tfMailAgasajado);
 		tfMailAgasajado.setColumns(10);		
+		
+		JLabel lblElRegistroSe = new JLabel("El registro se ha guardado con \u00E9xito");
+		lblElRegistroSe.setFont(new Font("Tahoma", Font.BOLD, 13));
+		lblElRegistroSe.setForeground(new Color(0, 128, 0));
+		lblElRegistroSe.setBounds(48, 204, 237, 16);
+		contentPane.add(lblElRegistroSe);
+		lblElRegistroSe.setVisible(false);
 		
 		JButton btnGuardar = new JButton("Guardar");
 		btnGuardar.addActionListener(new ActionListener() {
@@ -128,16 +126,22 @@ public class ABMListaRegalosParticipante extends JFrame {
 					Date fAg = format.parse(tfFechaAgasajo.getText());
 					Date now = new Date();
 					Date fFin = format.parse(tfFechaFin.getText());
-					ControladorListaRegalos.GetInstance().crearListaRegalos(Integer.parseInt(tfCodigo.getText()),tfAgasajado.getText(),
+					ControladorListaRegalos.GetInstance().crearListaRegalos(tfAgasajado.getText(),
 							fAg, tfMailAgasajado.getText(),0,now,fFin,"Activo",
 							SistemaRegalos.GetInstance().getUsuarioLogueado(),Float.parseFloat(tfMontoPart.getText()));
+					lblElRegistroSe.setText("El registro se ha guardado con \\u00E9xito");
+					lblElRegistroSe.setForeground(new Color(0,128,0));
+					lblElRegistroSe.setVisible(true);
 				}
 				catch(Exception ex) {
 					System.out.println(ex.getMessage());
+					lblElRegistroSe.setText("No se pudo grabar en la base el registro.");
+					lblElRegistroSe.setForeground(Color.RED);
+					lblElRegistroSe.setVisible(true);
 				}
 			}
 		});
-		btnGuardar.setBounds(171, 252, 97, 25);
+		btnGuardar.setBounds(171, 228, 97, 25);
 		contentPane.add(btnGuardar);
 		
 		JButton btnDarDeBaja = new JButton("Dar de Baja");
@@ -145,8 +149,13 @@ public class ABMListaRegalosParticipante extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		btnDarDeBaja.setBounds(21, 252, 116, 25);
+		btnDarDeBaja.setBounds(21, 228, 116, 25);
 		contentPane.add(btnDarDeBaja);
+		if (nuevo) {
+			btnDarDeBaja.setVisible(false);
+		}
+		
+
 		
 
 	}

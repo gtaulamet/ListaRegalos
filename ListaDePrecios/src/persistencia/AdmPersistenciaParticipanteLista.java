@@ -143,7 +143,7 @@ public class AdmPersistenciaParticipanteLista extends AdministradorPersistencia
 	public Map<Integer,ParticipanteLista> buscarTodos(int codigo){
 		try {
 			Connection con = PoolConnection.getPoolConnection().getConnection();
-			PreparedStatement s = con.prepareStatement("select * from BD_ListaRegalos.dbo.ParticipanteLista where listaDeRegalosId = ?");
+			PreparedStatement s = con.prepareStatement("select * from BD_ListaRegalos.dbo.ParticipanteLista where listaDeRegalosId = ? and estado like 'Activo'");
 			s.setInt(1,codigo);
 			
 			ResultSet result = s.executeQuery();
@@ -216,7 +216,7 @@ public class AdmPersistenciaParticipanteLista extends AdministradorPersistencia
 		{
 			Connection con = PoolConnection.getPoolConnection().getConnection();
 			PreparedStatement s = con.prepareStatement("update BD_ListaRegalos.dbo.ParticipanteLista " +
-					"set estado = 'Inactivo') where usuarioId = ? and listaDeRegalosId = ?");
+					"set estado = 'Inactivo' where usuarioId = ? and listaDeRegalosId = ?");
 			//agregar campos
 			s.setInt(1, u);
 			s.setInt(2, lr);
@@ -226,7 +226,7 @@ public class AdmPersistenciaParticipanteLista extends AdministradorPersistencia
 		}
 		catch (Exception e)
 		{
-			System.out.println();
+			System.out.println("Error al dar de baja el participante de la lista");
 		}
 	}
 }

@@ -110,7 +110,7 @@ public class MainUsuario extends JFrame {
 		JButton btnCrearLista = new JButton("Crear Lista");
 		btnCrearLista.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JFrame altaListaRegalos = new ABMListaRegalosParticipante();
+				JFrame altaListaRegalos = new ABMListaRegalosParticipante(true);
 				altaListaRegalos.setVisible(true);
 			}
 		});

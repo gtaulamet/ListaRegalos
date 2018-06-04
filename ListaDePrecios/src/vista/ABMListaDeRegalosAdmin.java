@@ -9,12 +9,19 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+import controlador.ControladorListaRegalos;
+import controlador.ControladorUsuario;
 import modelo.ListaDeRegalos;
+import modelo.ParticipanteLista;
+import modelo.Usuario;
 
 import javax.swing.JScrollPane;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.util.Map;
+import java.util.Vector;
+
 import javax.swing.border.EmptyBorder;
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -55,6 +62,9 @@ public class ABMListaDeRegalosAdmin extends JFrame {
 	 * Create the frame.
 	 */
 	public ABMListaDeRegalosAdmin(ListaDeRegalos lr) {
+		Map<Integer,ParticipanteLista> participantes = lr.GetParticipantes();
+		Map<Integer,Usuario> usuarios = ControladorUsuario.GetInstance().GetUsuarios();
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 712, 502);
 		contentPane = new JPanel();
@@ -84,24 +94,28 @@ public class ABMListaDeRegalosAdmin extends JFrame {
 		contentPane.add(lblMontoRecaudado);
 		
 		tfCodigo = new JTextField();
+		tfCodigo.setEditable(false);
 		tfCodigo.setBounds(168, 54, 116, 22);
 		contentPane.add(tfCodigo);
 		tfCodigo.setColumns(10);
 		tfCodigo.setText(String.valueOf(lr.getCodigo()));
 		
 		tfNombreAgasajado = new JTextField();
+		tfNombreAgasajado.setEditable(false);
 		tfNombreAgasajado.setBounds(168, 83, 116, 22);
 		contentPane.add(tfNombreAgasajado);
 		tfNombreAgasajado.setColumns(10);
 		tfNombreAgasajado.setText(lr.getNombreAgasajado());
 		
 		tfMontoParticipante = new JTextField();
+		tfMontoParticipante.setEditable(false);
 		tfMontoParticipante.setBounds(168, 112, 116, 22);
 		contentPane.add(tfMontoParticipante);
 		tfMontoParticipante.setColumns(10);
 		tfMontoParticipante.setText(String.valueOf(lr.getMontoARecaudarXIntegrante()));
 		
 		tfMontoRecaudado = new JTextField();
+		tfMontoRecaudado.setEditable(false);
 		tfMontoRecaudado.setBounds(169, 141, 116, 22);
 		contentPane.add(tfMontoRecaudado);
 		tfMontoRecaudado.setColumns(10);
@@ -120,18 +134,21 @@ public class ABMListaDeRegalosAdmin extends JFrame {
 		contentPane.add(lblEstado);
 		
 		tfFechaInicio = new JTextField();
+		tfFechaInicio.setEditable(false);
 		tfFechaInicio.setBounds(460, 83, 116, 22);
 		contentPane.add(tfFechaInicio);
 		tfFechaInicio.setColumns(10);
 		tfFechaInicio.setText(lr.getFechaInicio().toString());
 		
 		tfFechaFin = new JTextField();
+		tfFechaFin.setEditable(false);
 		tfFechaFin.setBounds(460, 112, 116, 22);
 		contentPane.add(tfFechaFin);
 		tfFechaFin.setColumns(10);
 		tfFechaFin.setText(lr.getFechaFin().toString());
 		
 		tfEstado = new JTextField();
+		tfEstado.setEditable(false);
 		tfEstado.setBounds(460, 141, 116, 22);
 		contentPane.add(tfEstado);
 		tfEstado.setColumns(10);
@@ -152,78 +169,65 @@ public class ABMListaDeRegalosAdmin extends JFrame {
 		contentPane.add(scrollPane);
 		
 		table = new JTable();
-		
-		Object[][] dataUsuarios= new Object[][] {
-			{"Garcia", "Carlos", ">>"},
-			{"Gomez", "Claudia", ">>"},
-			{"Perez", "Adrian", ">>"},
-			{"Smith", "Jorge", ">>"},
-		}; 
-		String[] columnaUsuarios = new String[] {
-				"Apellido", "Nombre", ""
-			};
-		
-		table.setModel(new DefaultTableModel(dataUsuarios,columnaUsuarios) {
-			Class[] columnTypes = new Class[] {
-				String.class, String.class, Object.class
-			};
-			public Class getColumnClass(int columnIndex) {
-				return columnTypes[columnIndex];
-			}
-		});
-		
-		table.getColumnModel().getColumn(2).setPreferredWidth(15);
+		table_1 = new JTable();
+		CompletarModeloUsuarios(participantes, usuarios, table);
+
+		table.getColumnModel().getColumn(3).setPreferredWidth(45);
 		scrollPane.setViewportView(table);
 		
 		Action add = new AbstractAction()
 		{
 		    public void actionPerformed(ActionEvent e)
 		    {
-		        JTable table = (JTable)e.getSource();
+		        JTable tbl = (JTable)e.getSource();
 		        int modelRow = Integer.valueOf( e.getActionCommand() );
 		        //((DefaultTableModel)table.getModel()).removeRow(modelRow);
-		        Object row = ((DefaultTableModel)table.getModel()).getDataVector().elementAt(modelRow);
+		        Vector row = (Vector) ((DefaultTableModel)tbl.getModel()).getDataVector().elementAt(modelRow);
+		        Usuario usuario = ControladorUsuario.GetInstance().GetUsuario(Integer.valueOf(row.get(0).toString()));
+		        lr.AgregarParticipanteLista(usuario);
+		        DefaultTableModel dtmP = (DefaultTableModel) table_1.getModel();
+		        dtmP.addRow(new Object[] {usuario.getCodigo(), usuario.getApellido(), usuario.getNombre(), "<<"});
+		        dtmP.fireTableDataChanged();
 		        
-		        
+		        DefaultTableModel dtmU = (DefaultTableModel) tbl.getModel();
+		        dtmU.removeRow(modelRow);
+		        dtmU.fireTableDataChanged();
 		    }
 		};		
-		ButtonColumn bAdd = new ButtonColumn(table,add,2);
+		ButtonColumn bAdd = new ButtonColumn(table,add,3);
 		bAdd.setMnemonic(KeyEvent.VK_D);
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
 		scrollPane_1.setBounds(354, 230, 326, 181);
 		contentPane.add(scrollPane_1);
 		
-		table_1 = new JTable();
 		
-		Object[][] dataParticipantes= new Object[][] {}; 
-		String[] columnaParticipantes = new String[] {
-				"Apellido", "Nombre", ""
-			};
-				
-		
-		table_1.setModel(new DefaultTableModel(dataParticipantes,columnaParticipantes) {
-			Class[] columnTypes = new Class[] {
-				String.class, String.class, Object.class
-			};
-			public Class getColumnClass(int columnIndex) {
-				return columnTypes[columnIndex];
-			}
-		});
-		table_1.getColumnModel().getColumn(2).setPreferredWidth(15);
+		CompletarModeloParticipantes(participantes, table_1);		
+
+		table_1.getColumnModel().getColumn(3).setPreferredWidth(45);
 		scrollPane_1.setViewportView(table_1);
 		
 		Action remove = new AbstractAction()
 		{
 		    public void actionPerformed(ActionEvent e)
 		    {
-		        JTable table = (JTable)e.getSource();
+		        JTable tbl = (JTable)e.getSource();
 		        int modelRow = Integer.valueOf( e.getActionCommand() );
 		        //((DefaultTableModel)table.getModel()).removeRow(modelRow);
+		        Vector row = (Vector) ((DefaultTableModel)tbl.getModel()).getDataVector().elementAt(modelRow);
+		        Usuario usuario = ControladorUsuario.GetInstance().GetUsuario(Integer.valueOf(row.get(0).toString()));
+		        lr.BajarParticipanteLista(usuario);
 		        
+		        DefaultTableModel dtm = (DefaultTableModel) tbl.getModel();
+				dtm.removeRow(modelRow);
+		        dtm.fireTableDataChanged();
+		        
+		        DefaultTableModel dtmU = (DefaultTableModel) table.getModel();
+		        dtmU.addRow(new Object[] {usuario.getCodigo(), usuario.getApellido(), usuario.getNombre(), ">>"});
+		        dtmU.fireTableDataChanged();
 		    }
 		};		
-		ButtonColumn bRemove = new ButtonColumn(table_1,remove,2);
+		ButtonColumn bRemove = new ButtonColumn(table_1,remove,3);
 		bRemove.setMnemonic(KeyEvent.VK_D);
 				
 		
@@ -235,5 +239,61 @@ public class ABMListaDeRegalosAdmin extends JFrame {
 		panel.setBorder(new LineBorder(new Color(0, 0, 0)));
 		panel.setBounds(12, 37, 668, 148);
 		contentPane.add(panel);
+	}
+	
+	private void CompletarModeloParticipantes(Map<Integer,ParticipanteLista> participantes, JTable tbl) {
+		String[] columnaParticipantes = new String[] {
+				"Codigo","Apellido", "Nombre", ""
+			};
+		DefaultTableModel dtm = new DefaultTableModel() {
+			boolean[] columnEditables = new boolean[] {
+					false,false, false, true
+			};
+			public boolean isCellEditable(int row, int column) {
+				return columnEditables[column];
+			}
+			};
+		dtm.setColumnIdentifiers(columnaParticipantes);
+		
+		tbl.setModel(dtm);
+		
+		for (Map.Entry<Integer, ParticipanteLista> e : participantes.entrySet()) {
+	        dtm.addRow(new Object[] {
+	        		e.getValue().getUsuario().getCodigo(),
+					e.getValue().getUsuario().getApellido(),
+					e.getValue().getUsuario().getNombre(),
+					"<<"
+			});
+		}
+		
+	}
+
+	private void CompletarModeloUsuarios(Map<Integer,ParticipanteLista> participantes, Map<Integer,Usuario> usuarios, JTable tbl) {
+		String[] columnaUsuarios = new String[] {
+				"Codigo","Apellido", "Nombre", ""
+			};
+		DefaultTableModel dtm = new DefaultTableModel() {
+			boolean[] columnEditables = new boolean[] {
+					false, false, false, true
+			};
+			public boolean isCellEditable(int row, int column) {
+				return columnEditables[column];
+			}
+			};
+		dtm.setColumnIdentifiers(columnaUsuarios);
+		
+		tbl.setModel(dtm);
+		
+		for (Map.Entry<Integer, Usuario> e : usuarios.entrySet()) {
+			if (!participantes.containsKey( e.getKey())) {
+		        dtm.addRow(new Object[] {
+		        		e.getValue().getCodigo(),
+						e.getValue().getApellido(),
+						e.getValue().getNombre(),
+						">>"
+				});
+			}
+		}
+		
 	}
 }

@@ -53,18 +53,18 @@ public class AdmPersistenciaListaRegalos extends AdministradorPersistencia
 		{
 			ListaDeRegalos l = (ListaDeRegalos)o;
 			Connection con = PoolConnection.getPoolConnection().getConnection();
-			PreparedStatement s = con.prepareStatement("insert into BD_ListaRegalos.dbo.ListaDeRegalos values (?,?,?,?,?,?,?,?,?,?)");
+			PreparedStatement s = con.prepareStatement("insert into BD_ListaRegalos.dbo.ListaDeRegalos values (?,?,?,?,?,?,?,?,?)");
 			//agregar campos
-			s.setInt(1,l.getCodigo());
-			s.setString(2, l.getNombreAgasajado());
-			s.setDate(3, new java.sql.Date(l.getFechaAgasajo().getTime()));
-			s.setString(4, l.getMailAgasajado());
-			s.setFloat(5, l.getMontoRecaudado());
-			s.setDate(6,new java.sql.Date(l.getFechaInicio().getTime()));
-			s.setDate(7,new java.sql.Date(l.getFechaFin().getTime()));
-			s.setString(8, l.getEstado());
-			s.setFloat(9, l.getMontoARecaudarXIntegrante());
-			s.setInt(10, l.getAdministrador().getCodigo());
+//			s.setInt(1,l.getCodigo());
+			s.setString(1, l.getNombreAgasajado());
+			s.setDate(2, new java.sql.Date(l.getFechaAgasajo().getTime()));
+			s.setString(3, l.getMailAgasajado());
+			s.setFloat(4, l.getMontoRecaudado());
+			s.setDate(5,new java.sql.Date(l.getFechaInicio().getTime()));
+			s.setDate(6,new java.sql.Date(l.getFechaFin().getTime()));
+			s.setString(7, l.getEstado());
+			s.setFloat(8, l.getMontoARecaudarXIntegrante());
+			s.setInt(9, l.getAdministrador().getCodigo());
 			s.execute();
 			PoolConnection.getPoolConnection().realeaseConnection(con);
 		}
