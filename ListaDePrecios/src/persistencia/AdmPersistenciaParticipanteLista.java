@@ -178,7 +178,7 @@ public class AdmPersistenciaParticipanteLista extends AdministradorPersistencia
 	public Map<Integer,ParticipanteLista> buscarTodosXUsuario(int codigo){
 		try {
 			Connection con = PoolConnection.getPoolConnection().getConnection();
-			PreparedStatement s = con.prepareStatement("select * from BD_ListaRegalos.dbo.ParticipanteLista where usuarioId = ?");
+			PreparedStatement s = con.prepareStatement("select * from BD_ListaRegalos.dbo.ParticipanteLista where usuarioId = ? and estado like 'Activo'");
 			s.setInt(1,codigo);
 			
 			ResultSet result = s.executeQuery();

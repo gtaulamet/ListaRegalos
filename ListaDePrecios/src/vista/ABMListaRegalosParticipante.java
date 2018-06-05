@@ -6,9 +6,12 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.text.MaskFormatter;
 
 import controlador.ControladorListaRegalos;
+import controlador.ControladorUsuario;
 import controlador.SistemaRegalos;
+import modelo.ListaDeRegalos;
 import modelo.Usuario;
 
 import javax.swing.JLabel;
@@ -18,20 +21,23 @@ import javax.print.attribute.standard.DateTimeAtCompleted;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
+import javax.swing.JFormattedTextField;
 
 public class ABMListaRegalosParticipante extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField tfAgasajado;
-	private JTextField tfMontoPart;
-	private JTextField tfFechaFin;
-	private JTextField tfFechaAgasajo;
-	private JTextField tfMailAgasajado;
+	private JFormattedTextField tfMontoPart;
+	private JFormattedTextField tfFechaFin;
+	private JFormattedTextField tfFechaAgasajo;
+	private JFormattedTextField tfMailAgasajado;
 
 	/**
 	 * Launch the application.
@@ -40,7 +46,7 @@ public class ABMListaRegalosParticipante extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					ABMListaRegalosParticipante frame = new ABMListaRegalosParticipante(false);
+					ABMListaRegalosParticipante frame = new ABMListaRegalosParticipante(false,new ListaDeRegalos());
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -51,8 +57,9 @@ public class ABMListaRegalosParticipante extends JFrame {
 
 	/**
 	 * Create the frame.
+	 * @throws ParseException 
 	 */
-	public ABMListaRegalosParticipante(boolean nuevo) {
+	public ABMListaRegalosParticipante(boolean nuevo, ListaDeRegalos lr)  {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 347, 342);
 		contentPane = new JPanel();
@@ -86,26 +93,48 @@ public class ABMListaRegalosParticipante extends JFrame {
 		contentPane.add(tfAgasajado);
 		tfAgasajado.setColumns(10);
 		
-		tfMontoPart = new JTextField();
+		tfMontoPart = new JFormattedTextField(new DecimalFormat("#.#"));
+		tfMontoPart.setText("0.0");
 		tfMontoPart.setBounds(152, 83, 116, 22);
 		contentPane.add(tfMontoPart);
 		tfMontoPart.setColumns(10);
 		
-		tfFechaFin = new JTextField();
-		tfFechaFin.setBounds(152, 175, 116, 22);
-		contentPane.add(tfFechaFin);
-		tfFechaFin.setColumns(10);
+
+		try {
+			MaskFormatter mk = new MaskFormatter("##/##/####");
+			mk.setPlaceholder("_");
+			tfFechaAgasajo = new JFormattedTextField(mk);
 		
-		tfFechaAgasajo = new JTextField();
+		} catch(Exception ex) {
+			tfFechaAgasajo = new JFormattedTextField();
+		
+		}
+		try {
+			MaskFormatter mk = new MaskFormatter("##/##/####");
+			mk.setPlaceholder("_");
+		
+			tfFechaFin = new JFormattedTextField(mk);
+		} catch(Exception ex) {
+		
+			tfFechaFin = new JFormattedTextField();
+		}
+		
+		
 		tfFechaAgasajo.setBounds(152, 145, 116, 22);
 		contentPane.add(tfFechaAgasajo);
 		tfFechaAgasajo.setColumns(10);
 		
-		JLabel lblMailAgasajado = new JLabel("Mail Agasajado");
-		lblMailAgasajado.setBounds(10, 116, 130, 16);
-		contentPane.add(lblMailAgasajado);
 		
-		tfMailAgasajado = new JTextField();
+		
+		tfFechaFin.setBounds(152, 175, 116, 22);
+		contentPane.add(tfFechaFin);
+		tfFechaFin.setColumns(10);
+		
+		JLabel lblMailAgasajado = new JLabel("Mail Agasajado");
+		lblMailAgasajado.setBounds(12, 115, 130, 16);
+		contentPane.add(lblMailAgasajado);
+
+		tfMailAgasajado = new JFormattedTextField();
 		tfMailAgasajado.setBounds(152, 113, 116, 22);
 		contentPane.add(tfMailAgasajado);
 		tfMailAgasajado.setColumns(10);		
@@ -113,7 +142,7 @@ public class ABMListaRegalosParticipante extends JFrame {
 		JLabel lblElRegistroSe = new JLabel("El registro se ha guardado con \u00E9xito");
 		lblElRegistroSe.setFont(new Font("Tahoma", Font.BOLD, 13));
 		lblElRegistroSe.setForeground(new Color(0, 128, 0));
-		lblElRegistroSe.setBounds(48, 204, 237, 16);
+		lblElRegistroSe.setBounds(48, 204, 254, 16);
 		contentPane.add(lblElRegistroSe);
 		lblElRegistroSe.setVisible(false);
 		
@@ -129,9 +158,10 @@ public class ABMListaRegalosParticipante extends JFrame {
 					ControladorListaRegalos.GetInstance().crearListaRegalos(tfAgasajado.getText(),
 							fAg, tfMailAgasajado.getText(),0,now,fFin,"Activo",
 							SistemaRegalos.GetInstance().getUsuarioLogueado(),Float.parseFloat(tfMontoPart.getText()));
-					lblElRegistroSe.setText("El registro se ha guardado con \\u00E9xito");
+					lblElRegistroSe.setText("El registro se ha guardado con Éxito");
 					lblElRegistroSe.setForeground(new Color(0,128,0));
 					lblElRegistroSe.setVisible(true);
+				
 				}
 				catch(Exception ex) {
 					System.out.println(ex.getMessage());
@@ -144,15 +174,40 @@ public class ABMListaRegalosParticipante extends JFrame {
 		btnGuardar.setBounds(171, 228, 97, 25);
 		contentPane.add(btnGuardar);
 		
+		JLabel lblSeHaDado = new JLabel("Se ha dado de baja de la lista de regalos");
+		lblSeHaDado.setFont(new Font("Tahoma", Font.BOLD, 13));
+		lblSeHaDado.setForeground(new Color(0, 128, 0));
+		lblSeHaDado.setBounds(12, 266, 305, 16);
+		contentPane.add(lblSeHaDado);
+		lblSeHaDado.setVisible(false);
+		
+		
 		JButton btnDarDeBaja = new JButton("Dar de Baja");
 		btnDarDeBaja.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				Usuario u = SistemaRegalos.GetInstance().getUsuarioLogueado();
+				lr.BajarParticipanteLista(u);
+				lblSeHaDado.setVisible(true);
 			}
 		});
 		btnDarDeBaja.setBounds(21, 228, 116, 25);
 		contentPane.add(btnDarDeBaja);
+		
+		
 		if (nuevo) {
 			btnDarDeBaja.setVisible(false);
+		}else {
+			tfAgasajado.setText(lr.getNombreAgasajado());
+			tfMontoPart.setText(String.valueOf(lr.getMontoARecaudarXIntegrante()));
+			tfFechaFin.setText(lr.getFechaFin().toString());
+			tfFechaAgasajo.setText(lr.getFechaAgasajo().toString());
+			tfMailAgasajado.setText(lr.getMailAgasajado());
+			tfAgasajado.setEditable(false);
+			tfMontoPart.setEditable(false);
+			tfFechaFin.setEditable(false);
+			tfFechaAgasajo.setEditable(false);
+			tfMailAgasajado.setEditable(false);
+			btnGuardar.setVisible(false);
 		}
 		
 

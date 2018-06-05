@@ -11,6 +11,7 @@ import javax.swing.table.DefaultTableModel;
 
 import controlador.ControladorListaRegalos;
 import controlador.ControladorUsuario;
+import controlador.SistemaRegalos;
 import modelo.ListaDeRegalos;
 import modelo.ParticipanteLista;
 import modelo.Usuario;
@@ -28,6 +29,8 @@ import javax.swing.JButton;
 import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
+import java.awt.event.WindowFocusListener;
+import java.awt.event.WindowEvent;
 
 public class ABMListaDeRegalosAdmin extends JFrame {
 
@@ -62,10 +65,11 @@ public class ABMListaDeRegalosAdmin extends JFrame {
 	 * Create the frame.
 	 */
 	public ABMListaDeRegalosAdmin(ListaDeRegalos lr) {
+
 		Map<Integer,ParticipanteLista> participantes = lr.GetParticipantes();
 		Map<Integer,Usuario> usuarios = ControladorUsuario.GetInstance().GetUsuarios();
-		
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 712, 502);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -181,14 +185,19 @@ public class ABMListaDeRegalosAdmin extends JFrame {
 		    {
 		        JTable tbl = (JTable)e.getSource();
 		        int modelRow = Integer.valueOf( e.getActionCommand() );
-		        //((DefaultTableModel)table.getModel()).removeRow(modelRow);
+		        //obtengo la fila que se seleccionó y el usuario que corresponde
 		        Vector row = (Vector) ((DefaultTableModel)tbl.getModel()).getDataVector().elementAt(modelRow);
 		        Usuario usuario = ControladorUsuario.GetInstance().GetUsuario(Integer.valueOf(row.get(0).toString()));
+		        
+		        //Agrego usuario como participante de la lista
 		        lr.AgregarParticipanteLista(usuario);
+		        
+		        //Actualizo modelo de la tabla de participantes
 		        DefaultTableModel dtmP = (DefaultTableModel) table_1.getModel();
 		        dtmP.addRow(new Object[] {usuario.getCodigo(), usuario.getApellido(), usuario.getNombre(), "<<"});
 		        dtmP.fireTableDataChanged();
 		        
+		        //Actualizo modelo de la tabla de usuarios
 		        DefaultTableModel dtmU = (DefaultTableModel) tbl.getModel();
 		        dtmU.removeRow(modelRow);
 		        dtmU.fireTableDataChanged();
@@ -213,20 +222,25 @@ public class ABMListaDeRegalosAdmin extends JFrame {
 		    {
 		        JTable tbl = (JTable)e.getSource();
 		        int modelRow = Integer.valueOf( e.getActionCommand() );
-		        //((DefaultTableModel)table.getModel()).removeRow(modelRow);
+		        //obtengo la fila que seleccionó y el participante a remover de la lista.
 		        Vector row = (Vector) ((DefaultTableModel)tbl.getModel()).getDataVector().elementAt(modelRow);
 		        Usuario usuario = ControladorUsuario.GetInstance().GetUsuario(Integer.valueOf(row.get(0).toString()));
+		        
+		        //Doy de baja el participante de la lista
 		        lr.BajarParticipanteLista(usuario);
 		        
+		        //Actualizo el modelo de la tabla de participantes
 		        DefaultTableModel dtm = (DefaultTableModel) tbl.getModel();
 				dtm.removeRow(modelRow);
 		        dtm.fireTableDataChanged();
 		        
+		        //Actualizo el modelo de la tabla de usuarios
 		        DefaultTableModel dtmU = (DefaultTableModel) table.getModel();
 		        dtmU.addRow(new Object[] {usuario.getCodigo(), usuario.getApellido(), usuario.getNombre(), ">>"});
 		        dtmU.fireTableDataChanged();
 		    }
 		};		
+		
 		ButtonColumn bRemove = new ButtonColumn(table_1,remove,3);
 		bRemove.setMnemonic(KeyEvent.VK_D);
 				
@@ -283,9 +297,10 @@ public class ABMListaDeRegalosAdmin extends JFrame {
 		dtm.setColumnIdentifiers(columnaUsuarios);
 		
 		tbl.setModel(dtm);
+		Usuario usuarioActual = SistemaRegalos.GetInstance().getUsuarioLogueado();
 		
 		for (Map.Entry<Integer, Usuario> e : usuarios.entrySet()) {
-			if (!participantes.containsKey( e.getKey())) {
+			if (!participantes.containsKey( e.getKey()) && e.getKey() != usuarioActual.getCodigo()) {
 		        dtm.addRow(new Object[] {
 		        		e.getValue().getCodigo(),
 						e.getValue().getApellido(),

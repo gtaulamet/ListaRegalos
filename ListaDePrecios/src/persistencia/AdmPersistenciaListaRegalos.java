@@ -70,7 +70,7 @@ public class AdmPersistenciaListaRegalos extends AdministradorPersistencia
 		}
 		catch (Exception e)
 		{
-			System.out.println();
+			System.out.println("Error al grabar la lista de regalos.");
 		}
 		
 

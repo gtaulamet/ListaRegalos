@@ -77,9 +77,7 @@ public class AdmPersistenciaUsuario extends AdministradorPersistencia
 		{
 			System.out.println();
 		}
-		
 		return codigo;
-
 	}
 
 	@Override

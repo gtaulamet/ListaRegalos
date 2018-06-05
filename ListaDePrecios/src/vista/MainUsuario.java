@@ -25,9 +25,13 @@ import modelo.Usuario;
 import javax.swing.JScrollPane;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowFocusListener;
 import java.util.EventObject;
 import java.util.Map;
 import java.awt.event.ActionEvent;
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
 
 public class MainUsuario extends JFrame {
 
@@ -58,6 +62,7 @@ public class MainUsuario extends JFrame {
 	 * Create the frame.
 	 */
 	public MainUsuario() {
+
 		Usuario u = SistemaRegalos.GetInstance().getUsuarioLogueado();
 		Map<Integer, ListaDeRegalos> listaParticipante = ControladorListaRegalos.GetInstance().GetListasDelParticipante(u.getCodigo());
 		Map<Integer, ListaDeRegalos> listaAdministrador = ControladorListaRegalos.GetInstance().GetListasAdministrador(u.getCodigo());
@@ -110,7 +115,7 @@ public class MainUsuario extends JFrame {
 		JButton btnCrearLista = new JButton("Crear Lista");
 		btnCrearLista.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JFrame altaListaRegalos = new ABMListaRegalosParticipante(true);
+				JFrame altaListaRegalos = new ABMListaRegalosParticipante(true, new ListaDeRegalos());
 				altaListaRegalos.setVisible(true);
 			}
 		});
@@ -128,14 +133,17 @@ public class MainUsuario extends JFrame {
 
 		table.addMouseListener(new java.awt.event.MouseAdapter() {
 		    public void mousePressed(MouseEvent me) {
-		    	JTable table =(JTable) me.getSource();
+		    	JTable tbl =(JTable) me.getSource();
 		    	Point p = me.getPoint();
-		    	int row = table.rowAtPoint(p);
+		    	int row = tbl.rowAtPoint(p);
 		    	
 		    	if (me.getClickCount() == 2) {
-	    			int linea = table.getSelectedRow();
-	    			String codigo = table.getValueAt(linea, 0).toString();
-	    			//Aca llamamos a la ventana que nos traera  los detalles del registro
+	    			int linea = tbl.getSelectedRow();
+	    			String codigo = tbl.getValueAt(linea, 0).toString();
+
+	    			ListaDeRegalos lr = ControladorListaRegalos.GetInstance().GetListaRegalos(Integer.parseInt(codigo));
+	    			JFrame abmListaParticipante = new ABMListaRegalosParticipante(false,lr);
+	    			abmListaParticipante.setVisible(true);
 		    	}
 		    }
 		});		
@@ -161,22 +169,54 @@ public class MainUsuario extends JFrame {
 		table_1.getColumnModel().getColumn(5).setPreferredWidth(123);
 		scrollPane_1.setViewportView(table_1);
 		
+		JButton btnRecargarlista = new JButton("Recargar");
+		btnRecargarlista.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Usuario u = SistemaRegalos.GetInstance().getUsuarioLogueado();
+				Map<Integer, ListaDeRegalos> listaParticipante = ControladorListaRegalos.GetInstance().GetListasDelParticipante(u.getCodigo());
+				Map<Integer, ListaDeRegalos> listaAdministrador = ControladorListaRegalos.GetInstance().GetListasAdministrador(u.getCodigo());
+				
+				CompletarModeloListaAdministrador(listaAdministrador, table_1);
+				CompletarModeloListaParticipante(listaParticipante,table);
+			}
+		});
+		btnRecargarlista.setBounds(469, 102, 97, 25);
+		contentPane.add(btnRecargarlista);
+		
 		table_1.addMouseListener(new java.awt.event.MouseAdapter() {
 		    public void mousePressed(MouseEvent me) {
-		    	JTable table =(JTable) me.getSource();
+		    	JTable tbl =(JTable) me.getSource();
 		    	Point p = me.getPoint();
-		    	int row = table.rowAtPoint(p);
+		    	int row = tbl.rowAtPoint(p);
 		    	
 		    	if (me.getClickCount() == 2) {
-	    			int linea = table.getSelectedRow();
-	    			String codigo = table.getValueAt(linea, 0).toString();
+	    			int linea = tbl.getSelectedRow();
+	    			String codigo = tbl.getValueAt(linea, 0).toString();
 	    			ListaDeRegalos lr = ControladorListaRegalos.GetInstance().GetListaRegalos(Integer.parseInt(codigo));
 	    			//Aca llamamos a la ventana que nos traera  los detalles del registro
 	    			JFrame abmListaAdmin = new ABMListaDeRegalosAdmin(lr);
 	    			abmListaAdmin.setVisible(true);
 		    	}
 		    }
-		});			
+		});	
+		
+		
+//		addWindowFocusListener(new WindowFocusListener() {
+//			public void windowGainedFocus(WindowEvent e) {
+//				CompletarModeloListaAdministrador(listaAdministrador, table_1);
+//				CompletarModeloListaParticipante(listaParticipante,table);
+//			}
+//			public void windowLostFocus(WindowEvent e) {
+//			}
+//		});
+//		addFocusListener(new FocusAdapter() {
+//			@Override
+//			public void focusGained(FocusEvent e) {
+//				CompletarModeloListaAdministrador(listaAdministrador, table_1);
+//				CompletarModeloListaParticipante(listaParticipante,table);
+//
+//			}
+//		});
 	}
 
 	
@@ -238,19 +278,4 @@ public class MainUsuario extends JFrame {
 		}
 	 
 	}	
-	private Object[][] CompletarModeloListaParticipante(Map<Integer, ListaDeRegalos> listaParticipante) {
-		Object[][] aux = new Object [][] {};
-		int k=0;
-		for (Map.Entry<Integer, ListaDeRegalos> e : listaParticipante.entrySet()) {
-			
-				aux[k][0] = e.getValue().getCodigo();
-				aux[k][1] = e.getValue().getNombreAgasajado();
-				aux[k][2] = e.getValue().getFechaInicio();
-				aux[k][3] = e.getValue().getFechaFin();
-				aux[k][4] = e.getValue().getEstado();
-				aux[k][5] = "NO"; //ver como hacemos para traer si pagó o no
-				k++;
-		}		
-		return aux;
-	}
 }

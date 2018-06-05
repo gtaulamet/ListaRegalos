@@ -97,14 +97,13 @@ public class Usuario {
 		this.mail = mail;
 	}
 
-	
 	public static Usuario insert(Usuario u) {
 		int codigo = AdmPersistenciaUsuario.getInstancia().insertCodigo(u);
 		System.out.println(codigo);
 		u.setCodigo(codigo);
 		return u;
-		
 	}
+	
 	public static void delete(Usuario u) {
 		AdmPersistenciaUsuario.getInstancia().delete(u);
 	}
