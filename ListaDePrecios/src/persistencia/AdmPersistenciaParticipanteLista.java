@@ -89,8 +89,9 @@ public class AdmPersistenciaParticipanteLista extends AdministradorPersistencia
 			Connection con = PoolConnection.getPoolConnection().getConnection();
 			PreparedStatement s = con.prepareStatement("update BD_ListaRegalos.dbo.ParticipanteLista " +
 					"set pago =?," +
-					"set estado = ?) where usuarioId = ? and listaDeRegalosId = ?");
+					"estado = ? where usuarioId = ? and listaDeRegalosId = ?");
 			//agregar campos
+
 			s.setBoolean(1, p.isPago());
 			s.setString(2, p.getEstado());
 			s.setInt(3, p.getUsuario().getCodigo());
@@ -101,7 +102,7 @@ public class AdmPersistenciaParticipanteLista extends AdministradorPersistencia
 		}
 		catch (Exception e)
 		{
-			System.out.println();
+			System.out.println("Error cuando actualiza el participante de la lista:"+e.getMessage());
 		}
 		
 	}

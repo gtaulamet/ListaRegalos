@@ -38,7 +38,8 @@ public class ControladorListaRegalos {
 	}
 	
 	public Map<Integer,ListaDeRegalos> GetListasDelParticipante(int u) {
-		if (listasDeRegalos.isEmpty()) {
+		listasDeRegalos.clear();
+//		if (listasDeRegalos.isEmpty()) {
 			//map con todos los participanteLista en los que el usuario esta referido
 			//Integer=codigoLista
 			Map<Integer,ParticipanteLista> pl = ParticipanteLista.buscarTodosXUsuario(u);
@@ -48,7 +49,7 @@ public class ControladorListaRegalos {
 				ListaDeRegalos aux = ListaDeRegalos.buscarLista(e.getKey());
 				listasDeRegalos.put(e.getKey(), aux);
 			}
-		}
+//		}
 		return listasDeRegalos;
 	}
 	

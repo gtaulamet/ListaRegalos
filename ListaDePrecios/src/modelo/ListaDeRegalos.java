@@ -49,7 +49,11 @@ public class ListaDeRegalos implements IObservableMails, IObserverCalendario {
 	}
 	
 	public Map<Integer,ParticipanteLista> GetParticipantes() {
-		return ParticipanteLista.buscarTodosXLista(this.getCodigo());
+		Map<Integer,ParticipanteLista> lista = ParticipanteLista.buscarTodosXLista(this.getCodigo()); 
+		this.participantes = lista;
+				
+		return this.participantes;
+		
 	}
 	
 	private ParticipanteLista GetParticipante(Usuario u) {

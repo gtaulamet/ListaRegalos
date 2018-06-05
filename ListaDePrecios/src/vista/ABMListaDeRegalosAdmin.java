@@ -30,6 +30,8 @@ import javax.swing.UIManager;
 import javax.swing.border.LineBorder;
 import java.awt.Color;
 import java.awt.event.WindowFocusListener;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.awt.event.WindowEvent;
 
 public class ABMListaDeRegalosAdmin extends JFrame {
@@ -137,19 +139,23 @@ public class ABMListaDeRegalosAdmin extends JFrame {
 		lblEstado.setBounds(354, 144, 56, 16);
 		contentPane.add(lblEstado);
 		
+		DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+		String aux = format.format(lr.getFechaInicio());		
+		
 		tfFechaInicio = new JTextField();
 		tfFechaInicio.setEditable(false);
 		tfFechaInicio.setBounds(460, 83, 116, 22);
 		contentPane.add(tfFechaInicio);
 		tfFechaInicio.setColumns(10);
-		tfFechaInicio.setText(lr.getFechaInicio().toString());
+		tfFechaInicio.setText(aux);
 		
+		aux = format.format(lr.getFechaFin());
 		tfFechaFin = new JTextField();
 		tfFechaFin.setEditable(false);
 		tfFechaFin.setBounds(460, 112, 116, 22);
 		contentPane.add(tfFechaFin);
 		tfFechaFin.setColumns(10);
-		tfFechaFin.setText(lr.getFechaFin().toString());
+		tfFechaFin.setText(aux);
 		
 		tfEstado = new JTextField();
 		tfEstado.setEditable(false);

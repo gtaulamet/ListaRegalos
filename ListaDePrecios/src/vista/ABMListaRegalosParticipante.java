@@ -186,6 +186,8 @@ public class ABMListaRegalosParticipante extends JFrame {
 		btnDarDeBaja.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Usuario u = SistemaRegalos.GetInstance().getUsuarioLogueado();
+				//Cargo los participantes a la lista para poder dar de baja el participante. (lazy)
+				lr.GetParticipantes();
 				lr.BajarParticipanteLista(u);
 				lblSeHaDado.setVisible(true);
 			}
@@ -199,8 +201,13 @@ public class ABMListaRegalosParticipante extends JFrame {
 		}else {
 			tfAgasajado.setText(lr.getNombreAgasajado());
 			tfMontoPart.setText(String.valueOf(lr.getMontoARecaudarXIntegrante()));
-			tfFechaFin.setText(lr.getFechaFin().toString());
-			tfFechaAgasajo.setText(lr.getFechaAgasajo().toString());
+			DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+			
+			String aux = format.format(lr.getFechaFin());
+			tfFechaFin.setText(aux);
+			
+			aux = format.format(lr.getFechaAgasajo());
+			tfFechaAgasajo.setText(aux);
 			tfMailAgasajado.setText(lr.getMailAgasajado());
 			tfAgasajado.setEditable(false);
 			tfMontoPart.setEditable(false);

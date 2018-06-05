@@ -9,9 +9,12 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.event.CellEditorListener;
 import javax.swing.JLabel;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.Point;
 
 import javax.swing.JTextField;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -148,12 +151,12 @@ public class MainUsuario extends JFrame {
 		    }
 		});		
 		
-		JLabel lblListasDeRegalo = new JLabel("Listas de Regalo - Participante");
+		JLabel lblListasDeRegalo = new JLabel("Listas de Regalo - Como participante");
 		lblListasDeRegalo.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 13));
 		lblListasDeRegalo.setBounds(12, 182, 305, 16);
 		contentPane.add(lblListasDeRegalo);
 		
-		JLabel lblListasDeRegalo_1 = new JLabel("Listas de Regalo - Administrador");
+		JLabel lblListasDeRegalo_1 = new JLabel("Listas de Regalo - Como administrador");
 		lblListasDeRegalo_1.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 13));
 		lblListasDeRegalo_1.setBounds(12, 336, 281, 16);
 		contentPane.add(lblListasDeRegalo_1);
@@ -169,7 +172,7 @@ public class MainUsuario extends JFrame {
 		table_1.getColumnModel().getColumn(5).setPreferredWidth(123);
 		scrollPane_1.setViewportView(table_1);
 		
-		JButton btnRecargarlista = new JButton("Recargar");
+		JButton btnRecargarlista = new JButton();
 		btnRecargarlista.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				Usuario u = SistemaRegalos.GetInstance().getUsuarioLogueado();
@@ -180,8 +183,15 @@ public class MainUsuario extends JFrame {
 				CompletarModeloListaParticipante(listaParticipante,table);
 			}
 		});
-		btnRecargarlista.setBounds(469, 102, 97, 25);
+		try {
+			btnRecargarlista.setIcon(new ImageIcon("D:\\Users\\gustavo\\eclipse-workspace\\ListaDePrecios\\img\\refresh.png"));
+		} catch (Exception ex) {
+			System.out.println(ex);
+		}
+		btnRecargarlista.setBounds(515, 166, 32, 32);
 		contentPane.add(btnRecargarlista);
+
+		
 		
 		table_1.addMouseListener(new java.awt.event.MouseAdapter() {
 		    public void mousePressed(MouseEvent me) {
