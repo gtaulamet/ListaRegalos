@@ -9,7 +9,6 @@ import modelo.ListaDeRegalos;
 import modelo.ParticipanteLista;
 import modelo.Usuario;
 import persistencia.AdmPersistenciaParticipanteLista;
-import vista.ListaRegaloAdministrador;
 
 
 public class ControladorListaRegalos {

@@ -23,6 +23,7 @@ import javax.swing.table.TableCellEditor;
 import controlador.ControladorListaRegalos;
 import controlador.SistemaRegalos;
 import modelo.ListaDeRegalos;
+import modelo.ParticipanteLista;
 import modelo.Usuario;
 
 import javax.swing.JScrollPane;
@@ -30,6 +31,8 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowFocusListener;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.EventObject;
 import java.util.Map;
 import java.awt.event.ActionEvent;
@@ -65,6 +68,8 @@ public class MainUsuario extends JFrame {
 	 * Create the frame.
 	 */
 	public MainUsuario() {
+		setResizable(false);
+		setTitle("Sistema de Lista de Regalos - Main Usuario");
 
 		Usuario u = SistemaRegalos.GetInstance().getUsuarioLogueado();
 		Map<Integer, ListaDeRegalos> listaParticipante = ControladorListaRegalos.GetInstance().GetListasDelParticipante(u.getCodigo());
@@ -246,12 +251,18 @@ public class MainUsuario extends JFrame {
 		
 		tbl.setModel(dtm);
 		
+		DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+		String fi = "";
+		String ff = "";
+		
 		for (Map.Entry<Integer, ListaDeRegalos> e : listaAdministrador.entrySet()) {
+			fi = format.format(e.getValue().getFechaInicio());
+			ff = format.format(e.getValue().getFechaFin());
 	        dtm.addRow(new Object[] {
 					e.getValue().getCodigo(),
 					e.getValue().getNombreAgasajado(),
-					e.getValue().getFechaInicio(),
-					e.getValue().getFechaFin(),
+					fi,
+					ff,
 					e.getValue().getEstado(),
 					e.getValue().getMontoRecaudado()
 			});
@@ -276,14 +287,27 @@ public class MainUsuario extends JFrame {
 		dtm.setColumnIdentifiers(columnasParticipante);
 		tbl.setModel(dtm);
 		
+		DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+		String fi = "";
+		String ff = "";		
+		
 		for (Map.Entry<Integer, ListaDeRegalos> e : listaParticipante.entrySet()) {
+			String pago = "";
+			if (e.getValue().GetParticipantes().get(e.getKey()).isPago()) {
+				pago ="Si";
+			}else {
+				pago ="No";
+			}
+			fi = format.format(e.getValue().getFechaInicio());
+			ff = format.format(e.getValue().getFechaFin());
 	        dtm.addRow(new Object[] {
 					e.getValue().getCodigo(),
 					e.getValue().getNombreAgasajado(),
-					e.getValue().getFechaInicio(),
-					e.getValue().getFechaFin(),
+					fi,
+					ff,
 					e.getValue().getEstado(),
-					"NO" //ver como completar este dato
+					pago
+					//"NO" //ver como completar este dato
 			});
 		}
 	 

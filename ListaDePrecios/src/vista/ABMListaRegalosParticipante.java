@@ -60,6 +60,8 @@ public class ABMListaRegalosParticipante extends JFrame {
 	 * @throws ParseException 
 	 */
 	public ABMListaRegalosParticipante(boolean nuevo, ListaDeRegalos lr)  {
+		setTitle("Sistema de Listas de Regalos - Lista Participante");
+		setResizable(false);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 347, 342);
 		contentPane = new JPanel();

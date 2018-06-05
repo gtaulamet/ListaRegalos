@@ -67,6 +67,8 @@ public class ABMListaDeRegalosAdmin extends JFrame {
 	 * Create the frame.
 	 */
 	public ABMListaDeRegalosAdmin(ListaDeRegalos lr) {
+		setResizable(false);
+		setTitle("Sistema de Listas de Regalos - Lista Administrada");
 
 		Map<Integer,ParticipanteLista> participantes = lr.GetParticipantes();
 		Map<Integer,Usuario> usuarios = ControladorUsuario.GetInstance().GetUsuarios();
@@ -175,7 +177,7 @@ public class ABMListaDeRegalosAdmin extends JFrame {
 		contentPane.add(lblParticipantes);
 		
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(12, 229, 317, 182);
+		scrollPane.setBounds(12, 229, 317, 225);
 		contentPane.add(scrollPane);
 		
 		table = new JTable();
@@ -213,7 +215,7 @@ public class ABMListaDeRegalosAdmin extends JFrame {
 		bAdd.setMnemonic(KeyEvent.VK_D);
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(354, 230, 326, 181);
+		scrollPane_1.setBounds(354, 230, 326, 224);
 		contentPane.add(scrollPane_1);
 		
 		
@@ -249,11 +251,6 @@ public class ABMListaDeRegalosAdmin extends JFrame {
 		
 		ButtonColumn bRemove = new ButtonColumn(table_1,remove,3);
 		bRemove.setMnemonic(KeyEvent.VK_D);
-				
-		
-		JButton btnGuardar = new JButton("Guardar");
-		btnGuardar.setBounds(479, 422, 97, 25);
-		contentPane.add(btnGuardar);
 		
 		JPanel panel = new JPanel();
 		panel.setBorder(new LineBorder(new Color(0, 0, 0)));
