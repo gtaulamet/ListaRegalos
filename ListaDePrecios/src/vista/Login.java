@@ -6,6 +6,7 @@ import java.awt.FlowLayout;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.border.EmptyBorder;
 
 import controlador.SistemaRegalos;
@@ -25,7 +26,7 @@ public class Login extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField tfUsuario;
-	private JTextField tfContrasenia;
+	private JPasswordField tfContrasenia;
 
 	/**
 	 * Launch the application.
@@ -72,7 +73,7 @@ public class Login extends JFrame {
 		contentPane.add(tfUsuario);
 		tfUsuario.setColumns(10);
 		
-		tfContrasenia = new JTextField();
+		tfContrasenia = new JPasswordField();
 		tfContrasenia.setBounds(171, 145, 116, 22);
 		contentPane.add(tfContrasenia);
 		tfContrasenia.setColumns(10);
@@ -90,7 +91,7 @@ public class Login extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				lblContraseaIncorrecta.setVisible(false);
 				//Logueo
-				if (SistemaRegalos.GetInstance().Login(tfUsuario.getText(), tfContrasenia.getText())) {
+				if (SistemaRegalos.GetInstance().Login(tfUsuario.getText(),  new String(tfContrasenia.getPassword()))) {
 					JFrame mainUsuario = new MainUsuario();
 					mainUsuario.setVisible(true);
 					dispose();	

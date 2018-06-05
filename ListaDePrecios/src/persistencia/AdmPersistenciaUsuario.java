@@ -46,22 +46,31 @@ public class AdmPersistenciaUsuario extends AdministradorPersistencia
 	}
 
 	@Override
-	public void insert(Object o) 
+	public void insert (Object o) 
 	{
+		// TODO Auto-generated method stub
+	}
+
+	public int insertCodigo(Object o) 
+	{
+		int codigo = 0;
 		try
 		{
 			Usuario a = (Usuario)o;
 			Connection con = PoolConnection.getPoolConnection().getConnection();
-			PreparedStatement s = con.prepareStatement("insert into BD_ListaRegalos.dbo.Usuario values (?,?,?,?,?,?,?)");
+			PreparedStatement s = con.prepareStatement("insert into BD_ListaRegalos.dbo.Usuario values (?,?,?,?,?,?)");
 			//agregar campos
-			s.setInt(1,a.getCodigo());
-			s.setString(2, a.getUser());
-			s.setString(3,a.getPass());
-			s.setString(4, a.getNombre());
-			s.setString(5, a.getApellido());
-			s.setInt(6,a.getDNI());
-			s.setString(7, a.getMail());
+			s.setString(1, a.getUser());
+			s.setString(2,a.getPass());
+			s.setString(3, a.getNombre());
+			s.setString(4, a.getApellido());
+			s.setInt(5,a.getDNI());
+			s.setString(6, a.getMail());
 			s.execute();
+			s = con.prepareStatement("SELECT @@IDENTITY AS 'Identity'");
+			ResultSet result = s.executeQuery();
+			result.next();
+			codigo =result.getInt(1);
 			PoolConnection.getPoolConnection().realeaseConnection(con);
 		}
 		catch (Exception e)
@@ -69,6 +78,7 @@ public class AdmPersistenciaUsuario extends AdministradorPersistencia
 			System.out.println();
 		}
 		
+		return codigo;
 
 	}
 

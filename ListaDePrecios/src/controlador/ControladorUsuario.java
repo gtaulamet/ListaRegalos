@@ -62,4 +62,10 @@ public class ControladorUsuario {
 		this.administradores = Administrador.buscarTodos();
 		this.usuarios = Usuario.buscarTodos();
 	}
+	
+	public void CrearUsuario(String user, String nombre, String apellido, String pass, String email, String DNI) {
+		Usuario u = new Usuario(0,user, SistemaRegalos.generarPass(pass), nombre, apellido, Integer.parseInt(DNI), email);
+		u = Usuario.insert(u);
+		usuarios.put(u.getCodigo(),u);
+	}
 }

@@ -12,8 +12,14 @@ import java.awt.Color;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+
+import controlador.ControladorUsuario;
+import modelo.ParticipanteLista;
+import modelo.Usuario;
+
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.util.Map;
 import java.awt.event.ActionEvent;
 
 public class Administracion extends JFrame {
@@ -42,6 +48,7 @@ public class Administracion extends JFrame {
 	 * Create the frame.
 	 */
 	public Administracion() {
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 609, 480);
 		contentPane = new JPanel();
@@ -64,8 +71,10 @@ public class Administracion extends JFrame {
 		scrollPane.setBounds(12, 119, 579, 113);
 		contentPane.add(scrollPane);
 		
+		
+		Map<Integer,Usuario> usuarios = ControladorUsuario.GetInstance().GetUsuarios();
 		table = new JTable();
-		table.setModel(new DefaultTableModel(
+	/*	table.setModel(new DefaultTableModel(
 			new Object[][] {
 				{null, null, null, null, null, null},
 				{null, null, null, null, null, null},
@@ -74,7 +83,8 @@ public class Administracion extends JFrame {
 			new String[] {
 				"C\u00F3digo", "User", "Nombre", "Apellido", "DNI", "E-mail"
 			}
-		));
+		));*/
+		CompletarModeloUsuarios(usuarios, table);
 		scrollPane.setViewportView(table);
 		
 		JButton btnNuevoUsuario = new JButton("Nuevo Usuario");
@@ -120,6 +130,36 @@ public class Administracion extends JFrame {
 		});
 		btnNuevoAdministrador.setBounds(369, 263, 157, 25);
 		contentPane.add(btnNuevoAdministrador);
+	}
+	
+	private void CompletarModeloUsuarios(Map<Integer,Usuario> usuarios, JTable tbl) {
+		String[] columnaUsuarios = new String[] {
+				"C\u00F3digo", "User", "Nombre", "Apellido", "DNI", "E-mail", ""
+			};
+		DefaultTableModel dtm = new DefaultTableModel() {
+			boolean[] columnEditables = new boolean[] {
+					false, false, false, false, false, false, true
+			};
+			public boolean isCellEditable(int row, int column) {
+				return columnEditables[column];
+			}
+			};
+		dtm.setColumnIdentifiers(columnaUsuarios);
+		
+		tbl.setModel(dtm);
+		
+		for (Map.Entry<Integer, Usuario> e : usuarios.entrySet()) {
+		        dtm.addRow(new Object[] {
+		        		e.getValue().getCodigo(),
+		        		e.getValue().getUser(),
+		        		e.getValue().getNombre(),
+						e.getValue().getApellido(),
+						e.getValue().getDNI(),
+						e.getValue().getMail(),
+						">>"
+	        	});
+		}
+		
 	}
 
 }

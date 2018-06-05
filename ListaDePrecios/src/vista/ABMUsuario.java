@@ -5,9 +5,17 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
 import javax.swing.border.EmptyBorder;
+
+import controlador.ControladorUsuario;
+import controlador.SistemaRegalos;
+
 import javax.swing.JLabel;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.JTextField;
 import javax.swing.JButton;
 
@@ -16,7 +24,7 @@ public class ABMUsuario extends JFrame {
 	private JPanel contentPane;
 	private JTextField tfCodigo;
 	private JTextField tfUser;
-	private JTextField tfPass;
+	private JPasswordField tfPass;
 	private JTextField tfNombre;
 	private JTextField tfApellido;
 	private JTextField tfDNI;
@@ -92,7 +100,7 @@ public class ABMUsuario extends JFrame {
 		contentPane.add(tfUser);
 		tfUser.setColumns(10);
 		
-		tfPass = new JTextField();
+		tfPass = new JPasswordField();
 		tfPass.setBounds(99, 135, 116, 22);
 		contentPane.add(tfPass);
 		tfPass.setColumns(10);
@@ -123,7 +131,26 @@ public class ABMUsuario extends JFrame {
 		
 		JButton btnGuardar = new JButton("Guardar");
 		btnGuardar.setBounds(223, 318, 97, 25);
+		btnGuardar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ControladorUsuario.GetInstance().CrearUsuario(tfUser.getText(), tfNombre.getText(), tfApellido.getText(), new String(tfPass.getPassword()), tfEmail.getText(), tfDNI.getText());
+				dispose();
+				
+			}
+		});
 		contentPane.add(btnGuardar);
+	/*
+	 public void actionPerformed(ActionEvent e) {
+				lblContraseaIncorrecta.setVisible(false);
+				//Logueo Administrado
+				if (SistemaRegalos.GetInstance().LoginAdmin(tfUsuario.getText(), new String(tfPass.getPassword()))) {
+					JFrame administracion = new Administracion();
+					administracion.setVisible(true);
+					dispose();	
+				}else {
+					lblContraseaIncorrecta.setVisible(true);
+				}
+			}*/
 	}
 
 }
