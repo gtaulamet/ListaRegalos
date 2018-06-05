@@ -19,6 +19,9 @@ public class ListaDeRegalos implements IObservableMails, IObserverCalendario {
 	private Usuario administrador;
 	private float montoARecaudarXIntegrante;
 	
+	public ListaDeRegalos() {
+		
+	}
 
 	public ListaDeRegalos(int codigo, String nombreAgasajado, Date fechaAgasajo, String mailAgasajado,
 			float montoRecaudado, Date fechaInicio, Date fechaFin, String estado, Usuario administrador,
@@ -55,11 +58,23 @@ public class ListaDeRegalos implements IObservableMails, IObserverCalendario {
 	
 	public void BajarParticipanteLista(Usuario u) {
 		ParticipanteLista.darDeBaja(u.getCodigo(), this.getCodigo());
+		this.participantes.remove(u.getCodigo());
 	}
 	
 	public void AgregarParticipanteLista(Usuario ul) {
-		ParticipanteLista pl = new ParticipanteLista(ul, this, false, "Activo");
-		ParticipanteLista.insert(pl);
+		//TODO
+		//primero hay que revisar si no existe el participante para ese usuario inactivo.
+		//Si es asi, se activa el participante. Sino se crea uno nuevo.
+		ParticipanteLista partInactivo = ParticipanteLista.buscarParticipante(ul.getCodigo(), this.getCodigo());
+		if (partInactivo != null) {
+			partInactivo.setEstado("Activo");
+			ParticipanteLista.update(partInactivo);
+			this.participantes.put(ul.getCodigo(), partInactivo);
+		} else {
+			ParticipanteLista pl = new ParticipanteLista(ul, this, false, "Activo");
+			ParticipanteLista.insert(pl);
+			this.participantes.put(ul.getCodigo(),pl);
+		}
 	}
 
 	@Override
