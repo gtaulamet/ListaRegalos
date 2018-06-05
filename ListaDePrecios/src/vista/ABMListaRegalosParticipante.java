@@ -39,27 +39,31 @@ public class ABMListaRegalosParticipante extends JFrame {
 	private JFormattedTextField tfFechaAgasajo;
 	private JFormattedTextField tfMailAgasajado;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					ABMListaRegalosParticipante frame = new ABMListaRegalosParticipante(false,new ListaDeRegalos());
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	private ListaDeRegalos lr;
+	private Usuario u;
+	
+//	/**
+//	 * Launch the application.
+//	 */
+//	public static void main(String[] args) {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					ABMListaRegalosParticipante frame = new ABMListaRegalosParticipante(false,new ListaDeRegalos());
+//					frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
 
 	/**
 	 * Create the frame.
 	 * @throws ParseException 
 	 */
-	public ABMListaRegalosParticipante(boolean nuevo, ListaDeRegalos lr)  {
+	public ABMListaRegalosParticipante(boolean nuevo, ListaDeRegalos listaregalos)  {
+		this.lr= listaregalos;
 		setTitle("Sistema de Listas de Regalos - Lista Participante");
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -153,13 +157,17 @@ public class ABMListaRegalosParticipante extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 
 				try {
+					//Formateo datos a guardar
 					DateFormat format = new SimpleDateFormat("dd/MM/yyyy", Locale.ROOT);
 					Date fAg = format.parse(tfFechaAgasajo.getText());
 					Date now = new Date();
 					Date fFin = format.parse(tfFechaFin.getText());
+					
+					//Llamo al controlador de lista de regalos para que cree la lista.
 					ControladorListaRegalos.GetInstance().crearListaRegalos(tfAgasajado.getText(),
 							fAg, tfMailAgasajado.getText(),0,now,fFin,"Activo",
 							SistemaRegalos.GetInstance().getUsuarioLogueado(),Float.parseFloat(tfMontoPart.getText()));
+					
 					lblElRegistroSe.setText("El registro se ha guardado con Éxito");
 					lblElRegistroSe.setForeground(new Color(0,128,0));
 					lblElRegistroSe.setVisible(true);
@@ -187,9 +195,13 @@ public class ABMListaRegalosParticipante extends JFrame {
 		JButton btnDarDeBaja = new JButton("Dar de Baja");
 		btnDarDeBaja.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Usuario u = SistemaRegalos.GetInstance().getUsuarioLogueado();
+				//Obtengo el usuario que está logueado
+				u = SistemaRegalos.GetInstance().getUsuarioLogueado();
+				
 				//Cargo los participantes a la lista para poder dar de baja el participante. (lazy)
 				lr.GetParticipantes();
+				
+				//Doy de baja el usuario como participante de la lista (baja lógica)
 				lr.BajarParticipanteLista(u);
 				lblSeHaDado.setVisible(true);
 			}
@@ -197,7 +209,7 @@ public class ABMListaRegalosParticipante extends JFrame {
 		btnDarDeBaja.setBounds(21, 228, 116, 25);
 		contentPane.add(btnDarDeBaja);
 		
-		
+		//Valido si es nueva lista o lista existente
 		if (nuevo) {
 			btnDarDeBaja.setVisible(false);
 		}else {

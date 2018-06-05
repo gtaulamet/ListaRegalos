@@ -47,22 +47,26 @@ public class ABMListaDeRegalosAdmin extends JFrame {
 	private JTable table;
 	private JTable table_1;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					ABMListaDeRegalosAdmin frame = new ABMListaDeRegalosAdmin(null);
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
+	private Map<Integer,ParticipanteLista> participantes;
+	private Map<Integer,Usuario> usuarios;
+	
+//	/**
+//	 * Launch the application.
+//	 */
+//	public static void main(String[] args) {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					ABMListaDeRegalosAdmin frame = new ABMListaDeRegalosAdmin(null);
+//					frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
+	
+	
 	/**
 	 * Create the frame.
 	 */
@@ -70,8 +74,8 @@ public class ABMListaDeRegalosAdmin extends JFrame {
 		setResizable(false);
 		setTitle("Sistema de Listas de Regalos - Lista Administrada");
 
-		Map<Integer,ParticipanteLista> participantes = lr.GetParticipantes();
-		Map<Integer,Usuario> usuarios = ControladorUsuario.GetInstance().GetUsuarios();
+		this.participantes = lr.GetParticipantes();
+		this.usuarios = ControladorUsuario.GetInstance().GetUsuarios();
 
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 712, 502);

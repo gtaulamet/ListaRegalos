@@ -48,21 +48,25 @@ public class MainUsuario extends JFrame {
 	private JTable table;
 	private JTable table_1;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					MainUsuario frame = new MainUsuario();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	private Map<Integer, ListaDeRegalos> listaParticipante;
+	private Map<Integer, ListaDeRegalos> listaAdministrador;
+	private Usuario u;
+	
+//	/**
+//	 * Launch the application.
+//	 */
+//	public static void main(String[] args) {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					MainUsuario frame = new MainUsuario();
+//					frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
 
 	/**
 	 * Create the frame.
@@ -71,9 +75,9 @@ public class MainUsuario extends JFrame {
 		setResizable(false);
 		setTitle("Sistema de Lista de Regalos - Main Usuario");
 
-		Usuario u = SistemaRegalos.GetInstance().getUsuarioLogueado();
-		Map<Integer, ListaDeRegalos> listaParticipante = ControladorListaRegalos.GetInstance().GetListasDelParticipante(u.getCodigo());
-		Map<Integer, ListaDeRegalos> listaAdministrador = ControladorListaRegalos.GetInstance().GetListasAdministrador(u.getCodigo());
+		this.u = SistemaRegalos.GetInstance().getUsuarioLogueado();
+		this.listaParticipante = ControladorListaRegalos.GetInstance().GetListasDelParticipante(u.getCodigo());
+		this.listaAdministrador = ControladorListaRegalos.GetInstance().GetListasAdministrador(u.getCodigo());
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 615, 521);
@@ -180,16 +184,15 @@ public class MainUsuario extends JFrame {
 		JButton btnRecargarlista = new JButton();
 		btnRecargarlista.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Usuario u = SistemaRegalos.GetInstance().getUsuarioLogueado();
-				Map<Integer, ListaDeRegalos> listaParticipante = ControladorListaRegalos.GetInstance().GetListasDelParticipante(u.getCodigo());
-				Map<Integer, ListaDeRegalos> listaAdministrador = ControladorListaRegalos.GetInstance().GetListasAdministrador(u.getCodigo());
+				listaParticipante = ControladorListaRegalos.GetInstance().GetListasDelParticipante(u.getCodigo());
+				listaAdministrador = ControladorListaRegalos.GetInstance().GetListasAdministrador(u.getCodigo());
 				
 				CompletarModeloListaAdministrador(listaAdministrador, table_1);
 				CompletarModeloListaParticipante(listaParticipante,table);
 			}
 		});
 		try {
-			btnRecargarlista.setIcon(new ImageIcon("D:\\Users\\gustavo\\eclipse-workspace\\ListaDePrecios\\img\\refresh.png"));
+			btnRecargarlista.setIcon(new ImageIcon(".\\img\\refresh.png"));
 		} catch (Exception ex) {
 			System.out.println(ex);
 		}
@@ -214,27 +217,9 @@ public class MainUsuario extends JFrame {
 		    	}
 		    }
 		});	
-		
-		
-//		addWindowFocusListener(new WindowFocusListener() {
-//			public void windowGainedFocus(WindowEvent e) {
-//				CompletarModeloListaAdministrador(listaAdministrador, table_1);
-//				CompletarModeloListaParticipante(listaParticipante,table);
-//			}
-//			public void windowLostFocus(WindowEvent e) {
-//			}
-//		});
-//		addFocusListener(new FocusAdapter() {
-//			@Override
-//			public void focusGained(FocusEvent e) {
-//				CompletarModeloListaAdministrador(listaAdministrador, table_1);
-//				CompletarModeloListaParticipante(listaParticipante,table);
-//
-//			}
-//		});
 	}
 
-	
+	//Completo el modelo de la tabla tbl con los datos de las listas en las que el usuario es administrador
 	private void CompletarModeloListaAdministrador(Map<Integer,ListaDeRegalos> listaAdministrador, JTable tbl) {
 		String[] columnasAdministrador = new String[] {
 				"C\u00F3digo", "Agasajado", "F. Inicio", "F. Fin", "Estado", "Monto Recaudado"
@@ -270,7 +255,7 @@ public class MainUsuario extends JFrame {
 		
 	}
 
-	
+	//Completo el modelo de la tabla tbl con los datos de las listas en las que el usuario es participante
 	private void CompletarModeloListaParticipante(Map<Integer,ListaDeRegalos> listaParticipante, JTable tbl) {
 		String[] columnasParticipante = new String[] {
 				"C\u00F3digo", "Agasajado", "F. Inicio", "F. Fin", "Estado", "Pag\u00F3"
@@ -307,7 +292,6 @@ public class MainUsuario extends JFrame {
 					ff,
 					e.getValue().getEstado(),
 					pago
-					//"NO" //ver como completar este dato
 			});
 		}
 	 
