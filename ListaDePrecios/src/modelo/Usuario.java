@@ -104,6 +104,10 @@ public class Usuario {
 		return u;
 	}
 	
+	public void actualizarUsuario() {
+		AdmPersistenciaUsuario.getInstancia().update(this);
+	}
+	
 	public static void delete(Usuario u) {
 		AdmPersistenciaUsuario.getInstancia().delete(u);
 	}

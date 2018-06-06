@@ -11,6 +11,7 @@ import javax.swing.border.EmptyBorder;
 
 import controlador.ControladorUsuario;
 import controlador.SistemaRegalos;
+import modelo.Usuario;
 
 import javax.swing.JLabel;
 import java.awt.Font;
@@ -40,7 +41,7 @@ public class ABMUsuario extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					ABMUsuario frame = new ABMUsuario();
+					ABMUsuario frame = new ABMUsuario(null);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -52,7 +53,7 @@ public class ABMUsuario extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public ABMUsuario() {
+	public ABMUsuario(Usuario u) {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 427, 397);
 		contentPane = new JPanel();
@@ -134,6 +135,7 @@ public class ABMUsuario extends JFrame {
 		contentPane.add(tfEmail);
 		tfEmail.setColumns(10);
 		
+		
 		JButton btnDarDeBaja = new JButton("Dar de Baja");
 		btnDarDeBaja.setBounds(223, 40, 131, 25);
 		contentPane.add(btnDarDeBaja);
@@ -145,16 +147,22 @@ public class ABMUsuario extends JFrame {
 				
 				try {
 					 Pattern pattern = Pattern.compile("^[_a-z0-9-]+(\\.[_a-z0-9-]+)*@" +
-						      "[a-z0-9-]+(\\.[a-z0-9-]+)*(\\.[a-z]{2,4})$");
-				 
+							 "[a-z0-9-]+(\\.[a-z0-9-]+)*(\\.[a-z]{2,4})$");
+					 
 					 Matcher matcher = pattern.matcher(tfEmail.getText());
-				        if (!matcher.matches()) {
-				        	throw new Exception("EMail invalido"); 
-				        }
-					
-				        
-				ControladorUsuario.GetInstance().CrearUsuario(tfUser.getText(), tfNombre.getText(), tfApellido.getText(), new String(tfPass.getPassword()), tfEmail.getText(), tfDNI.getText());
-				dispose();
+					if (!matcher.matches()) {
+						throw new Exception("EMail invalido"); 
+					}
+					//Si es un alta	
+					if (u==null) {       
+						ControladorUsuario.GetInstance().CrearUsuario(tfUser.getText(), tfNombre.getText(), tfApellido.getText(), new String(tfPass.getPassword()), tfEmail.getText(), tfDNI.getText());
+					}else {
+						//Si es una modificacion
+						ControladorUsuario.GetInstance().ModificarUsuario(Integer.parseInt(tfCodigo.getText()), tfUser.getText(), tfNombre.getText(), tfApellido.getText(), new String(tfPass.getPassword()), tfEmail.getText(), tfDNI.getText());
+					}
+					 JFrame adimistrador = new Administracion();
+					 adimistrador.setVisible(true);
+					dispose();
 				}
 				catch(Exception ex) {
 					System.out.println(ex.getMessage());
@@ -165,6 +173,21 @@ public class ABMUsuario extends JFrame {
 			}
 		});
 		contentPane.add(btnGuardar);
+		
+
+		if (u!=null) {
+			tfCodigo.setText(String.valueOf(u.getCodigo()));
+			tfCodigo.setEditable(false);
+			tfUser.setText(String.valueOf(u.getUser()));
+			tfUser.setEditable(false);
+			tfNombre.setText(u.getNombre());
+			tfApellido.setText(u.getApellido());
+			tfDNI.setText(String.valueOf(u.getDNI()));
+			tfEmail.setText(u.getMail());
+		}else {
+			tfCodigo.setEnabled(false);
+			btnDarDeBaja.setEnabled(false);
+		}
 	/*
 	 public void actionPerformed(ActionEvent e) {
 				lblContraseaIncorrecta.setVisible(false);

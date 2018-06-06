@@ -95,28 +95,27 @@ public class AdmPersistenciaUsuario extends AdministradorPersistencia
 			Usuario a = (Usuario)o;
 			Connection con = PoolConnection.getPoolConnection().getConnection();
 			PreparedStatement s = con.prepareStatement("update BD_ListaRegalos.dbo.Usuario " +
-					"set codigo = ?," +
 					"set username = ?," +
-					"set pass =?," +
-					"set nombre =?," +
-					"set apellido =?," +
-					"set dni =?," +
-					"set mail = ?)");
+					" pass =?," +
+					" nombre =?," +
+					" apellido =?," +
+					" dni =?," +
+					" mail = ? where codigo=?");
 			//agregar campos
-			s.setInt(1,a.getCodigo());
-			s.setString(2, a.getUser());
-			s.setString(3,a.getPass());
-			s.setString(4, a.getNombre());
-			s.setString(5, a.getApellido());
-			s.setInt(6,a.getDNI());
-			s.setString(7, a.getMail());
+			s.setString(1, a.getUser());
+			s.setString(2,a.getPass());
+			s.setString(3, a.getNombre());
+			s.setString(4, a.getApellido());
+			s.setInt(5,a.getDNI());
+			s.setString(6, a.getMail());
+			s.setInt(7, a.getCodigo());
 			
 			s.execute();
 			PoolConnection.getPoolConnection().realeaseConnection(con);
 		}
 		catch (Exception e)
 		{
-			System.out.println();
+			System.out.println(e);
 		}
 		
 

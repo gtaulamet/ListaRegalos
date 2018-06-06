@@ -13,13 +13,18 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+import controlador.ControladorListaRegalos;
 import controlador.ControladorUsuario;
 import modelo.ParticipanteLista;
 import modelo.Usuario;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.util.Map;
+import java.util.Vector;
 import java.awt.event.ActionEvent;
 
 public class Administracion extends JFrame {
@@ -74,27 +79,34 @@ public class Administracion extends JFrame {
 		
 		Map<Integer,Usuario> usuarios = ControladorUsuario.GetInstance().GetUsuarios();
 		table = new JTable();
-	/*	table.setModel(new DefaultTableModel(
-			new Object[][] {
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-				{null, null, null, null, null, null},
-			},
-			new String[] {
-				"C\u00F3digo", "User", "Nombre", "Apellido", "DNI", "E-mail"
-			}
-		));*/
 		CompletarModeloUsuarios(usuarios, table);
 		scrollPane.setViewportView(table);
 		
+		
+		 Action edit = new AbstractAction()
+	    	{
+	    	    public void actionPerformed(ActionEvent e)
+	    	    {
+	    	    	System.out.println("Editar");
+	    	    	JTable tbl = (JTable)e.getSource();
+			        int modelRow = Integer.valueOf( e.getActionCommand() );
+			        //obtengo la fila que se seleccionó y el usuario que corresponde
+			        Vector row = (Vector) ((DefaultTableModel)tbl.getModel()).getDataVector().elementAt(modelRow);
+			        Usuario usuario = ControladorUsuario.GetInstance().GetUsuario(Integer.valueOf(row.get(0).toString()));
+			        JFrame abmUsuario = new ABMUsuario(usuario);
+					abmUsuario.setVisible(true);
+					dispose();
+	    	    }
+	    	};		
+	    	ButtonColumn bEdit = new ButtonColumn(table,edit,6);
+	    	bEdit.setMnemonic(KeyEvent.VK_D);
+	    	
 		JButton btnNuevoUsuario = new JButton("Nuevo Usuario");
 		btnNuevoUsuario.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JFrame abmUsuario = new ABMUsuario();
-				//VER DE HACE DE OTRA FORMA
-				abmUsuario.getContentPane().getComponents()[9].setEnabled(false);
-				abmUsuario.getContentPane().getComponents()[16].setEnabled(false);
+				JFrame abmUsuario = new ABMUsuario(null);
 				abmUsuario.setVisible(true);
+				dispose();
 			}
 		});
 		btnNuevoUsuario.setBounds(369, 85, 133, 25);
@@ -157,7 +169,7 @@ public class Administracion extends JFrame {
 						e.getValue().getApellido(),
 						e.getValue().getDNI(),
 						e.getValue().getMail(),
-						">>"
+						"Editar"
 	        	});
 		}
 		

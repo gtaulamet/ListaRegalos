@@ -62,7 +62,6 @@ public class ControladorUsuario {
 		this.administradores = Administrador.buscarTodos();
 		this.usuarios = Usuario.buscarTodos();
 	}
-	
 	public void CrearUsuario(String user, String nombre, String apellido, String pass, String email, String DNI) throws Exception {
 		Usuario uExistente = Usuario.buscarUsuario(user);
 		if (uExistente==null) {
@@ -72,5 +71,35 @@ public class ControladorUsuario {
 		}else {
 			throw new Exception("El User ya existe"); 
 		}
+	}
+	
+	public void ModificarUsuario(int Codigo, String user, String nombre, String apellido, String pass, String email, String DNI) throws Exception {
+		Usuario uExistente = buscarUsuario(Codigo);
+		if (uExistente!=null) {
+			if(uExistente.getApellido()!=apellido)
+				uExistente.setApellido(apellido);
+			if(uExistente.getNombre()!=nombre)
+				uExistente.setNombre(nombre);
+			if(uExistente.getDNI()!=Integer.parseInt(DNI))
+				uExistente.setDNI(Integer.parseInt(DNI));
+			if(uExistente.getMail()!=email)
+				uExistente.setMail(email);
+			if((pass != null) && (!pass.equals("")))
+				uExistente.setPass(SistemaRegalos.generarPass(pass));
+			uExistente.actualizarUsuario();
+		}
+	}
+	
+	public Usuario buscarUsuario (int Codigo) {
+		Usuario u = usuarios.get(Codigo);
+		if (u!=null) {
+			return u;
+		}
+		u = Usuario.buscarUsuario(Codigo);
+		if (u != null) {
+			usuarios.put(u.getCodigo(),u);
+			return u;
+		}
+		return null;
 	}
 }
