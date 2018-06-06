@@ -63,9 +63,14 @@ public class ControladorUsuario {
 		this.usuarios = Usuario.buscarTodos();
 	}
 	
-	public void CrearUsuario(String user, String nombre, String apellido, String pass, String email, String DNI) {
-		Usuario u = new Usuario(0,user, SistemaRegalos.generarPass(pass), nombre, apellido, Integer.parseInt(DNI), email);
-		u = Usuario.insert(u);
-		usuarios.put(u.getCodigo(),u);
+	public void CrearUsuario(String user, String nombre, String apellido, String pass, String email, String DNI) throws Exception {
+		Usuario uExistente = Usuario.buscarUsuario(user);
+		if (uExistente==null) {
+			Usuario u = new Usuario(0,user, SistemaRegalos.generarPass(pass), nombre, apellido, Integer.parseInt(DNI), email);
+			u = Usuario.insert(u);
+			usuarios.put(u.getCodigo(),u);
+		}else {
+			throw new Exception("El User ya existe"); 
+		}
 	}
 }

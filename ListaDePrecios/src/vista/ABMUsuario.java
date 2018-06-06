@@ -1,6 +1,7 @@
 package vista;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -15,6 +16,8 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -61,6 +64,12 @@ public class ABMUsuario extends JFrame {
 		lblAbmUsuario.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 18));
 		lblAbmUsuario.setBounds(12, 13, 152, 16);
 		contentPane.add(lblAbmUsuario);
+		
+		JLabel lblError = new JLabel("");
+		lblError.setFont(new Font("Tahoma", Font.BOLD, 13));
+		lblError.setForeground(Color.RED);
+		lblError.setBounds(99, 284, 222, 14);
+		contentPane.add(lblError);
 		
 		JLabel lblCdigo = new JLabel("C\u00F3digo");
 		lblCdigo.setBounds(12, 80, 56, 16);
@@ -133,9 +142,25 @@ public class ABMUsuario extends JFrame {
 		btnGuardar.setBounds(223, 318, 97, 25);
 		btnGuardar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
+				try {
+					 Pattern pattern = Pattern.compile("^[_A-Za-z0-9-\\\\+]+(\\\\.[_A-Za-z0-9-]+)*@\"+\"[A-Za-z0-9-]+(\\\\.[A-Za-z0-9]+)*(\\\\.[A-Za-z]{2,})$");
+				 
+					 Matcher matcher = pattern.matcher(tfEmail.getText());
+/*				        if (!matcher.matches()) {
+				        	throw new Exception("EMail invalido"); 
+				        }
+	*/				
+				        
 				ControladorUsuario.GetInstance().CrearUsuario(tfUser.getText(), tfNombre.getText(), tfApellido.getText(), new String(tfPass.getPassword()), tfEmail.getText(), tfDNI.getText());
 				dispose();
-				
+				}
+				catch(Exception ex) {
+					System.out.println(ex.getMessage());
+					lblError.setText("Error: "+ ex.getMessage());
+					lblError.setForeground(Color.RED);
+					lblError.setVisible(true);
+				}
 			}
 		});
 		contentPane.add(btnGuardar);

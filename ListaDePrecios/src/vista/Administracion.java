@@ -92,7 +92,8 @@ public class Administracion extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				JFrame abmUsuario = new ABMUsuario();
 				//VER DE HACE DE OTRA FORMA
-				abmUsuario.getContentPane().getComponents()[15].setEnabled(false);
+				abmUsuario.getContentPane().getComponents()[9].setEnabled(false);
+				abmUsuario.getContentPane().getComponents()[16].setEnabled(false);
 				abmUsuario.setVisible(true);
 			}
 		});
