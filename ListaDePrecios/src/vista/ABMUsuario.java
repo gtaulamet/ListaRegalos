@@ -144,13 +144,14 @@ public class ABMUsuario extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				
 				try {
-					 Pattern pattern = Pattern.compile("^[_A-Za-z0-9-\\\\+]+(\\\\.[_A-Za-z0-9-]+)*@\"+\"[A-Za-z0-9-]+(\\\\.[A-Za-z0-9]+)*(\\\\.[A-Za-z]{2,})$");
+					 Pattern pattern = Pattern.compile("^[_a-z0-9-]+(\\.[_a-z0-9-]+)*@" +
+						      "[a-z0-9-]+(\\.[a-z0-9-]+)*(\\.[a-z]{2,4})$");
 				 
 					 Matcher matcher = pattern.matcher(tfEmail.getText());
-/*				        if (!matcher.matches()) {
+				        if (!matcher.matches()) {
 				        	throw new Exception("EMail invalido"); 
 				        }
-	*/				
+					
 				        
 				ControladorUsuario.GetInstance().CrearUsuario(tfUser.getText(), tfNombre.getText(), tfApellido.getText(), new String(tfPass.getPassword()), tfEmail.getText(), tfDNI.getText());
 				dispose();
