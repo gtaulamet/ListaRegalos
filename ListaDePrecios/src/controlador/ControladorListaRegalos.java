@@ -38,41 +38,46 @@ public class ControladorListaRegalos {
 	
 	public Map<Integer,ListaDeRegalos> GetListasDelParticipante(int u) {
 		listasDeRegalos.clear();
-//		if (listasDeRegalos.isEmpty()) {
-			//map con todos los participanteLista en los que el usuario esta referido
-			//Integer=codigoLista
-			Map<Integer,ParticipanteLista> pl = ParticipanteLista.buscarTodosXUsuario(u);
-			Set<Map.Entry<Integer,ParticipanteLista>>	lista = pl.entrySet();
-			
-			for(Map.Entry<Integer, ParticipanteLista> e : lista){
-				ListaDeRegalos aux = ListaDeRegalos.buscarLista(e.getKey());
-				listasDeRegalos.put(e.getKey(), aux);
-			}
-//		}
+
+		//map con todos los participanteLista en los que el usuario esta referido
+		//Integer=codigoLista
+		Map<Integer,ParticipanteLista> pl = ParticipanteLista.buscarTodosXUsuario(u);
+		Set<Map.Entry<Integer,ParticipanteLista>>	lista = pl.entrySet();
+		
+		for(Map.Entry<Integer, ParticipanteLista> e : lista){
+			ListaDeRegalos aux = ListaDeRegalos.buscarLista(e.getKey());
+			listasDeRegalos.put(e.getKey(), aux);
+		}
 		return listasDeRegalos;
 	}
 	
 	public void BajarParticipanteLista(int usuario, int codigoLista) {
-		ParticipanteLista.darDeBaja(usuario, codigoLista);
+		ListaDeRegalos lr = this.GetListaRegalos(codigoLista);
+		Usuario u = ControladorUsuario.GetInstance().GetUsuario(usuario);
+		lr.BajarParticipanteLista(u);
 	}
 	
 	public void AgregarParticipanteLista(int usuario, int codigoLista) {
-		Usuario u = Usuario.buscarUsuario(usuario);
-		ListaDeRegalos lr = ListaDeRegalos.buscarLista(codigoLista);
+		Usuario u = ControladorUsuario.GetInstance().GetUsuario(usuario);
+		ListaDeRegalos lr = this.GetListaRegalos(codigoLista);
+		lr.AgregarParticipanteLista(u);
 		
-		ParticipanteLista pl = new ParticipanteLista(u, lr, false, "Activo");
-		ParticipanteLista.insert(pl);
 	}
 	
 	public Map<Integer,ListaDeRegalos> GetListasAdministrador(int u){
 		return ListaDeRegalos.buscarListasAdministrador(u);
 	}
 	
-	public void crearListaRegalos(String nombreAgasajado, Date fechaAgasajo, String mailAgasajado,
+	public void CrearListaRegalos(String nombreAgasajado, Date fechaAgasajo, String mailAgasajado,
 			float montoRecaudado, Date fechaInicio, Date fechaFin, String estado, Usuario administrador,
 			float montoARecaudarXIntegrante) {
 		
 		ListaDeRegalos lr = new ListaDeRegalos(0,nombreAgasajado, fechaAgasajo, mailAgasajado, montoRecaudado, fechaInicio, fechaFin, estado, administrador, montoARecaudarXIntegrante);
 		ListaDeRegalos.insert(lr);
+	}
+
+	public Map<Integer,ParticipanteLista> BuscarParticipantesLista(int codigoLista){
+		ListaDeRegalos lr = this.GetListaRegalos(codigoLista);
+		return lr.GetParticipantes();
 	}
 }

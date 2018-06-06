@@ -61,11 +61,13 @@ public class ListaDeRegalos implements IObservableMails, IObserverCalendario {
 	}
 	
 	public void BajarParticipanteLista(Usuario u) {
+		GetParticipantes();
 		ParticipanteLista.darDeBaja(u.getCodigo(), this.getCodigo());
 		this.participantes.remove(u.getCodigo());
 	}
 	
 	public void AgregarParticipanteLista(Usuario ul) {
+		GetParticipantes();
 		//TODO
 		//primero hay que revisar si no existe el participante para ese usuario inactivo.
 		//Si es asi, se activa el participante. Sino se crea uno nuevo.

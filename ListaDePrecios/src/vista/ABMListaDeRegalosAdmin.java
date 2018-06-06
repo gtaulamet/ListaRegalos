@@ -50,22 +50,6 @@ public class ABMListaDeRegalosAdmin extends JFrame {
 	private Map<Integer,ParticipanteLista> participantes;
 	private Map<Integer,Usuario> usuarios;
 	
-//	/**
-//	 * Launch the application.
-//	 */
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					ABMListaDeRegalosAdmin frame = new ABMListaDeRegalosAdmin(null);
-//					frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
-	
 	
 	/**
 	 * Create the frame.
@@ -74,7 +58,7 @@ public class ABMListaDeRegalosAdmin extends JFrame {
 		setResizable(false);
 		setTitle("Sistema de Listas de Regalos - Lista Administrada");
 
-		this.participantes = lr.GetParticipantes();
+		this.participantes = ControladorListaRegalos.GetInstance().BuscarParticipantesLista(lr.getCodigo());
 		this.usuarios = ControladorUsuario.GetInstance().GetUsuarios();
 
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -202,7 +186,7 @@ public class ABMListaDeRegalosAdmin extends JFrame {
 		        Usuario usuario = ControladorUsuario.GetInstance().GetUsuario(Integer.valueOf(row.get(0).toString()));
 		        
 		        //Agrego usuario como participante de la lista
-		        lr.AgregarParticipanteLista(usuario);
+		        ControladorListaRegalos.GetInstance().AgregarParticipanteLista(Integer.valueOf(row.get(0).toString()), lr.getCodigo());
 		        
 		        //Actualizo modelo de la tabla de participantes
 		        DefaultTableModel dtmP = (DefaultTableModel) table_1.getModel();
@@ -239,7 +223,7 @@ public class ABMListaDeRegalosAdmin extends JFrame {
 		        Usuario usuario = ControladorUsuario.GetInstance().GetUsuario(Integer.valueOf(row.get(0).toString()));
 		        
 		        //Doy de baja el participante de la lista
-		        lr.BajarParticipanteLista(usuario);
+		        ControladorListaRegalos.GetInstance().BajarParticipanteLista(Integer.valueOf(row.get(0).toString()), lr.getCodigo());
 		        
 		        //Actualizo el modelo de la tabla de participantes
 		        DefaultTableModel dtm = (DefaultTableModel) tbl.getModel();

@@ -42,28 +42,15 @@ public class ABMListaRegalosParticipante extends JFrame {
 	private ListaDeRegalos lr;
 	private Usuario u;
 	
-//	/**
-//	 * Launch the application.
-//	 */
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					ABMListaRegalosParticipante frame = new ABMListaRegalosParticipante(false,new ListaDeRegalos());
-//					frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
 
 	/**
 	 * Create the frame.
 	 * @throws ParseException 
 	 */
 	public ABMListaRegalosParticipante(boolean nuevo, ListaDeRegalos listaregalos)  {
+		
 		this.lr= listaregalos;
+		
 		setTitle("Sistema de Listas de Regalos - Lista Participante");
 		setResizable(false);
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -164,7 +151,7 @@ public class ABMListaRegalosParticipante extends JFrame {
 					Date fFin = format.parse(tfFechaFin.getText());
 					
 					//Llamo al controlador de lista de regalos para que cree la lista.
-					ControladorListaRegalos.GetInstance().crearListaRegalos(tfAgasajado.getText(),
+					ControladorListaRegalos.GetInstance().CrearListaRegalos(tfAgasajado.getText(),
 							fAg, tfMailAgasajado.getText(),0,now,fFin,"Activo",
 							SistemaRegalos.GetInstance().getUsuarioLogueado(),Float.parseFloat(tfMontoPart.getText()));
 					
@@ -198,11 +185,9 @@ public class ABMListaRegalosParticipante extends JFrame {
 				//Obtengo el usuario que está logueado
 				u = SistemaRegalos.GetInstance().getUsuarioLogueado();
 				
-				//Cargo los participantes a la lista para poder dar de baja el participante. (lazy)
-				lr.GetParticipantes();
-				
 				//Doy de baja el usuario como participante de la lista (baja lógica)
-				lr.BajarParticipanteLista(u);
+				ControladorListaRegalos.GetInstance().BajarParticipanteLista(u.getCodigo(), lr.getCodigo());
+				
 				lblSeHaDado.setVisible(true);
 			}
 		});
