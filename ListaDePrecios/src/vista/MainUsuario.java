@@ -47,10 +47,6 @@ public class MainUsuario extends JFrame {
 	private JTextField tfEmail;
 	private JTable table;
 	private JTable table_1;
-
-	private Map<Integer, ListaDeRegalos> listaParticipante;
-	private Map<Integer, ListaDeRegalos> listaAdministrador;
-	private Usuario u;
 	
 	/**
 	 * Create the frame.
@@ -58,11 +54,11 @@ public class MainUsuario extends JFrame {
 	public MainUsuario() {
 		setResizable(false);
 		setTitle("Sistema de Lista de Regalos - Main Usuario");
-
-		this.u = SistemaRegalos.GetInstance().getUsuarioLogueado();
-		this.listaParticipante = ControladorListaRegalos.GetInstance().GetListasDelParticipante(u.getCodigo());
-		this.listaAdministrador = ControladorListaRegalos.GetInstance().GetListasAdministrador(u.getCodigo());
-		
+		Usuario u = SistemaRegalos.GetInstance().getUsuarioLogueado();
+//		this.u = SistemaRegalos.GetInstance().getUsuarioLogueado();
+//		Map<Integer, ListaDeRegalos> listaParticipante = SistemaRegalos.GetInstance().getListaParticipante();
+//		Map<Integer, ListaDeRegalos> listaAdministrador = SistemaRegalos.GetInstance().getListaAdministrador();
+//		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 615, 521);
 		contentPane = new JPanel();
@@ -125,7 +121,7 @@ public class MainUsuario extends JFrame {
 		table = new JTable();
 		scrollPane.setViewportView(table);
 		
-		CompletarModeloListaParticipante(listaParticipante,table);
+		CompletarModeloListaParticipante(SistemaRegalos.GetInstance().getListaParticipante(),table);
 
 		table.addMouseListener(new java.awt.event.MouseAdapter() {
 		    public void mousePressed(MouseEvent me) {
@@ -159,7 +155,7 @@ public class MainUsuario extends JFrame {
 		contentPane.add(scrollPane_1);
 		
 		table_1 = new JTable();
-		CompletarModeloListaAdministrador(listaAdministrador,table_1);
+		CompletarModeloListaAdministrador(SistemaRegalos.GetInstance().getListaAdministrador(),table_1);
 
 		table_1.getColumnModel().getColumn(1).setPreferredWidth(130);
 		table_1.getColumnModel().getColumn(5).setPreferredWidth(123);
@@ -168,11 +164,9 @@ public class MainUsuario extends JFrame {
 		JButton btnRecargarlista = new JButton();
 		btnRecargarlista.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				listaParticipante = ControladorListaRegalos.GetInstance().GetListasDelParticipante(u.getCodigo());
-				listaAdministrador = ControladorListaRegalos.GetInstance().GetListasAdministrador(u.getCodigo());
 				
-				CompletarModeloListaAdministrador(listaAdministrador, table_1);
-				CompletarModeloListaParticipante(listaParticipante,table);
+				CompletarModeloListaAdministrador(SistemaRegalos.GetInstance().getListaAdministrador(), table_1);
+				CompletarModeloListaParticipante(SistemaRegalos.GetInstance().getListaParticipante(),table);
 			}
 		});
 		try {

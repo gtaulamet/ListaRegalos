@@ -1,11 +1,13 @@
 package controlador;
 import java.awt.EventQueue;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 import modelo.Administrador;
+import modelo.ListaDeRegalos;
 import modelo.Usuario;
 import persistencia.AdmPersistenciaUsuario;
 import vista.Login;
@@ -14,6 +16,9 @@ public class SistemaRegalos {
 	private static SistemaRegalos sistemaRegalos;
 	public int diasProximoAVencer;
 	private Usuario usuarioLogueado;
+	private Map<Integer, ListaDeRegalos> listaParticipante = new HashMap<Integer, ListaDeRegalos>();
+	private Map<Integer, ListaDeRegalos> listaAdministrador = new HashMap<Integer, ListaDeRegalos>();
+	
 	
 	private SistemaRegalos() {
 		this.diasProximoAVencer = 3;
@@ -25,6 +30,8 @@ public class SistemaRegalos {
 			String aux= generarPass(pass);
 			if (aux.equals(u.getPass())) {
 				this.usuarioLogueado = u;
+				this.listaParticipante = ControladorListaRegalos.GetInstance().GetListasDelParticipante(u.getCodigo());
+				this.listaAdministrador = ControladorListaRegalos.GetInstance().GetListasAdministrador(u.getCodigo());
 				return true;
 			}
 		}
@@ -49,6 +56,25 @@ public class SistemaRegalos {
 		
 		return false;
 	}
+	
+	public Map<Integer, ListaDeRegalos> getListaParticipante() {
+		this.listaParticipante = ControladorListaRegalos.GetInstance().GetListasDelParticipante(this.usuarioLogueado.getCodigo());
+		return this.listaParticipante;
+	}
+
+	public void setListaParticipante(Map<Integer, ListaDeRegalos> listaParticipante) {
+		this.listaParticipante = listaParticipante;
+	}
+
+	public Map<Integer, ListaDeRegalos> getListaAdministrador() {
+		this.listaAdministrador = ControladorListaRegalos.GetInstance().GetListasAdministrador(this.usuarioLogueado.getCodigo());
+		return this.listaAdministrador;
+	}
+
+	public void setListaAdministrador(Map<Integer, ListaDeRegalos> listaAdministrador) {
+		this.listaAdministrador = listaAdministrador;
+	}
+	
 	
 	
 	public Usuario getUsuarioLogueado() {

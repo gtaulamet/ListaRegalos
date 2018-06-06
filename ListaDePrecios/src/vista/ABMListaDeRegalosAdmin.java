@@ -33,6 +33,7 @@ import java.awt.event.WindowFocusListener;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.awt.event.WindowEvent;
+import java.awt.event.ActionListener;
 
 public class ABMListaDeRegalosAdmin extends JFrame {
 
@@ -62,7 +63,7 @@ public class ABMListaDeRegalosAdmin extends JFrame {
 		this.usuarios = ControladorUsuario.GetInstance().GetUsuarios();
 
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 712, 502);
+		setBounds(100, 100, 712, 524);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -244,6 +245,30 @@ public class ABMListaDeRegalosAdmin extends JFrame {
 		panel.setBorder(new LineBorder(new Color(0, 0, 0)));
 		panel.setBounds(12, 37, 668, 148);
 		contentPane.add(panel);
+		panel.setLayout(null);
+		
+		JLabel lblSeHaEliminado = new JLabel("Se ha eliminado la lista de regalos");
+		lblSeHaEliminado.setForeground(new Color(0, 128, 0));
+		lblSeHaEliminado.setFont(new Font("Tahoma", Font.BOLD, 13));
+		lblSeHaEliminado.setBounds(59, 460, 581, 16);
+		contentPane.add(lblSeHaEliminado);
+		lblSeHaEliminado.setVisible(false);
+		
+		JButton btnEliminarLista = new JButton("Eliminar Lista");
+		btnEliminarLista.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ControladorListaRegalos.GetInstance().BorrarListaRegalos(lr);
+				lblSeHaEliminado.setVisible(true);
+			}
+		});
+		btnEliminarLista.setEnabled(false);
+		btnEliminarLista.setBounds(508, 13, 148, 25);
+		panel.add(btnEliminarLista);
+		
+
+		if (lr.getMontoRecaudado() == Float.valueOf(0)) {
+			btnEliminarLista.setEnabled(true);
+		}
 	}
 	
 	private void CompletarModeloParticipantes(Map<Integer,ParticipanteLista> participantes, JTable tbl) {

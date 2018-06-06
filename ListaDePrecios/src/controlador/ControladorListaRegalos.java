@@ -46,7 +46,8 @@ public class ControladorListaRegalos {
 		
 		for(Map.Entry<Integer, ParticipanteLista> e : lista){
 			ListaDeRegalos aux = ListaDeRegalos.buscarLista(e.getKey());
-			listasDeRegalos.put(e.getKey(), aux);
+			if (aux.getEstado()!="Inactivo")
+				listasDeRegalos.put(e.getKey(), aux);
 		}
 		return listasDeRegalos;
 	}
@@ -79,5 +80,16 @@ public class ControladorListaRegalos {
 	public Map<Integer,ParticipanteLista> BuscarParticipantesLista(int codigoLista){
 		ListaDeRegalos lr = this.GetListaRegalos(codigoLista);
 		return lr.GetParticipantes();
+	}
+
+	public void BorrarListaRegalos(ListaDeRegalos lr) {
+				
+		lr.setEstado("Inactivo");
+		ListaDeRegalos.updateEstado(lr);
+		Map<Integer, ParticipanteLista> participantes = this.BuscarParticipantesLista(lr.getCodigo());
+		
+		for (Map.Entry<Integer, ParticipanteLista> e : participantes.entrySet()) {
+			this.BajarParticipanteLista(e.getKey(), lr.getCodigo());
+		}
 	}
 }

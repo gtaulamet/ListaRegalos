@@ -70,7 +70,7 @@ public class AdmPersistenciaListaRegalos extends AdministradorPersistencia
 		}
 		catch (Exception e)
 		{
-			System.out.println("Error al grabar la lista de regalos.");
+			System.out.println("Error al insertar una la lista de regalos.");
 		}
 		
 
@@ -92,14 +92,14 @@ public class AdmPersistenciaListaRegalos extends AdministradorPersistencia
 			Connection con = PoolConnection.getPoolConnection().getConnection();
 			PreparedStatement s = con.prepareStatement("update BD_ListaRegalos.dbo.ListaDeRegalos " +
 					"set nombreAgasajado = ?," +
-					"set fechaAgasajo =?," +
-					"set mailAgasajado =?," +
-					"set montoRecaudado =?," +
-					"set fechaInicio =?," +
-					"set fechaFin =?," +
-					"set estado =?," +
-					"set montoARecaudarXInteg =?," +
-					"set administradorId = ?) where codigo = ?");
+					"fechaAgasajo =?," +
+					"mailAgasajado =?," +
+					"montoRecaudado =?," +
+					"fechaInicio =?," +
+					"fechaFin =?," +
+					"estado =?," +
+					"montoARecaudarXInteg =?," +
+					"administradorId = ? where codigo = ?");
 			
 			s.setString(1, l.getNombreAgasajado());
 			s.setDate(2,(Date) l.getFechaAgasajo());
@@ -117,12 +117,33 @@ public class AdmPersistenciaListaRegalos extends AdministradorPersistencia
 		}
 		catch (Exception e)
 		{
-			System.out.println();
+			System.out.println("Error al actualizar la lista de regalos");
 		}
-		
-
-
 	}
+
+	public void updateEstado(Object o) 
+	{
+		try
+		{
+			ListaDeRegalos l = (ListaDeRegalos)o;
+			Connection con = PoolConnection.getPoolConnection().getConnection();
+			PreparedStatement s = con.prepareStatement("update BD_ListaRegalos.dbo.ListaDeRegalos " +
+					"set estado =?" +
+					" where codigo = ?");
+			
+			s.setString(1, l.getEstado());
+			s.setInt(2,l.getCodigo());
+			s.execute();
+			
+			PoolConnection.getPoolConnection().realeaseConnection(con);
+		}
+		catch (Exception e)
+		{
+			System.out.println("Error al cambiar el estado de la lista de Regalos.");
+		}
+	}
+		
+	
 	public ListaDeRegalos buscarAListaDeRegalos(int codigo)
 	{
 		try
@@ -154,7 +175,7 @@ public class AdmPersistenciaListaRegalos extends AdministradorPersistencia
 		}
 		catch (Exception e)
 		{
-			System.out.println();
+			System.out.println("Error al buscar una lista de regalos.");
 		}
 		return null;
 	}
@@ -190,7 +211,7 @@ public class AdmPersistenciaListaRegalos extends AdministradorPersistencia
 			return listaRegalos;
 		}
 		catch(Exception e) {
-			System.out.println();
+			System.out.println("Error al buscar todas las listas de regalos.");
 		}
 		return null;
 	}
@@ -200,7 +221,7 @@ public class AdmPersistenciaListaRegalos extends AdministradorPersistencia
 		{
 			ListaDeRegalos l = null;
 			Connection con = PoolConnection.getPoolConnection().getConnection();
-			PreparedStatement s = con.prepareStatement("select * from BD_ListaRegalos.dbo.ListaDeRegalos where administradorid = ?");			
+			PreparedStatement s = con.prepareStatement("select * from BD_ListaRegalos.dbo.ListaDeRegalos where administradorid = ? and estado not like 'Inactivo'");			
 			
 			s.setInt(1,codigo);
 			ResultSet result = s.executeQuery();
@@ -228,7 +249,7 @@ public class AdmPersistenciaListaRegalos extends AdministradorPersistencia
 		}
 		catch (Exception e)
 		{
-			System.out.println();
+			System.out.println("Error al buscar las listas de regalo que administra.");
 		}
 		return null;
 	}
