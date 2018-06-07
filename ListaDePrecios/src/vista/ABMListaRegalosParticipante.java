@@ -15,11 +15,15 @@ import modelo.ListaDeRegalos;
 import modelo.Usuario;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import javax.swing.JTextField;
 import javax.print.attribute.standard.DateTimeAtCompleted;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -41,15 +45,17 @@ public class ABMListaRegalosParticipante extends JFrame {
 
 	private ListaDeRegalos lr;
 	private Usuario u;
-	
+	private JFrame f;
+	private JFrame m;
 
 	/**
 	 * Create the frame.
 	 * @throws ParseException 
 	 */
-	public ABMListaRegalosParticipante(boolean nuevo, ListaDeRegalos listaregalos)  {
-		
+	public ABMListaRegalosParticipante(boolean nuevo, ListaDeRegalos listaregalos, JFrame main)  {
+		this.f = this;
 		this.lr= listaregalos;
+		this.m = main;
 		
 		setTitle("Sistema de Listas de Regalos - Lista Participante");
 		setResizable(false);
@@ -182,15 +188,43 @@ public class ABMListaRegalosParticipante extends JFrame {
 		JButton btnDarDeBaja = new JButton("Dar de Baja");
 		btnDarDeBaja.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//Obtengo el usuario que está logueado
-				u = SistemaRegalos.GetInstance().getUsuarioLogueado();
+				int result = JOptionPane.showConfirmDialog(null,
+			            "¿Realmente desea dar de baja la lista de regalos?", "Sistema de Lista de regalos - Baja Lista de Regalos",
+			            JOptionPane.YES_NO_OPTION);
 				
-				//Doy de baja el usuario como participante de la lista (baja lógica)
-				ControladorListaRegalos.GetInstance().BajarParticipanteLista(u.getCodigo(), lr.getCodigo());
+			        if (result == JOptionPane.YES_OPTION) {
+			        	setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			        	u = SistemaRegalos.GetInstance().getUsuarioLogueado();
+						
+						//Doy de baja el usuario como participante de la lista (baja lógica)
+						ControladorListaRegalos.GetInstance().BajarParticipanteLista(u.getCodigo(), lr.getCodigo());			 
+						m.dispose();
+						//m.setVisible(false);
+						m = new MainUsuario();
+						m.setVisible(true);
+						dispose();
+						
+			          }
+			        else if (result == JOptionPane.NO_OPTION)
+			          setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+
 				
-				lblSeHaDado.setVisible(true);
+//				ConfirmarBajaLista confirmar = new ConfirmarBajaLista(lr, f, m);
+//				confirmar.setVisible(true);
+//				
+//				//Obtengo el usuario que está logueado
+//				u = SistemaRegalos.GetInstance().getUsuarioLogueado();
+//				
+//				//Doy de baja el usuario como participante de la lista (baja lógica)
+//				ControladorListaRegalos.GetInstance().BajarParticipanteLista(u.getCodigo(), lr.getCodigo());
+//				
+//				lblSeHaDado.setVisible(true);
 			}
 		});
+
+		
+		
+		
 		btnDarDeBaja.setBounds(21, 228, 116, 25);
 		contentPane.add(btnDarDeBaja);
 		

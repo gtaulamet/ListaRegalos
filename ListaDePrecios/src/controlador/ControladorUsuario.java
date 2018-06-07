@@ -46,12 +46,12 @@ public class ControladorUsuario {
 		return usuarios;
 	}
 	
-	public static Administrador GetAdministrador(String a) {
+	public Administrador GetAdministrador(String a) {
 		return Administrador.buscarAdministrador(a);
 	}
 	
 	public Map<String,Administrador> GetAdministradores(){
-		if (administradores.isEmpty()) {
+		if (administradores == null) {
 			this.administradores = Administrador.buscarTodos();
 		}
 		return this.administradores;
@@ -101,5 +101,16 @@ public class ControladorUsuario {
 			return u;
 		}
 		return null;
+	}
+
+	public boolean CrearAdministrador(String user, String pass) {
+		Administrador admin = Administrador.buscarAdministrador(user);
+		if (admin == null) {
+			admin = new Administrador(user,pass);
+			Administrador.insert(admin);
+			
+			return true;
+		}
+		return false;
 	}
 }

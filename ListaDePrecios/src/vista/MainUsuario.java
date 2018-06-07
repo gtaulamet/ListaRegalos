@@ -8,6 +8,8 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.CellEditorListener;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.Point;
@@ -38,6 +40,7 @@ import java.util.Map;
 import java.awt.event.ActionEvent;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
+import java.awt.event.WindowAdapter;
 
 public class MainUsuario extends JFrame {
 
@@ -45,21 +48,37 @@ public class MainUsuario extends JFrame {
 	private JTextField tfNombre;
 	private JTextField tfApellido;
 	private JTextField tfEmail;
-	private JTable table;
-	private JTable table_1;
+	public JTable table;
+	public JTable table_1;
+	private MainUsuario main;
 	
 	/**
 	 * Create the frame.
 	 */
 	public MainUsuario() {
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosing(WindowEvent e) {
+				int result = JOptionPane.showConfirmDialog(e.getComponent(),
+			            "¿Realmente desea salir?", "Sistema de Lista de regalos - Salir",
+			            JOptionPane.YES_NO_OPTION);
+				
+			        if (result == JOptionPane.YES_OPTION) {
+			        	setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			        	Login login = new Login();
+						login.setVisible(true);			        	
+			          }
+			        else if (result == JOptionPane.NO_OPTION)
+			          setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+
+			}
+		});
+		main = this;
 		setResizable(false);
 		setTitle("Sistema de Lista de Regalos - Main Usuario");
 		Usuario u = SistemaRegalos.GetInstance().getUsuarioLogueado();
-//		this.u = SistemaRegalos.GetInstance().getUsuarioLogueado();
-//		Map<Integer, ListaDeRegalos> listaParticipante = SistemaRegalos.GetInstance().getListaParticipante();
-//		Map<Integer, ListaDeRegalos> listaAdministrador = SistemaRegalos.GetInstance().getListaAdministrador();
-//		
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 615, 521);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -107,7 +126,7 @@ public class MainUsuario extends JFrame {
 		JButton btnCrearLista = new JButton("Crear Lista");
 		btnCrearLista.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JFrame altaListaRegalos = new ABMListaRegalosParticipante(true, new ListaDeRegalos());
+				JFrame altaListaRegalos = new ABMListaRegalosParticipante(true, new ListaDeRegalos(),main);
 				altaListaRegalos.setVisible(true);
 			}
 		});
@@ -134,7 +153,7 @@ public class MainUsuario extends JFrame {
 	    			String codigo = tbl.getValueAt(linea, 0).toString();
 
 	    			ListaDeRegalos lr = ControladorListaRegalos.GetInstance().GetListaRegalos(Integer.parseInt(codigo));
-	    			JFrame abmListaParticipante = new ABMListaRegalosParticipante(false,lr);
+	    			JFrame abmListaParticipante = new ABMListaRegalosParticipante(false,lr, main);
 	    			abmListaParticipante.setVisible(true);
 		    	}
 		    }
@@ -165,8 +184,7 @@ public class MainUsuario extends JFrame {
 		btnRecargarlista.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				CompletarModeloListaAdministrador(SistemaRegalos.GetInstance().getListaAdministrador(), table_1);
-				CompletarModeloListaParticipante(SistemaRegalos.GetInstance().getListaParticipante(),table);
+				refrescar(table_1,table);
 			}
 		});
 		try {
@@ -274,4 +292,8 @@ public class MainUsuario extends JFrame {
 		}
 	 
 	}	
+	public void refrescar(JTable adm, JTable part) {
+		CompletarModeloListaAdministrador(SistemaRegalos.GetInstance().getListaAdministrador(), adm);
+		CompletarModeloListaParticipante(SistemaRegalos.GetInstance().getListaParticipante(),part);
+	}
 }

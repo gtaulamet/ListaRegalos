@@ -253,5 +253,45 @@ public class AdmPersistenciaListaRegalos extends AdministradorPersistencia
 		}
 		return null;
 	}
-	
+
+	public Map<Integer,ListaDeRegalos> buscarListasParticipo(int codigo)
+	{
+		try
+		{
+			ListaDeRegalos l = null;
+			Connection con = PoolConnection.getPoolConnection().getConnection();
+			PreparedStatement s = con.prepareStatement("select lr.* from ListaDeRegalos lr\r\n" + 
+					"inner join ParticipanteLista pl on pl.listaDeRegalosId = lr.codigo and pl.estado like 'Activo'\r\n" + 
+					"inner join Usuario u on u.codigo=? and pl.usuarioId=u.codigo");			
+			
+			s.setInt(1,codigo);
+			ResultSet result = s.executeQuery();
+			Map<Integer,ListaDeRegalos> lista = new HashMap<Integer,ListaDeRegalos>();
+			
+			while (result.next())
+			{
+				int cod = result.getInt(1);
+				String nomAgas= result.getString(2);
+				Date fAgas=result.getDate(3);
+				String mailAgas=result.getString(4);
+				float montoRec= result.getFloat(5);
+				Date fInicio=result.getDate(6);
+				Date fFin=result.getDate(7);
+				String estado= result.getString(8);
+				float montoInteg= result.getFloat(9);
+				int adminId = result.getInt(10);
+				Usuario admin = AdmPersistenciaUsuario.getInstancia().buscarAUsuario(adminId);
+				l = new ListaDeRegalos(cod, nomAgas, fAgas, mailAgas, montoRec, fInicio, fFin, estado, admin, montoInteg);
+				lista.put(cod, l);
+			}
+			
+			PoolConnection.getPoolConnection().realeaseConnection(con);
+			return lista;
+		}
+		catch (Exception e)
+		{
+			System.out.println("Error al buscar las listas de regalo que participo.");
+		}
+		return null;
+	}	
 }

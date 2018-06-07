@@ -20,6 +20,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.font.TextAttribute;
+import java.util.HashMap;
+import java.util.Map;
 import java.awt.Color;
 import javax.swing.JPasswordField;
 
@@ -48,6 +51,8 @@ public class Login extends JFrame {
 	 * Create the frame.
 	 */
 	public Login() {
+		setTitle("Sistema de Lista de Regalos - Login");
+		setResizable(false);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -76,7 +81,7 @@ public class Login extends JFrame {
 		JLabel lblContraseaIncorrecta = new JLabel("Usuario y/o Contrase\u00F1a Incorrectos!");
 		lblContraseaIncorrecta.setFont(new Font("Tahoma", Font.BOLD, 13));
 		lblContraseaIncorrecta.setForeground(Color.RED);
-		lblContraseaIncorrecta.setBounds(93, 177, 222, 16);
+		lblContraseaIncorrecta.setBounds(93, 177, 297, 16);
 		lblContraseaIncorrecta.setVisible(false);
 		contentPane.add(lblContraseaIncorrecta);		
 
@@ -104,6 +109,12 @@ public class Login extends JFrame {
 		contentPane.add(btnIngresar);
 		
 		JLabel lblAdministracin = new JLabel("Administraci\u00F3n");
+		lblAdministracin.setForeground(Color.BLUE);
+//	    Font font = lblAdministracin.getFont();
+//	    Map<TextAttribute, Object> attributes = new HashMap<>(font.getAttributes());
+//	    attributes.put(TextAttribute.UNDERLINE, 1);
+//	    lblAdministracin.setFont(font.deriveFont(attributes));
+	    
 		lblAdministracin.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -112,16 +123,18 @@ public class Login extends JFrame {
 				dispose();
 			}
 		});
-		lblAdministracin.setFont(new Font("Tahoma", Font.BOLD, 13));
+		lblAdministracin.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 13));
 		lblAdministracin.setBounds(31, 219, 128, 16);
 		contentPane.add(lblAdministracin);
+		
+		JLabel label = new JLabel("______________");
+		label.setBounds(31, 219, 116, 16);
+		contentPane.add(label);
 		
 		JLabel lblLoginSistema = new JLabel("Login - Sistema de Lista de Regalos");
 		lblLoginSistema.setFont(new Font("Tahoma", Font.BOLD | Font.ITALIC, 18));
 		lblLoginSistema.setBounds(31, 23, 359, 40);
 		contentPane.add(lblLoginSistema);
-		
-
 
 	}
 }

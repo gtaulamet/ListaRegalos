@@ -40,16 +40,17 @@ public class ControladorListaRegalos {
 		listasDeRegalos.clear();
 
 		//map con todos los participanteLista en los que el usuario esta referido
-		//Integer=codigoLista
-		Map<Integer,ParticipanteLista> pl = ParticipanteLista.buscarTodosXUsuario(u);
-		Set<Map.Entry<Integer,ParticipanteLista>>	lista = pl.entrySet();
+//		//Integer=codigoLista
+//		Map<Integer,ParticipanteLista> pl = ParticipanteLista.buscarTodosXUsuario(u);
+//		Set<Map.Entry<Integer,ParticipanteLista>>	lista = pl.entrySet();
+//		
+//		for(Map.Entry<Integer, ParticipanteLista> e : lista){
+//			ListaDeRegalos aux = ListaDeRegalos.buscarLista(e.getKey());
+//			if (aux.getEstado()!="Inactivo")
+//				listasDeRegalos.put(e.getKey(), aux);
+//		}
 		
-		for(Map.Entry<Integer, ParticipanteLista> e : lista){
-			ListaDeRegalos aux = ListaDeRegalos.buscarLista(e.getKey());
-			if (aux.getEstado()!="Inactivo")
-				listasDeRegalos.put(e.getKey(), aux);
-		}
-		return listasDeRegalos;
+		return ListaDeRegalos.buscarListasParticipo(u);
 	}
 	
 	public void BajarParticipanteLista(int usuario, int codigoLista) {

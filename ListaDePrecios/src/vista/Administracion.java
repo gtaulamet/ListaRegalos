@@ -15,6 +15,7 @@ import javax.swing.table.DefaultTableModel;
 
 import controlador.ControladorListaRegalos;
 import controlador.ControladorUsuario;
+import modelo.Administrador;
 import modelo.ParticipanteLista;
 import modelo.Usuario;
 
@@ -34,25 +35,11 @@ public class Administracion extends JFrame {
 	private JTable table_1;
 
 	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Administracion frame = new Administracion();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
 	 * Create the frame.
 	 */
 	public Administracion() {
+		setTitle("Sistema de Lista de Regalos - Administraci\u00F3n de Usuarios");
+		setResizable(false);
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 609, 480);
@@ -121,17 +108,9 @@ public class Administracion extends JFrame {
 		scrollPane_1.setBounds(12, 296, 567, 113);
 		contentPane.add(scrollPane_1);
 		
+		Map<String,Administrador> administradores = ControladorUsuario.GetInstance().GetAdministradores();
 		table_1 = new JTable();
-		table_1.setModel(new DefaultTableModel(
-			new Object[][] {
-				{null},
-				{null},
-				{null},
-			},
-			new String[] {
-				"User"
-			}
-		));
+		CompletarModeloAdministradores(administradores, table_1);
 		scrollPane_1.setViewportView(table_1);
 		
 		JButton btnNuevoAdministrador = new JButton("Nuevo Administrador");
@@ -144,6 +123,30 @@ public class Administracion extends JFrame {
 		btnNuevoAdministrador.setBounds(369, 263, 157, 25);
 		contentPane.add(btnNuevoAdministrador);
 	}
+
+	private void CompletarModeloAdministradores(Map<String,Administrador> administradores, JTable tbl) {
+		String[] columnaAdministradores = new String[] {
+				"User"
+			};
+		DefaultTableModel dtm = new DefaultTableModel() {
+			boolean[] columnEditables = new boolean[] {
+					false
+			};
+			public boolean isCellEditable(int row, int column) {
+				return columnEditables[column];
+			}
+			};
+		dtm.setColumnIdentifiers(columnaAdministradores);
+		
+		tbl.setModel(dtm);
+		
+		for (Map.Entry<String, Administrador> e : administradores.entrySet()) {
+		        dtm.addRow(new Object[] {
+		        		e.getValue().getUser()
+	        	});
+		}
+		
+	}	
 	
 	private void CompletarModeloUsuarios(Map<Integer,Usuario> usuarios, JTable tbl) {
 		String[] columnaUsuarios = new String[] {

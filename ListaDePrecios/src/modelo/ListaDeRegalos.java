@@ -199,6 +199,9 @@ public class ListaDeRegalos implements IObservableMails, IObserverCalendario {
 	public static Map<Integer,ListaDeRegalos> buscarTodas(){
 		return AdmPersistenciaListaRegalos.getInstancia().buscarTodos();
 	}
+	public static Map<Integer,ListaDeRegalos> buscarListasParticipo(int u){
+		return AdmPersistenciaListaRegalos.getInstancia().buscarListasParticipo(u);
+	}
 	public static ListaDeRegalos buscarLista(int codigo) {
 		return AdmPersistenciaListaRegalos.getInstancia().buscarAListaDeRegalos(codigo);
 	}

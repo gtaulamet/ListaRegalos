@@ -17,6 +17,8 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JPasswordField;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class LoginAdministrador extends JFrame {
 
@@ -25,27 +27,20 @@ public class LoginAdministrador extends JFrame {
 	private JPasswordField tfPass;
 
 	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					LoginAdministrador frame = new LoginAdministrador();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
 	 * Create the frame.
 	 */
 	public LoginAdministrador() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosed(WindowEvent e) {
+				Login login = new Login();
+				login.setVisible(true);
+			}
+		});
+		setTitle("Sistema de Lista de Regalos - Login Administrador");
+		setResizable(false);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setBounds(100, 100, 378, 264);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -71,13 +66,13 @@ public class LoginAdministrador extends JFrame {
 		tfUsuario.setColumns(10);
 		
 		tfPass = new JPasswordField();
-		tfPass.setBounds(143, 112, 118, 20);
+		tfPass.setBounds(145, 112, 116, 20);
 		contentPane.add(tfPass);
 		
 		JLabel lblContraseaIncorrecta = new JLabel("Usuario y/o Contrase\u00F1a Incorrectos!");
 		lblContraseaIncorrecta.setFont(new Font("Tahoma", Font.BOLD, 13));
 		lblContraseaIncorrecta.setForeground(Color.RED);
-		lblContraseaIncorrecta.setBounds(96, 144, 222, 16);
+		lblContraseaIncorrecta.setBounds(33, 143, 263, 16);
 		lblContraseaIncorrecta.setVisible(false);
 		contentPane.add(lblContraseaIncorrecta);
 		
