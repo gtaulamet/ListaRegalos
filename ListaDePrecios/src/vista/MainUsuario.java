@@ -208,7 +208,7 @@ public class MainUsuario extends JFrame {
 	    			String codigo = tbl.getValueAt(linea, 0).toString();
 	    			ListaDeRegalos lr = ControladorListaRegalos.GetInstance().GetListaRegalos(Integer.parseInt(codigo));
 	    			//Aca llamamos a la ventana que nos traera  los detalles del registro
-	    			JFrame abmListaAdmin = new ABMListaDeRegalosAdmin(lr);
+	    			JFrame abmListaAdmin = new ABMListaDeRegalosAdmin(lr,main);
 	    			abmListaAdmin.setVisible(true);
 		    	}
 		    }

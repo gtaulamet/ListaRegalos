@@ -27,6 +27,8 @@ import java.awt.event.KeyEvent;
 import java.util.Map;
 import java.util.Vector;
 import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class Administracion extends JFrame {
 
@@ -38,10 +40,18 @@ public class Administracion extends JFrame {
 	 * Create the frame.
 	 */
 	public Administracion() {
+		addWindowListener(new WindowAdapter() {
+			@Override
+			public void windowClosed(WindowEvent e) {
+				LoginAdministrador login = new LoginAdministrador();
+				login.setVisible(true);
+			}
+		});
+		
 		setTitle("Sistema de Lista de Regalos - Administraci\u00F3n de Usuarios");
 		setResizable(false);
 		
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 609, 480);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));

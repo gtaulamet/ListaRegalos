@@ -24,12 +24,16 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
 import javax.swing.JFormattedTextField;
@@ -148,27 +152,64 @@ public class ABMListaRegalosParticipante extends JFrame {
 		JButton btnGuardar = new JButton("Guardar");
 		btnGuardar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
+				lblElRegistroSe.setVisible(false);
 				try {
 					//Formateo datos a guardar
 					DateFormat format = new SimpleDateFormat("dd/MM/yyyy", Locale.ROOT);
-					Date fAg = format.parse(tfFechaAgasajo.getText());
 					Date now = new Date();
-					Date fFin = format.parse(tfFechaFin.getText());
+					Date fAg = null;
+					Date fFin = null;
 					
-					//Llamo al controlador de lista de regalos para que cree la lista.
-					ControladorListaRegalos.GetInstance().CrearListaRegalos(tfAgasajado.getText(),
-							fAg, tfMailAgasajado.getText(),0,now,fFin,"Activo",
-							SistemaRegalos.GetInstance().getUsuarioLogueado(),Float.parseFloat(tfMontoPart.getText()));
+					try {
+						fAg = format.parse(tfFechaAgasajo.getText());
+						fFin = format.parse(tfFechaFin.getText());
+					}
+					catch(Exception ex) {
+						System.out.println(ex.getMessage());
+						lblElRegistroSe.setText("Corrobore las fechas, son obligatorias");
+						lblElRegistroSe.setForeground(Color.RED);
+						lblElRegistroSe.setVisible(true);
+					}
 					
-					lblElRegistroSe.setText("El registro se ha guardado con Éxito");
-					lblElRegistroSe.setForeground(new Color(0,128,0));
-					lblElRegistroSe.setVisible(true);
-				
+					if (fAg != null && fFin != null && tfAgasajado.getText() != "" &&
+							Float.parseFloat(tfMontoPart.getText()) != Float.parseFloat("0.0") &&
+							tfMailAgasajado.getText() != "") {
+					
+						Pattern pattern = Pattern.compile("^[_a-z0-9-]+(\\.[_a-z0-9-]+)*@" +
+								 "[a-z0-9-]+(\\.[a-z0-9-]+)*(\\.[a-z]{2,4})$");
+						 
+						 Matcher matcher = pattern.matcher(tfMailAgasajado.getText());
+						if (!matcher.matches()) {
+							throw new Exception("Mail invalido");
+						}
+						
+						try {
+						//Llamo al controlador de lista de regalos para que cree la lista.
+						ControladorListaRegalos.GetInstance().CrearListaRegalos(tfAgasajado.getText(),
+								fAg, tfMailAgasajado.getText(),0,now,fFin,"Activo",
+								SistemaRegalos.GetInstance().getUsuarioLogueado(),Float.parseFloat(tfMontoPart.getText()));
+						} catch (Exception ex) {
+							System.out.println(ex.getMessage());
+							lblElRegistroSe.setText("No se pudo grabar en la base el registro.");
+							lblElRegistroSe.setForeground(Color.RED);
+							lblElRegistroSe.setVisible(true);
+							
+						}
+						lblElRegistroSe.setText("El registro se ha guardado con Éxito");
+						lblElRegistroSe.setForeground(new Color(0,128,0));
+						lblElRegistroSe.setVisible(true);
+	
+						m.dispose();
+						m = new MainUsuario();
+						m.setVisible(true);
+						dispose();
+					} else {
+						throw new Exception("Corrobore los campos obligatorios.");
+					}
 				}
 				catch(Exception ex) {
 					System.out.println(ex.getMessage());
-					lblElRegistroSe.setText("No se pudo grabar en la base el registro.");
+					lblElRegistroSe.setText(ex.getMessage());
 					lblElRegistroSe.setForeground(Color.RED);
 					lblElRegistroSe.setVisible(true);
 				}
@@ -188,8 +229,8 @@ public class ABMListaRegalosParticipante extends JFrame {
 		JButton btnDarDeBaja = new JButton("Dar de Baja");
 		btnDarDeBaja.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int result = JOptionPane.showConfirmDialog(null,
-			            "¿Realmente desea dar de baja la lista de regalos?", "Sistema de Lista de regalos - Baja Lista de Regalos",
+				int result = JOptionPane.showConfirmDialog(f,
+			            "¿Realmente desea darse de baja se la lista de regalos?", "Sistema de Lista de regalos - Darse de baja de Lista de Regalos",
 			            JOptionPane.YES_NO_OPTION);
 				
 			        if (result == JOptionPane.YES_OPTION) {
@@ -198,15 +239,14 @@ public class ABMListaRegalosParticipante extends JFrame {
 						
 						//Doy de baja el usuario como participante de la lista (baja lógica)
 						ControladorListaRegalos.GetInstance().BajarParticipanteLista(u.getCodigo(), lr.getCodigo());			 
-						m.dispose();
-						//m.setVisible(false);
-						m = new MainUsuario();
-						m.setVisible(true);
+						MainUsuario aux = (MainUsuario)m;
+						
+						aux.refrescar(aux.table_1, aux.table);
 						dispose();
 						
 			          }
 			        else if (result == JOptionPane.NO_OPTION)
-			          setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+			          setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 				
 //				ConfirmarBajaLista confirmar = new ConfirmarBajaLista(lr, f, m);
@@ -227,6 +267,36 @@ public class ABMListaRegalosParticipante extends JFrame {
 		
 		btnDarDeBaja.setBounds(21, 228, 116, 25);
 		contentPane.add(btnDarDeBaja);
+		
+		JLabel label = new JLabel("*");
+		label.setFont(new Font("Tahoma", Font.BOLD, 13));
+		label.setForeground(Color.RED);
+		label.setBounds(272, 57, 13, 16);
+		contentPane.add(label);
+		
+		JLabel label_1 = new JLabel("*");
+		label_1.setForeground(Color.RED);
+		label_1.setFont(new Font("Tahoma", Font.BOLD, 13));
+		label_1.setBounds(272, 86, 13, 16);
+		contentPane.add(label_1);
+		
+		JLabel label_2 = new JLabel("*");
+		label_2.setForeground(Color.RED);
+		label_2.setFont(new Font("Tahoma", Font.BOLD, 13));
+		label_2.setBounds(272, 116, 13, 16);
+		contentPane.add(label_2);
+		
+		JLabel label_3 = new JLabel("*");
+		label_3.setForeground(Color.RED);
+		label_3.setFont(new Font("Tahoma", Font.BOLD, 13));
+		label_3.setBounds(272, 145, 13, 16);
+		contentPane.add(label_3);
+		
+		JLabel label_4 = new JLabel("*");
+		label_4.setForeground(Color.RED);
+		label_4.setFont(new Font("Tahoma", Font.BOLD, 13));
+		label_4.setBounds(272, 175, 13, 16);
+		contentPane.add(label_4);
 		
 		//Valido si es nueva lista o lista existente
 		if (nuevo) {

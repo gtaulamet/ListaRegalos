@@ -25,7 +25,7 @@ public class LoginAdministrador extends JFrame {
 	private JPanel contentPane;
 	private JTextField tfUsuario;
 	private JPasswordField tfPass;
-
+	private boolean logueo = false;
 	/**
 	 * Create the frame.
 	 */
@@ -33,8 +33,10 @@ public class LoginAdministrador extends JFrame {
 		addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosed(WindowEvent e) {
-				Login login = new Login();
-				login.setVisible(true);
+				if (!logueo) {
+					Login login = new Login();
+					login.setVisible(true);
+				}
 			}
 		});
 		setTitle("Sistema de Lista de Regalos - Login Administrador");
@@ -84,6 +86,7 @@ public class LoginAdministrador extends JFrame {
 				if (SistemaRegalos.GetInstance().LoginAdmin(tfUsuario.getText(), new String(tfPass.getPassword()))) {
 					JFrame administracion = new Administracion();
 					administracion.setVisible(true);
+					logueo = true;
 					dispose();	
 				}else {
 					lblContraseaIncorrecta.setVisible(true);

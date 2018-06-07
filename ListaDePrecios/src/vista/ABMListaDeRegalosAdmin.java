@@ -5,6 +5,7 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
@@ -50,12 +51,15 @@ public class ABMListaDeRegalosAdmin extends JFrame {
 
 	private Map<Integer,ParticipanteLista> participantes;
 	private Map<Integer,Usuario> usuarios;
-	
+	private JFrame This;
+	private JFrame main;
 	
 	/**
 	 * Create the frame.
 	 */
-	public ABMListaDeRegalosAdmin(ListaDeRegalos lr) {
+	public ABMListaDeRegalosAdmin(ListaDeRegalos lr, JFrame m) {
+		This = this;
+		main = m;
 		setResizable(false);
 		setTitle("Sistema de Listas de Regalos - Lista Administrada");
 
@@ -257,8 +261,21 @@ public class ABMListaDeRegalosAdmin extends JFrame {
 		JButton btnEliminarLista = new JButton("Eliminar Lista");
 		btnEliminarLista.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ControladorListaRegalos.GetInstance().BorrarListaRegalos(lr);
-				lblSeHaEliminado.setVisible(true);
+				int result = JOptionPane.showConfirmDialog(This,
+			            "¿Realmente desea dar de baja la lista de regalos?", "Sistema de Lista de regalos - Dar de baja la Lista de Regalos",
+			            JOptionPane.YES_NO_OPTION);
+				
+			        if (result == JOptionPane.YES_OPTION) {
+			        	setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+						ControladorListaRegalos.GetInstance().BorrarListaRegalos(lr);
+						lblSeHaEliminado.setVisible(true);
+						
+						MainUsuario aux=(MainUsuario) m;
+						aux.refrescar(aux.table_1, aux.table);
+			          }
+			        else if (result == JOptionPane.NO_OPTION)
+			          setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);				
+
 			}
 		});
 		btnEliminarLista.setEnabled(false);
