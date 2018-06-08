@@ -12,6 +12,7 @@ import javax.swing.border.EmptyBorder;
 import controlador.ControladorListaRegalos;
 import controlador.ControladorUsuario;
 import controlador.SistemaRegalos;
+import modelo.Administrador;
 import modelo.ListaDeRegalos;
 import modelo.Usuario;
 
@@ -40,11 +41,15 @@ public class ABMUsuario extends JFrame {
 	private JTextField tfEmail;
 
 	private JFrame f;
+	private JFrame m;
+
 	/**
 	 * Create the frame.
 	 */
-	public ABMUsuario(Usuario u) {
+	public ABMUsuario(Usuario u, JFrame main) {
 		this.f = this;
+		this.m = main;
+		
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 309, 397);
 		contentPane = new JPanel();
@@ -139,15 +144,11 @@ public class ABMUsuario extends JFrame {
 			        	setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			        	
 			        	ControladorUsuario.GetInstance().DardeBajaUsuario(Integer.parseInt(tfCodigo.getText()));
-			        	/*
-						//Doy de baja el usuario como participante de la lista (baja lógica)
-						ControladorListaRegalos.GetInstance().BajarParticipanteLista(u.getCodigo(), lr.getCodigo());			 
-						MainUsuario aux = (MainUsuario)m;
-						
-						aux.refrescar(aux.table_1, aux.table);
+			        	
+			        	Administracion aux = (Administracion)m;
+						aux.refrescarUsuario(aux.table);
 						dispose();
-						
-						*/
+
 			        	}catch(Exception ex) {
 							System.out.println(ex.getMessage());
 							lblError.setText("Error: "+ ex.getMessage());
@@ -176,11 +177,8 @@ public class ABMUsuario extends JFrame {
 					if (!matcher.matches()) {
 						throw new Exception("EMail invalido"); 
 					}
-					if(tfUser.getText()=="") {
-						throw new Exception("User Obligatorio");
-					}
-					if(tfUser.getText()=="" ||tfNombre.getText()==""||tfApellido.getText()==""||tfEmail.getText()=="" ||
-							( u==null && tfNombre.getText()=="")) {
+					if(tfUser.getText().isEmpty() ||tfNombre.getText().isEmpty()||tfApellido.getText().isEmpty() ||tfEmail.getText().isEmpty() ||
+							( u==null && tfNombre.getText().isEmpty() )) {
 						throw new Exception("Corrobore los campos obligatorios.");
 					}
 					//Si es un alta	
@@ -190,13 +188,13 @@ public class ABMUsuario extends JFrame {
 						//Si es una modificacion
 						ControladorUsuario.GetInstance().ModificarUsuario(Integer.parseInt(tfCodigo.getText()), tfUser.getText(), tfNombre.getText(), tfApellido.getText(), new String(tfPass.getPassword()), tfEmail.getText(), tfDNI.getText());
 					}
-					 JFrame adimistrador = new Administracion();
-					 adimistrador.setVisible(true);
+		        	Administracion aux = (Administracion)m;
+					aux.refrescarUsuario(aux.table);
 					dispose();
 				}
 				catch(Exception ex) {
 					System.out.println(ex.getMessage());
-					lblError.setText("Error: "+ ex.getMessage());
+					lblError.setText(ex.getMessage());
 					lblError.setForeground(Color.RED);
 					lblError.setVisible(true);
 				}

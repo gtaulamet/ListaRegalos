@@ -67,7 +67,7 @@ public class ControladorUsuario {
 	public void CrearUsuario(String user, String nombre, String apellido, String pass, String email, String DNI) throws Exception {
 		Usuario uExistente = Usuario.buscarUsuario(user);
 		if (uExistente==null) {
-			Usuario u = new Usuario(0,user, SistemaRegalos.generarPass(pass), nombre, apellido, Integer.parseInt(DNI), email);
+			Usuario u = new Usuario(0,user, SistemaRegalos.generarPass(pass), nombre, apellido, Integer.parseInt(DNI.isEmpty()?"0":DNI), email);
 			u = Usuario.insert(u);
 			usuarios.put(u.getCodigo(),u);
 		}else {

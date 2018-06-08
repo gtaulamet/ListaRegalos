@@ -33,8 +33,11 @@ public class AdmPersistenciaUsuario extends AdministradorPersistencia
 		{
 			Usuario u = (Usuario)d;
 			Connection con = PoolConnection.getPoolConnection().getConnection();
-			PreparedStatement s = con.prepareStatement("delete from BD_ListaRegalos.dbo.Usuario where codigo = ?");
-			s.setInt(1, u.getCodigo());
+			PreparedStatement s = con.prepareStatement("update BD_ListaRegalos.dbo.Usuario " +
+					"set estado = ? where codigo=?");
+			//agregar campos
+			s.setString(1, "Inactivo");
+			s.setInt(2,u.getCodigo());
 			s.execute();
 			PoolConnection.getPoolConnection().realeaseConnection(con);
 		}
@@ -58,7 +61,7 @@ public class AdmPersistenciaUsuario extends AdministradorPersistencia
 		{
 			Usuario a = (Usuario)o;
 			Connection con = PoolConnection.getPoolConnection().getConnection();
-			PreparedStatement s = con.prepareStatement("insert into BD_ListaRegalos.dbo.Usuario values (?,?,?,?,?,?)");
+			PreparedStatement s = con.prepareStatement("insert into BD_ListaRegalos.dbo.Usuario values (?,?,?,?,?,?,?)");
 			//agregar campos
 			s.setString(1, a.getUser());
 			s.setString(2,a.getPass());
@@ -66,6 +69,7 @@ public class AdmPersistenciaUsuario extends AdministradorPersistencia
 			s.setString(4, a.getApellido());
 			s.setInt(5,a.getDNI());
 			s.setString(6, a.getMail());
+			s.setString(7, "Activo");
 			s.execute();
 			s = con.prepareStatement("SELECT @@IDENTITY AS 'Identity'");
 			ResultSet result = s.executeQuery();
@@ -187,7 +191,7 @@ public class AdmPersistenciaUsuario extends AdministradorPersistencia
 	public Map<Integer,Usuario> buscarTodos(){
 		try {
 			Connection con = PoolConnection.getPoolConnection().getConnection();
-			PreparedStatement s = con.prepareStatement("select * from BD_ListaRegalos.dbo.Usuario");
+			PreparedStatement s = con.prepareStatement("select * from BD_ListaRegalos.dbo.Usuario where estado='Activo'");
 			
 			ResultSet result = s.executeQuery();
 			Usuario u = null;

@@ -15,7 +15,9 @@ import javax.swing.table.DefaultTableModel;
 
 import controlador.ControladorListaRegalos;
 import controlador.ControladorUsuario;
+import controlador.SistemaRegalos;
 import modelo.Administrador;
+import modelo.ListaDeRegalos;
 import modelo.ParticipanteLista;
 import modelo.Usuario;
 
@@ -33,9 +35,9 @@ import java.awt.event.WindowEvent;
 public class Administracion extends JFrame {
 
 	private JPanel contentPane;
-	private JTable table;
+	public JTable table;
 	private JTable table_1;
-
+	private Administracion main;
 	/**
 	 * Create the frame.
 	 */
@@ -47,6 +49,8 @@ public class Administracion extends JFrame {
 				login.setVisible(true);
 			}
 		});
+		
+		main = this;
 		
 		setTitle("Sistema de Lista de Regalos - Administraci\u00F3n de Usuarios");
 		setResizable(false);
@@ -79,31 +83,12 @@ public class Administracion extends JFrame {
 		CompletarModeloUsuarios(usuarios, table);
 		scrollPane.setViewportView(table);
 		
-		
-		 Action edit = new AbstractAction()
-	    	{
-	    	    public void actionPerformed(ActionEvent e)
-	    	    {
-	    	    	System.out.println("Editar");
-	    	    	JTable tbl = (JTable)e.getSource();
-			        int modelRow = Integer.valueOf( e.getActionCommand() );
-			        //obtengo la fila que se seleccionó y el usuario que corresponde
-			        Vector row = (Vector) ((DefaultTableModel)tbl.getModel()).getDataVector().elementAt(modelRow);
-			        Usuario usuario = ControladorUsuario.GetInstance().GetUsuario(Integer.valueOf(row.get(0).toString()));
-			        JFrame abmUsuario = new ABMUsuario(usuario);
-					abmUsuario.setVisible(true);
-					dispose();
-	    	    }
-	    	};		
-	    	ButtonColumn bEdit = new ButtonColumn(table,edit,6);
-	    	bEdit.setMnemonic(KeyEvent.VK_D);
 	    	
 		JButton btnNuevoUsuario = new JButton("Nuevo Usuario");
 		btnNuevoUsuario.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JFrame abmUsuario = new ABMUsuario(null);
+				JFrame abmUsuario = new ABMUsuario(null,main);
 				abmUsuario.setVisible(true);
-				dispose();
 			}
 		});
 		btnNuevoUsuario.setBounds(369, 85, 133, 25);
@@ -185,6 +170,31 @@ public class Administracion extends JFrame {
 						"Editar"
 	        	});
 		}
+		 Action edit = new AbstractAction()
+	    	{
+	    	    public void actionPerformed(ActionEvent e)
+	    	    {
+	    	    	System.out.println("Editar");
+	    	    	JTable tbl = (JTable)e.getSource();
+			        int modelRow = Integer.valueOf( e.getActionCommand() );
+			        //obtengo la fila que se seleccionó y el usuario que corresponde
+			        Vector row = (Vector) ((DefaultTableModel)tbl.getModel()).getDataVector().elementAt(modelRow);
+			        Usuario usuario = ControladorUsuario.GetInstance().GetUsuario(Integer.valueOf(row.get(0).toString()));
+			        JFrame abmUsuario = new ABMUsuario(usuario,main);
+			        abmUsuario.setVisible(true);
+	    	    }
+	    	};		
+	    	ButtonColumn bEdit = new ButtonColumn(table,edit,6);
+	    	bEdit.setMnemonic(KeyEvent.VK_D);
+	}
+	
+	public void refrescarUsuario(JTable tablaUsuario) {
+		CompletarModeloUsuarios(ControladorUsuario.GetInstance().GetUsuarios(),tablaUsuario);
+		
+	}
+	
+	public void refrescarAdministrador(JTable tablaAdmin) {
+		CompletarModeloAdministradores(ControladorUsuario.GetInstance().GetAdministradores(),tablaAdmin);
 		
 	}
 

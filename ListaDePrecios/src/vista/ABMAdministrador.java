@@ -70,7 +70,7 @@ public class ABMAdministrador extends JFrame {
 		JButton btnGuardar = new JButton("Guardar");
 		btnGuardar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				boolean seCreo = ControladorUsuario.GetInstance().CrearAdministrador(tfUser.getText(),tfPass.getText());
+				boolean seCreo = ControladorUsuario.GetInstance().CrearAdministrador(tfUser.getText(),new String(tfPass.getPassword()));
 				if (!seCreo) {
 					lblElAdministradorYa.setVisible(true);
 				}else {
