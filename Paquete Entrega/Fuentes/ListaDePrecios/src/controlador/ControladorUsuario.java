@@ -42,9 +42,9 @@ public class ControladorUsuario {
 	}
 	
 	public Map<Integer,Usuario> GetUsuarios(){
-		if (usuarios.isEmpty()) {
+		//if (usuarios.isEmpty()) {
 			this.usuarios = Usuario.buscarTodos();	
-		}		
+		//}		
 		return usuarios;
 	}
 	
