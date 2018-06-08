@@ -162,7 +162,7 @@ public class AdmPersistenciaUsuario extends AdministradorPersistencia
 		{
 			Usuario a = null;
 			Connection con = PoolConnection.getPoolConnection().getConnection();
-			PreparedStatement s = con.prepareStatement("select * from BD_ListaRegalos.dbo.Usuario where username = ?");			
+			PreparedStatement s = con.prepareStatement("select * from BD_ListaRegalos.dbo.Usuario where username = ? and estado='Activo'");			
 			//agregar campos
 			s.setString(1,username);
 			ResultSet result = s.executeQuery();

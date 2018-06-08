@@ -74,11 +74,11 @@ public class ListaDeRegalos implements IObservableMails, IObserverCalendario {
 		ParticipanteLista partInactivo = ParticipanteLista.buscarParticipante(ul.getCodigo(), this.getCodigo());
 		if (partInactivo != null) {
 			partInactivo.setEstado("Activo");
-			ParticipanteLista.update(partInactivo);
+			ParticipanteLista.update(partInactivo,this.getCodigo());
 			this.participantes.put(ul.getCodigo(), partInactivo);
 		} else {
-			ParticipanteLista pl = new ParticipanteLista(ul, this, false, "Activo");
-			ParticipanteLista.insert(pl);
+			ParticipanteLista pl = new ParticipanteLista(ul, false, "Activo");
+			ParticipanteLista.insert(pl,this.getCodigo());
 			this.participantes.put(ul.getCodigo(),pl);
 		}
 	}
