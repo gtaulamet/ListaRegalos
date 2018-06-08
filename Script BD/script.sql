@@ -140,7 +140,7 @@ GO
 use [BD_ListaRegalos]
 go
 
-INSERT [dbo].[Administrador] ([username], [pass]) VALUES (N'admin', N'576031f7b5341875417575767997d17f')
+INSERT [dbo].[Administrador] ([username], [pass]) VALUES (N'admin', N'8a5da52ed126447d359e70c05721a8aa')
 
 SET IDENTITY_INSERT [dbo].[Usuario] OFF
 INSERT [dbo].[Usuario] ( [username], [pass], [nombre], [apellido], [DNI], [mail],[estado]) VALUES ( N'gtaulamet', N'8a5da52ed126447d359e70c05721a8aa', N'Gustavo', N'Taulamet', 324234324, N'gt@dd.com', 'Activo')
