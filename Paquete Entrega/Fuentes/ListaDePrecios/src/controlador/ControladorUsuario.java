@@ -37,7 +37,7 @@ public class ControladorUsuario {
 		return usuarios.get((Object)u);
 	}
 	
-	public static Usuario GetUsuario(String u) {
+	public  Usuario GetUsuario(String u) {
 		return Usuario.buscarUsuario(u);
 	}
 	
