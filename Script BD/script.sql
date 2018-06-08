@@ -13,11 +13,14 @@ GO
 USE [master]
 GO
 
-
 /* For security reasons the login is created disabled and with a random password. */
 /****** Object:  Login [api]    Script Date: 07/06/2018 13:21:47 ******/
 CREATE LOGIN [api] WITH PASSWORD='api18', DEFAULT_DATABASE=[BD_ListaRegalos], DEFAULT_LANGUAGE=[Español], CHECK_EXPIRATION=ON, CHECK_POLICY=ON
 GO
+
+ALTER LOGIN [api] DISABLE
+GO
+
 
 USE [BD_ListaRegalos]
 GO
