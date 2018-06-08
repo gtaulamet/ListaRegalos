@@ -31,25 +31,14 @@ public class AdmPersistenciaParticipanteLista extends AdministradorPersistencia
 	@Override
 	public void delete(Object d) 
 	{
-		try
-		{
-			ParticipanteLista p = (ParticipanteLista)d;
-			Connection con = PoolConnection.getPoolConnection().getConnection();
-			PreparedStatement s = con.prepareStatement("delete from BD_ListaRegalos.dbo.ParticipanteLista where usuarioid = ? and listaDeRegalosId = ?");
-			s.setInt(1, p.getUsuario().getCodigo());
-			s.setInt(2, p.getListaDeRegalos().getCodigo());
-			s.execute();
-			PoolConnection.getPoolConnection().realeaseConnection(con);
-		}
-		catch (Exception e)
-		{
-			System.out.println();
-		}
-		
 	}
 
 	@Override
 	public void insert(Object o) 
+	{
+
+	}
+	public void insert(Object o, int codigoLista) 
 	{
 		try
 		{
@@ -58,7 +47,7 @@ public class AdmPersistenciaParticipanteLista extends AdministradorPersistencia
 			PreparedStatement s = con.prepareStatement("insert into BD_ListaRegalos.dbo.ParticipanteLista values (?,?,?,?)");
 			//agregar campos
 			s.setInt(1, p.getUsuario().getCodigo());
-			s.setInt(2, p.getListaDeRegalos().getCodigo());
+			s.setInt(2, codigoLista);
 			s.setBoolean(3, p.isPago());
 			s.setString(4, p.getEstado());
 			s.execute();
@@ -83,6 +72,10 @@ public class AdmPersistenciaParticipanteLista extends AdministradorPersistencia
 	@Override
 	public void update(Object o) 
 	{
+		
+	}
+	public void update(Object o, int codigoLista) 
+	{
 		try
 		{
 			ParticipanteLista p = (ParticipanteLista)o;
@@ -95,7 +88,7 @@ public class AdmPersistenciaParticipanteLista extends AdministradorPersistencia
 			s.setBoolean(1, p.isPago());
 			s.setString(2, p.getEstado());
 			s.setInt(3, p.getUsuario().getCodigo());
-			s.setInt(4, p.getListaDeRegalos().getCodigo());
+			s.setInt(4, codigoLista);
 			
 			s.execute();
 			PoolConnection.getPoolConnection().realeaseConnection(con);
@@ -127,8 +120,8 @@ public class AdmPersistenciaParticipanteLista extends AdministradorPersistencia
 				String estado = result.getString(4);
 				
 				Usuario us = AdmPersistenciaUsuario.getInstancia().buscarAUsuario(usuarioId);
-				ListaDeRegalos li = AdmPersistenciaListaRegalos.getInstancia().buscarAListaDeRegalos(lista);
-				p= new ParticipanteLista(us, li, pago, estado);
+				//ListaDeRegalos li = AdmPersistenciaListaRegalos.getInstancia().buscarAListaDeRegalos(lista);
+				p= new ParticipanteLista(us, pago, estado);
 			}
 			
 			PoolConnection.getPoolConnection().realeaseConnection(con);
@@ -160,9 +153,9 @@ public class AdmPersistenciaParticipanteLista extends AdministradorPersistencia
 				String estado= result.getString(4);
 				
 				Usuario us = AdmPersistenciaUsuario.getInstancia().buscarAUsuario(usuario);
-				ListaDeRegalos li = AdmPersistenciaListaRegalos.getInstancia().buscarAListaDeRegalos(lista);
+				//ListaDeRegalos li = AdmPersistenciaListaRegalos.getInstancia().buscarAListaDeRegalos(lista);
 				
-				p = new  ParticipanteLista(us, li, pago, estado);
+				p = new  ParticipanteLista(us, pago, estado);
 				
 				participantes.put(usuario,p);
 			}
@@ -195,9 +188,9 @@ public class AdmPersistenciaParticipanteLista extends AdministradorPersistencia
 				String estado= result.getString(4);
 				
 				Usuario us = AdmPersistenciaUsuario.getInstancia().buscarAUsuario(usuario);
-				ListaDeRegalos li = AdmPersistenciaListaRegalos.getInstancia().buscarAListaDeRegalos(lista);
+				//ListaDeRegalos li = AdmPersistenciaListaRegalos.getInstancia().buscarAListaDeRegalos(lista);
 				
-				p = new  ParticipanteLista(us, li, pago, estado);
+				p = new  ParticipanteLista(us, pago, estado);
 				
 				participantes.put(lista,p);
 			}

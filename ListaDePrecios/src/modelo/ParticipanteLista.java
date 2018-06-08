@@ -8,26 +8,16 @@ import persistencia.AdmPersistenciaParticipanteLista;
 
 public class ParticipanteLista {
 	private Usuario usuario;
-	private ListaDeRegalos listaDeRegalos;
 	private boolean pago;
 	private String estado;
 
-	public ParticipanteLista(Usuario usuario, ListaDeRegalos listaDeRegalos, boolean pago, String estado) {
+	public ParticipanteLista(Usuario usuario, boolean pago, String estado) {
 		super();
 		this.usuario = usuario;
-		this.listaDeRegalos = listaDeRegalos;
 		this.pago = pago;
 		this.estado = estado;
 	}
 
-	public ListaDeRegalos getListaDeRegalos() {
-		return listaDeRegalos;
-	}
-
-	public void setListaDeRegalos(ListaDeRegalos listaDeRegalos) {
-		this.listaDeRegalos = listaDeRegalos;
-	}
-	
 	public Usuario getUsuario() {
 		return usuario;
 	}
@@ -62,14 +52,14 @@ public class ParticipanteLista {
 		//todo
 	}
 	
-	public static void insert(ParticipanteLista pl) {
-		AdmPersistenciaParticipanteLista.getInstancia().insert(pl);
+	public static void insert(ParticipanteLista pl, int codigoLista) {
+		AdmPersistenciaParticipanteLista.getInstancia().insert(pl, codigoLista);
 	}
 	public static void delete(ParticipanteLista pl) {
 		AdmPersistenciaParticipanteLista.getInstancia().delete(pl);
 	}
-	public static void update(ParticipanteLista pl) {
-		AdmPersistenciaParticipanteLista.getInstancia().update(pl);
+	public static void update(ParticipanteLista pl, int codigoLista) {
+		AdmPersistenciaParticipanteLista.getInstancia().update(pl, codigoLista);
 	}
 	public static Map<Integer,ParticipanteLista> buscarTodosXLista(int lista){
 		return AdmPersistenciaParticipanteLista.getInstancia().buscarTodos(lista);
