@@ -51,7 +51,7 @@ public class MainUsuario extends JFrame {
 	public JTable table;
 	public JTable table_1;
 	private MainUsuario main;
-	
+	private Usuario u;
 	/**
 	 * Create the frame.
 	 */
@@ -76,7 +76,7 @@ public class MainUsuario extends JFrame {
 		main = this;
 		setResizable(false);
 		setTitle("Sistema de Lista de Regalos - Main Usuario");
-		Usuario u = SistemaRegalos.GetInstance().getUsuarioLogueado();
+		u = SistemaRegalos.GetInstance().getUsuarioLogueado();
 
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 615, 521);
@@ -274,7 +274,8 @@ public class MainUsuario extends JFrame {
 		
 		for (Map.Entry<Integer, ListaDeRegalos> e : listaParticipante.entrySet()) {
 			String pago = "";
-			if (e.getValue().GetParticipantes().get(e.getKey()).isPago()) {
+			Map<Integer, ParticipanteLista> aux = e.getValue().GetParticipantes();
+			if (aux != null && aux.get(u.getCodigo()).isPago()) {
 				pago ="Si";
 			}else {
 				pago ="No";
