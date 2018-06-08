@@ -115,12 +115,11 @@ public class AdmPersistenciaParticipanteLista extends AdministradorPersistencia
 			while (result.next())
 			{
 				int usuarioId = result.getInt(1);
-				int lista = result.getInt(2);
 				boolean pago = result.getBoolean(3);
 				String estado = result.getString(4);
 				
 				Usuario us = AdmPersistenciaUsuario.getInstancia().buscarAUsuario(usuarioId);
-				//ListaDeRegalos li = AdmPersistenciaListaRegalos.getInstancia().buscarAListaDeRegalos(lista);
+
 				p= new ParticipanteLista(us, pago, estado);
 			}
 			
@@ -148,12 +147,10 @@ public class AdmPersistenciaParticipanteLista extends AdministradorPersistencia
 			while (result.next())
 			{
 				int usuario = result.getInt(1);
-				int lista = result.getInt(2);
 				boolean pago = result.getBoolean(3);
 				String estado= result.getString(4);
 				
 				Usuario us = AdmPersistenciaUsuario.getInstancia().buscarAUsuario(usuario);
-				//ListaDeRegalos li = AdmPersistenciaListaRegalos.getInstancia().buscarAListaDeRegalos(lista);
 				
 				p = new  ParticipanteLista(us, pago, estado);
 				
