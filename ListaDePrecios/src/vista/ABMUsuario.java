@@ -9,14 +9,19 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.border.EmptyBorder;
 
+import controlador.ControladorListaRegalos;
 import controlador.ControladorUsuario;
 import controlador.SistemaRegalos;
+import modelo.ListaDeRegalos;
 import modelo.Usuario;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -34,12 +39,14 @@ public class ABMUsuario extends JFrame {
 	private JTextField tfDNI;
 	private JTextField tfEmail;
 
+	private JFrame f;
 	/**
 	 * Create the frame.
 	 */
 	public ABMUsuario(Usuario u) {
+		this.f = this;
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		setBounds(100, 100, 427, 397);
+		setBounds(100, 100, 309, 397);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -51,9 +58,9 @@ public class ABMUsuario extends JFrame {
 		contentPane.add(lblAbmUsuario);
 		
 		JLabel lblError = new JLabel("");
-		lblError.setFont(new Font("Tahoma", Font.BOLD, 13));
+		lblError.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblError.setForeground(Color.RED);
-		lblError.setBounds(99, 284, 222, 14);
+		lblError.setBounds(99, 284, 184, 14);
 		contentPane.add(lblError);
 		
 		JLabel lblCdigo = new JLabel("C\u00F3digo");
@@ -121,11 +128,43 @@ public class ABMUsuario extends JFrame {
 		
 		
 		JButton btnDarDeBaja = new JButton("Dar de Baja");
-		btnDarDeBaja.setBounds(223, 40, 131, 25);
+		btnDarDeBaja.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int result = JOptionPane.showConfirmDialog(f,
+			            "¿Realmente desea eliminmar el usuario?", "Sistema de Lista de regalos - Darse de baja de Usuario",
+			            JOptionPane.YES_NO_OPTION);
+				
+			        if (result == JOptionPane.YES_OPTION) {
+			        	try {
+			        	setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			        	
+			        	ControladorUsuario.GetInstance().DardeBajaUsuario(Integer.parseInt(tfCodigo.getText()));
+			        	/*
+						//Doy de baja el usuario como participante de la lista (baja lógica)
+						ControladorListaRegalos.GetInstance().BajarParticipanteLista(u.getCodigo(), lr.getCodigo());			 
+						MainUsuario aux = (MainUsuario)m;
+						
+						aux.refrescar(aux.table_1, aux.table);
+						dispose();
+						
+						*/
+			        	}catch(Exception ex) {
+							System.out.println(ex.getMessage());
+							lblError.setText("Error: "+ ex.getMessage());
+							lblError.setForeground(Color.RED);
+							lblError.setVisible(true);
+						}
+			        	
+			          }
+			        else if (result == JOptionPane.NO_OPTION)
+			          setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			}
+		});
+		btnDarDeBaja.setBounds(10, 309, 131, 25);
 		contentPane.add(btnDarDeBaja);
 		
 		JButton btnGuardar = new JButton("Guardar");
-		btnGuardar.setBounds(223, 318, 97, 25);
+		btnGuardar.setBounds(166, 309, 97, 25);
 		btnGuardar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -136,6 +175,13 @@ public class ABMUsuario extends JFrame {
 					 Matcher matcher = pattern.matcher(tfEmail.getText());
 					if (!matcher.matches()) {
 						throw new Exception("EMail invalido"); 
+					}
+					if(tfUser.getText()=="") {
+						throw new Exception("User Obligatorio");
+					}
+					if(tfUser.getText()=="" ||tfNombre.getText()==""||tfApellido.getText()==""||tfEmail.getText()=="" ||
+							( u==null && tfNombre.getText()=="")) {
+						throw new Exception("Corrobore los campos obligatorios.");
 					}
 					//Si es un alta	
 					if (u==null) {       
@@ -157,6 +203,42 @@ public class ABMUsuario extends JFrame {
 			}
 		});
 		contentPane.add(btnGuardar);
+		
+		JLabel label = new JLabel("*");
+		label.setForeground(Color.RED);
+		label.setFont(new Font("Tahoma", Font.BOLD, 13));
+		label.setBounds(225, 81, 46, 14);
+		contentPane.add(label);
+		
+		JLabel label_1 = new JLabel("*");
+		label_1.setForeground(Color.RED);
+		label_1.setFont(new Font("Tahoma", Font.BOLD, 13));
+		label_1.setBounds(225, 110, 46, 14);
+		contentPane.add(label_1);
+		
+		JLabel label_2 = new JLabel("*");
+		label_2.setFont(new Font("Tahoma", Font.BOLD, 13));
+		label_2.setForeground(Color.RED);
+		label_2.setBounds(225, 139, 46, 14);
+		contentPane.add(label_2);
+		
+		JLabel label_3 = new JLabel("*");
+		label_3.setForeground(Color.RED);
+		label_3.setFont(new Font("Tahoma", Font.BOLD, 13));
+		label_3.setBounds(225, 168, 46, 14);
+		contentPane.add(label_3);
+		
+		JLabel label_4 = new JLabel("*");
+		label_4.setForeground(Color.RED);
+		label_4.setFont(new Font("Tahoma", Font.BOLD, 13));
+		label_4.setBounds(225, 197, 46, 14);
+		contentPane.add(label_4);
+		
+		JLabel label_5 = new JLabel("*");
+		label_5.setFont(new Font("Tahoma", Font.BOLD, 13));
+		label_5.setForeground(Color.RED);
+		label_5.setBounds(225, 255, 46, 14);
+		contentPane.add(label_5);
 		
 
 		if (u!=null) {
@@ -185,5 +267,4 @@ public class ABMUsuario extends JFrame {
 				}
 			}*/
 	}
-
 }

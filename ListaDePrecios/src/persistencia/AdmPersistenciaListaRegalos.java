@@ -260,9 +260,9 @@ public class AdmPersistenciaListaRegalos extends AdministradorPersistencia
 		{
 			ListaDeRegalos l = null;
 			Connection con = PoolConnection.getPoolConnection().getConnection();
-			PreparedStatement s = con.prepareStatement("select lr.* from ListaDeRegalos lr\r\n" + 
-					"inner join ParticipanteLista pl on pl.listaDeRegalosId = lr.codigo and pl.estado like 'Activo'\r\n" + 
-					"inner join Usuario u on u.codigo=? and pl.usuarioId=u.codigo");			
+			PreparedStatement s = con.prepareStatement("select lr.* from  BD_ListaRegalos.dbo.ListaDeRegalos lr\r\n" + 
+					"inner join  BD_ListaRegalos.dbo.ParticipanteLista pl on pl.listaDeRegalosId = lr.codigo and pl.estado like 'Activo'\r\n" + 
+					"inner join  BD_ListaRegalos.dbo.Usuario u on u.codigo=? and pl.usuarioId=u.codigo");			
 			
 			s.setInt(1,codigo);
 			ResultSet result = s.executeQuery();

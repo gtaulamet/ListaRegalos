@@ -4,6 +4,8 @@ import java.util.Map;
 import java.util.Vector;
 
 import modelo.Administrador;
+import modelo.ListaDeRegalos;
+import modelo.ParticipanteLista;
 import modelo.Usuario;
 
 
@@ -73,8 +75,8 @@ public class ControladorUsuario {
 		}
 	}
 	
-	public void ModificarUsuario(int Codigo, String user, String nombre, String apellido, String pass, String email, String DNI) throws Exception {
-		Usuario uExistente = buscarUsuario(Codigo);
+	public void ModificarUsuario(int codigo, String user, String nombre, String apellido, String pass, String email, String DNI) throws Exception {
+		Usuario uExistente = buscarUsuario(codigo);
 		if (uExistente!=null) {
 			if(uExistente.getApellido()!=apellido)
 				uExistente.setApellido(apellido);
@@ -88,6 +90,24 @@ public class ControladorUsuario {
 				uExistente.setPass(SistemaRegalos.generarPass(pass));
 			uExistente.actualizarUsuario();
 		}
+	}
+
+
+	public void DardeBajaUsuario(int codigo) throws Exception {
+				
+		Usuario uExistente = buscarUsuario(codigo);
+	  	Map<Integer,ListaDeRegalos> listasComoParticipante = ControladorListaRegalos.GetInstance().GetListasDelParticipante(uExistente.getCodigo());
+    	Map<Integer,ListaDeRegalos> listasComoAdmin = ControladorListaRegalos.GetInstance().GetListasAdministrador(uExistente.getCodigo());
+    	if(listasComoParticipante.size()!=0) {
+    		throw new Exception("El usuario esta particiando en alguna listas. ");
+    	}if(listasComoAdmin.size()!=0) {
+    		throw new Exception("El usuario es administrador en alguna listas. ");
+    	}
+    	Usuario.delete(uExistente);
+    	usuarios.remove(uExistente.getCodigo());
+		//u.setEstado("Inactivo");
+		//ListaDeRegalos.updateEstado(lr);
+		
 	}
 	
 	public Usuario buscarUsuario (int Codigo) {
