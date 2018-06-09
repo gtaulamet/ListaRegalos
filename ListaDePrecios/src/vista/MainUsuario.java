@@ -1,3 +1,4 @@
+
 package vista;
 
 import java.awt.BorderLayout;
@@ -23,6 +24,9 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableCellEditor;
 
+import DTO.ListaDeRegalosDTO;
+import DTO.ParticipanteListaDTO;
+import DTO.UsuarioDTO;
 import controlador.ControladorListaRegalos;
 import controlador.SistemaRegalos;
 import modelo.ListaDeRegalos;
@@ -52,7 +56,7 @@ public class MainUsuario extends JFrame {
 	public JTable table;
 	public JTable table_1;
 	private MainUsuario main;
-	private Usuario u;
+	private UsuarioDTO u;
 	/**
 	 * Create the frame.
 	 */
@@ -110,26 +114,26 @@ public class MainUsuario extends JFrame {
 		tfNombre.setBounds(90, 44, 116, 22);
 		contentPane.add(tfNombre);
 		tfNombre.setColumns(10);
-		tfNombre.setText(u.getNombre());
+		tfNombre.setText(u.nombre);
 		
 		tfApellido = new JTextField();
 		tfApellido.setEditable(false);
 		tfApellido.setBounds(90, 73, 116, 22);
 		contentPane.add(tfApellido);
 		tfApellido.setColumns(10);
-		tfApellido.setText(u.getApellido());
+		tfApellido.setText(u.apellido);
 		
 		tfEmail = new JTextField();
 		tfEmail.setEditable(false);
 		tfEmail.setBounds(90, 103, 116, 22);
 		contentPane.add(tfEmail);
 		tfEmail.setColumns(10);
-		tfEmail.setText(u.getMail());
+		tfEmail.setText(u.mail);
 		
 		JButton btnCrearLista = new JButton("Crear Lista");
 		btnCrearLista.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JFrame altaListaRegalos = new ABMListaRegalosParticipante(true, new ListaDeRegalos(),main);
+				JFrame altaListaRegalos = new ABMListaRegalosParticipante(true, new ListaDeRegalosDTO(),main);
 				altaListaRegalos.setVisible(true);
 			}
 		});
@@ -155,7 +159,7 @@ public class MainUsuario extends JFrame {
 	    			int linea = tbl.getSelectedRow();
 	    			String codigo = tbl.getValueAt(linea, 0).toString();
 
-	    			ListaDeRegalos lr = ControladorListaRegalos.GetInstance().GetListaRegalos(Integer.parseInt(codigo));
+	    			ListaDeRegalosDTO lr = ControladorListaRegalos.GetInstance().GetListaRegalos(Integer.parseInt(codigo));
 	    			JFrame abmListaParticipante = new ABMListaRegalosParticipante(false,lr, main);
 	    			abmListaParticipante.setVisible(true);
 		    	}
@@ -209,7 +213,7 @@ public class MainUsuario extends JFrame {
 		    	if (me.getClickCount() == 2) {
 	    			int linea = tbl.getSelectedRow();
 	    			String codigo = tbl.getValueAt(linea, 0).toString();
-	    			ListaDeRegalos lr = ControladorListaRegalos.GetInstance().GetListaRegalos(Integer.parseInt(codigo));
+	    			ListaDeRegalosDTO lr = ControladorListaRegalos.GetInstance().GetListaRegalos(Integer.parseInt(codigo));
 	    			//Aca llamamos a la ventana que nos traera  los detalles del registro
 	    			JFrame abmListaAdmin = new ABMListaDeRegalosAdmin(lr,main);
 	    			abmListaAdmin.setVisible(true);
@@ -219,7 +223,7 @@ public class MainUsuario extends JFrame {
 	}
 
 	//Completo el modelo de la tabla tbl con los datos de las listas en las que el usuario es administrador
-	private void CompletarModeloListaAdministrador(Map<Integer,ListaDeRegalos> listaAdministrador, JTable tbl) {
+	private void CompletarModeloListaAdministrador(Map<Integer,ListaDeRegalosDTO> listaAdministrador, JTable tbl) {
 		String[] columnasAdministrador = new String[] {
 				"C\u00F3digo", "Agasajado", "F. Inicio", "F. Fin", "Estado", "Monto Recaudado"
 			};
@@ -239,23 +243,23 @@ public class MainUsuario extends JFrame {
 		String fi = "";
 		String ff = "";
 		
-		for (Map.Entry<Integer, ListaDeRegalos> e : listaAdministrador.entrySet()) {
-			fi = format.format(e.getValue().getFechaInicio());
-			ff = format.format(e.getValue().getFechaFin());
+		for (Map.Entry<Integer, ListaDeRegalosDTO> e : listaAdministrador.entrySet()) {
+			fi = format.format(e.getValue().fechaInicio);
+			ff = format.format(e.getValue().fechaFin);
 	        dtm.addRow(new Object[] {
-					e.getValue().getCodigo(),
-					e.getValue().getNombreAgasajado(),
+					e.getValue().codigo,
+					e.getValue().nombreAgasajado,
 					fi,
 					ff,
-					e.getValue().getEstado(),
-					e.getValue().getMontoRecaudado()
+					e.getValue().estado,
+					e.getValue().montoRecaudado
 			});
 		}
 		
 	}
 
 	//Completo el modelo de la tabla tbl con los datos de las listas en las que el usuario es participante
-	private void CompletarModeloListaParticipante(Map<Integer,ListaDeRegalos> listaParticipante, JTable tbl) {
+	private void CompletarModeloListaParticipante(Map<Integer,ListaDeRegalosDTO> listaParticipante, JTable tbl) {
 		String[] columnasParticipante = new String[] {
 				"C\u00F3digo", "Agasajado", "F. Inicio", "F. Fin", "Estado", "Pag\u00F3"
 			};
@@ -275,22 +279,22 @@ public class MainUsuario extends JFrame {
 		String fi = "";
 		String ff = "";		
 		
-		for (Map.Entry<Integer, ListaDeRegalos> e : listaParticipante.entrySet()) {
+		for (Map.Entry<Integer, ListaDeRegalosDTO> e : listaParticipante.entrySet()) {
 			String pago = "";
-			Map<Integer, ParticipanteLista> aux = e.getValue().GetParticipantes();
-			if (aux != null && aux.get(u.getCodigo()).isPago()) {
+			Map<Integer, ParticipanteListaDTO> aux = e.getValue().participantes;
+			if (aux.get(u.codigo) != null && aux.get(u.codigo).pago) {
 				pago ="Si";
 			}else {
 				pago ="No";
 			}
-			fi = format.format(e.getValue().getFechaInicio());
-			ff = format.format(e.getValue().getFechaFin());
+			fi = format.format(e.getValue().fechaInicio);
+			ff = format.format(e.getValue().fechaFin);
 	        dtm.addRow(new Object[] {
-					e.getValue().getCodigo(),
-					e.getValue().getNombreAgasajado(),
+					e.getValue().codigo,
+					e.getValue().nombreAgasajado,
 					fi,
 					ff,
-					e.getValue().getEstado(),
+					e.getValue().estado,
 					pago
 			});
 		}

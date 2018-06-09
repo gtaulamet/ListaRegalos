@@ -1,9 +1,11 @@
 package modelo;
 
 import java.io.Console;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
+import DTO.UsuarioDTO;
 import persistencia.AdmPersistenciaUsuario;
 
 public class Usuario {
@@ -97,30 +99,85 @@ public class Usuario {
 		this.mail = mail;
 	}
 
-	public static Usuario insert(Usuario u) {
+	public static UsuarioDTO insert(String user, String pass, String nombre, String apellido, int dni,
+			String email) {
+		Usuario u = new Usuario(0, user, pass, nombre, apellido, dni, email);
 		int codigo = AdmPersistenciaUsuario.getInstancia().insertCodigo(u);
 		System.out.println(codigo);
 		u.setCodigo(codigo);
-		return u;
+		
+		UsuarioDTO uDTO = new UsuarioDTO();
+		uDTO.apellido = u.getApellido();
+		uDTO.codigo = u.getCodigo();
+		uDTO.DNI = u.getDNI();
+		uDTO.mail = u.getMail();
+		uDTO.nombre = u.getNombre();
+		uDTO.pass = u.getPass();
+		uDTO.user = u.getUser();
+		
+		return uDTO;
 	}
 	
-	public void actualizarUsuario() {
-		AdmPersistenciaUsuario.getInstancia().update(this);
+	public static void actualizarUsuario(UsuarioDTO u) {
+		Usuario usuario = new Usuario(u.codigo, u.user, u.pass, u.nombre, u.apellido, u.DNI, u.mail);
+		AdmPersistenciaUsuario.getInstancia().update(usuario);
 	}
 	
-	public static void delete(Usuario u) {
-		AdmPersistenciaUsuario.getInstancia().delete(u);
+	public static void delete(UsuarioDTO u) {
+		Usuario usuario = new Usuario(u.codigo, u.user, u.pass, u.nombre, u.apellido, u.DNI, u.mail);
+		AdmPersistenciaUsuario.getInstancia().delete(usuario);
 	}
 	public static void update(Usuario u) {
 		AdmPersistenciaUsuario.getInstancia().update(u);
 	}
-	public static Usuario buscarUsuario(int codigo){
-		return AdmPersistenciaUsuario.getInstancia().buscarAUsuario(codigo);
+	public static UsuarioDTO buscarUsuario(int codigo){
+		Usuario u = AdmPersistenciaUsuario.getInstancia().buscarAUsuario(codigo);
+		UsuarioDTO uDTO = new UsuarioDTO();
+		uDTO.apellido = u.getApellido();
+		uDTO.codigo = u.getCodigo();
+		uDTO.DNI = u.getDNI();
+		uDTO.mail = u.getMail();
+		uDTO.nombre = u.getNombre();
+		uDTO.pass = u.getPass();
+		uDTO.user = u.getUser();
+		
+		return uDTO;
 	}
-	public static Map<Integer,Usuario> buscarTodos(){
-		return AdmPersistenciaUsuario.getInstancia().buscarTodos();
+	public static Map<Integer,UsuarioDTO> buscarTodos(){
+		Map<Integer,Usuario> lista = AdmPersistenciaUsuario.getInstancia().buscarTodos();
+		Map<Integer,UsuarioDTO> listaDTO = new HashMap<Integer, UsuarioDTO>();
+		
+		for (Map.Entry<Integer, Usuario> e : lista.entrySet()) {
+			UsuarioDTO uDTO = new UsuarioDTO();
+			uDTO.apellido = e.getValue().getApellido();
+			uDTO.codigo = e.getValue().getCodigo();
+			uDTO.DNI = e.getValue().getDNI();
+			uDTO.mail = e.getValue().getMail();
+			uDTO.nombre = e.getValue().getNombre();
+			uDTO.pass = e.getValue().getPass();
+			uDTO.user = e.getValue().getUser();
+			listaDTO.put(uDTO.codigo, uDTO);
+		}
+		
+		return listaDTO;
 	}
-	public static Usuario buscarUsuario(String user) {
-		return AdmPersistenciaUsuario.getInstancia().buscarAUsuario(user);
+	public static UsuarioDTO buscarUsuario(String user) {
+		Usuario u = AdmPersistenciaUsuario.getInstancia().buscarAUsuario(user);
+		if (u != null) {
+			UsuarioDTO uDTO = new UsuarioDTO();
+			uDTO.apellido = u.getApellido();
+			uDTO.codigo = u.getCodigo();
+			uDTO.DNI = u.getDNI();
+			uDTO.mail = u.getMail();
+			uDTO.nombre = u.getNombre();
+			uDTO.pass = u.getPass();
+			uDTO.user = u.getUser();
+			
+			return uDTO;
+		}
+		return null;
 	}
+
+
+
 }

@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.border.EmptyBorder;
 
+import DTO.UsuarioDTO;
 import controlador.ControladorListaRegalos;
 import controlador.ControladorUsuario;
 import controlador.SistemaRegalos;
@@ -47,7 +48,7 @@ public class ABMUsuario extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public ABMUsuario(Usuario u, JFrame main) {
+	public ABMUsuario(UsuarioDTO u, JFrame main) {
 		setTitle("Sistema de Lista de Regalos - ABM Usuario");
 		this.f = this;
 		this.m = main;
@@ -243,14 +244,14 @@ public class ABMUsuario extends JFrame {
 		
 
 		if (u!=null) {
-			tfCodigo.setText(String.valueOf(u.getCodigo()));
+			tfCodigo.setText(String.valueOf(u.codigo));
 			tfCodigo.setEditable(false);
-			tfUser.setText(String.valueOf(u.getUser()));
+			tfUser.setText(String.valueOf(u.user));
 			tfUser.setEditable(false);
-			tfNombre.setText(u.getNombre());
-			tfApellido.setText(u.getApellido());
-			tfDNI.setText(String.valueOf(u.getDNI()));
-			tfEmail.setText(u.getMail());
+			tfNombre.setText(u.nombre);
+			tfApellido.setText(u.apellido);
+			tfDNI.setText(String.valueOf(u.DNI));
+			tfEmail.setText(u.mail);
 		}else {
 			tfCodigo.setEnabled(false);
 			btnDarDeBaja.setEnabled(false);

@@ -1,7 +1,9 @@
 package modelo;
 
+import java.util.HashMap;
 import java.util.Map;
 
+import DTO.AdministradorDTO;
 import persistencia.AdmPersistenciaUsuario;
 
 public class Administrador {
@@ -27,19 +29,37 @@ public class Administrador {
 		this.pass = pass;
 	}
 	
-	public static void insert(Administrador a) {
-		AdmPersistenciaUsuario.getInstancia().insertAdmin(a);
+	public static void insert(AdministradorDTO a) {
+		Administrador admin = new Administrador(a.user,a.pass);
+//		Administrador.insert(admin);
+		AdmPersistenciaUsuario.getInstancia().insertAdmin(admin);
 	}
 	
 	public static void delete(Administrador a) {
 		AdmPersistenciaUsuario.getInstancia().deleteAdmin(a);
 	}
 
-	public static Map<String,Administrador> buscarTodos(){
-		return AdmPersistenciaUsuario.getInstancia().buscarAdministradores();
+	public static Map<String,AdministradorDTO> buscarTodos(){
+		Map<String,Administrador> ads = AdmPersistenciaUsuario.getInstancia().buscarAdministradores();
+		Map<String,AdministradorDTO> adsDTO = new HashMap<String, AdministradorDTO>();
+		
+		for (Map.Entry<String, Administrador> e : ads.entrySet()) {
+			AdministradorDTO aDTO = new AdministradorDTO();
+			aDTO.user = e.getValue().getUser();
+			aDTO.pass = e.getValue().getPass();
+			adsDTO.put(aDTO.user, aDTO);
+		}
+		return adsDTO;
 	}
 	
-	public static Administrador buscarAdministrador(String a) {
-		return AdmPersistenciaUsuario.getInstancia().buscarAdministrador(a);
+	public static AdministradorDTO buscarAdministrador(String a) {
+		Administrador ad = AdmPersistenciaUsuario.getInstancia().buscarAdministrador(a);
+		if (ad != null) {
+			AdministradorDTO aDTO = new AdministradorDTO();
+			aDTO.user = ad.getUser();
+			aDTO.pass = ad.getPass();
+			return aDTO;
+		}
+		return null;
 	}
 }

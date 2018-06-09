@@ -16,6 +16,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+import DTO.AdministradorDTO;
+import DTO.UsuarioDTO;
 import controlador.ControladorListaRegalos;
 import controlador.ControladorUsuario;
 import controlador.SistemaRegalos;
@@ -92,7 +94,7 @@ public class Administracion extends JFrame {
 		contentPane.add(scrollPane);
 		
 		
-		Map<Integer,Usuario> usuarios = ControladorUsuario.GetInstance().GetUsuarios();
+		Map<Integer,UsuarioDTO> usuarios = ControladorUsuario.GetInstance().GetUsuarios();
 		table = new JTable();
 		CompletarModeloUsuarios(usuarios, table);
 		scrollPane.setViewportView(table);
@@ -117,7 +119,7 @@ public class Administracion extends JFrame {
 		scrollPane_1.setBounds(12, 296, 567, 113);
 		contentPane.add(scrollPane_1);
 		
-		Map<String,Administrador> administradores = ControladorUsuario.GetInstance().GetAdministradores();
+		Map<String,AdministradorDTO> administradores = ControladorUsuario.GetInstance().GetAdministradores();
 		table_1 = new JTable();
 		CompletarModeloAdministradores(administradores, table_1);
 		scrollPane_1.setViewportView(table_1);
@@ -133,7 +135,7 @@ public class Administracion extends JFrame {
 		contentPane.add(btnNuevoAdministrador);
 	}
 
-	public void CompletarModeloAdministradores(Map<String,Administrador> administradores, JTable tbl) {
+	public void CompletarModeloAdministradores(Map<String,AdministradorDTO> administradores, JTable tbl) {
 		String[] columnaAdministradores = new String[] {
 				"User"
 			};
@@ -149,9 +151,9 @@ public class Administracion extends JFrame {
 		
 		tbl.setModel(dtm);
 		
-		for (Map.Entry<String, Administrador> e : administradores.entrySet()) {
+		for (Map.Entry<String, AdministradorDTO> e : administradores.entrySet()) {
 		        dtm.addRow(new Object[] {
-		        		e.getValue().getUser()
+		        		e.getValue().user
 	        	});
 		}
 		
@@ -161,7 +163,7 @@ public class Administracion extends JFrame {
 		
 	}
 	
-	private void CompletarModeloUsuarios(Map<Integer,Usuario> usuarios, JTable tbl) {
+	private void CompletarModeloUsuarios(Map<Integer,UsuarioDTO> usuarios, JTable tbl) {
 		String[] columnaUsuarios = new String[] {
 				"C\u00F3digo", "User", "Nombre", "Apellido", "DNI", "E-mail", ""
 			};
@@ -177,14 +179,14 @@ public class Administracion extends JFrame {
 		
 		tbl.setModel(dtm);
 		
-		for (Map.Entry<Integer, Usuario> e : usuarios.entrySet()) {
+		for (Map.Entry<Integer, UsuarioDTO> e : usuarios.entrySet()) {
 		        dtm.addRow(new Object[] {
-		        		e.getValue().getCodigo(),
-		        		e.getValue().getUser(),
-		        		e.getValue().getNombre(),
-						e.getValue().getApellido(),
-						e.getValue().getDNI(),
-						e.getValue().getMail(),
+		        		e.getValue().codigo,
+		        		e.getValue().user,
+		        		e.getValue().nombre,
+						e.getValue().apellido,
+						e.getValue().DNI,
+						e.getValue().mail,
 						"Editar"
 	        	});
 		}
@@ -197,7 +199,7 @@ public class Administracion extends JFrame {
 			        int modelRow = Integer.valueOf( e.getActionCommand() );
 			        //obtengo la fila que se seleccionó y el usuario que corresponde
 			        Vector row = (Vector) ((DefaultTableModel)tbl.getModel()).getDataVector().elementAt(modelRow);
-			        Usuario usuario = ControladorUsuario.GetInstance().GetUsuario(Integer.valueOf(row.get(0).toString()));
+			        UsuarioDTO usuario = ControladorUsuario.GetInstance().GetUsuario(Integer.valueOf(row.get(0).toString()));
 			        JFrame abmUsuario = new ABMUsuario(usuario,main);
 			        abmUsuario.setVisible(true);
 	    	    }

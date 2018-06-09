@@ -5,6 +5,10 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
 
+import DTO.AdministradorDTO;
+import DTO.ListaDeRegalosDTO;
+import DTO.ParticipanteListaDTO;
+import DTO.UsuarioDTO;
 import modelo.ListaDeRegalos;
 import modelo.ParticipanteLista;
 import modelo.Usuario;
@@ -28,15 +32,17 @@ public class ControladorListaRegalos {
 	}
 	
 	
-	public ListaDeRegalos GetListaRegalos(int l) {
-		return ListaDeRegalos.buscarLista(l);
+	public ListaDeRegalosDTO GetListaRegalos(int l) {
+		ListaDeRegalosDTO lista = ListaDeRegalos.buscarLista(l);
+		
+		return lista;
 	}
 	
 	public void VerificarEstadoListas(int dias) {
 		//todo
 	}
 	
-	public Map<Integer,ListaDeRegalos> GetListasDelParticipante(int u) {
+	public Map<Integer,ListaDeRegalosDTO> GetListasDelParticipante(int u) {
 		listasDeRegalos.clear();
 
 		//map con todos los participanteLista en los que el usuario esta referido
@@ -54,43 +60,63 @@ public class ControladorListaRegalos {
 	}
 	
 	public void BajarParticipanteLista(int usuario, int codigoLista) {
-		ListaDeRegalos lr = this.GetListaRegalos(codigoLista);
-		Usuario u = ControladorUsuario.GetInstance().GetUsuario(usuario);
-		lr.BajarParticipanteLista(u);
+//		ListaDeRegalosDTO lr = this.GetListaRegalos(codigoLista);
+//		Usuario u = ControladorUsuario.GetInstance().GetUsuario(usuario);
+		
+		ListaDeRegalos.BajarParticipanteLista(usuario,codigoLista);
+		
+//		lr.BajarParticipanteLista(u);
 	}
 	
 	public void AgregarParticipanteLista(int usuario, int codigoLista) {
-		Usuario u = ControladorUsuario.GetInstance().GetUsuario(usuario);
-		ListaDeRegalos lr = this.GetListaRegalos(codigoLista);
-		lr.AgregarParticipanteLista(u);
+//		Usuario u = ControladorUsuario.GetInstance().GetUsuario(usuario);
+		ListaDeRegalos.AgregarParticipanteLista(usuario,codigoLista);
+//		ListaDeRegalos lr = this.GetListaRegalos(codigoLista);
+//		lr.AgregarParticipanteLista(u);
 		
 	}
 	
-	public Map<Integer,ListaDeRegalos> GetListasAdministrador(int u){
+	public Map<Integer,ListaDeRegalosDTO> GetListasAdministrador(int u){
 		return ListaDeRegalos.buscarListasAdministrador(u);
 	}
 	
 	public void CrearListaRegalos(String nombreAgasajado, Date fechaAgasajo, String mailAgasajado,
-			float montoRecaudado, Date fechaInicio, Date fechaFin, String estado, Usuario administrador,
+			float montoRecaudado, Date fechaInicio, Date fechaFin, String estado, UsuarioDTO administrador,
 			float montoARecaudarXIntegrante) {
+		ListaDeRegalosDTO ldto = new ListaDeRegalosDTO();
+		ldto.estado = estado;
+		ldto.fechaAgasajo = fechaAgasajo;
+		ldto.fechaFin = fechaFin;
+		ldto.fechaInicio = fechaInicio;
+		ldto.mailAgasajado = mailAgasajado;
+		ldto.montoARecaudarXIntegrante = montoARecaudarXIntegrante;
+		ldto.montoRecaudado = montoRecaudado;
+		ldto.nombreAgasajado = nombreAgasajado;
 		
-		ListaDeRegalos lr = new ListaDeRegalos(0,nombreAgasajado, fechaAgasajo, mailAgasajado, montoRecaudado, fechaInicio, fechaFin, estado, administrador, montoARecaudarXIntegrante);
-		ListaDeRegalos.insert(lr);
+		UsuarioDTO uDTO = new UsuarioDTO();
+		uDTO.apellido = administrador.apellido;
+		uDTO.codigo = administrador.codigo;
+		uDTO.DNI = administrador.DNI;
+		uDTO.mail = administrador.mail;
+		uDTO.nombre = administrador.nombre;
+		uDTO.pass = administrador.pass;
+		uDTO.user = administrador.user;
+		
+		ldto.administrador = uDTO;
+		
+		ListaDeRegalos.insert(ldto);
+
 	}
 
-	public Map<Integer,ParticipanteLista> BuscarParticipantesLista(int codigoLista){
-		ListaDeRegalos lr = this.GetListaRegalos(codigoLista);
-		return lr.GetParticipantes();
+	public Map<Integer,ParticipanteListaDTO> BuscarParticipantesLista(int codigoLista){
+//		ListaDeRegalosDTO lr = this.GetListaRegalos(codigoLista);
+		return ListaDeRegalos.GetParticipantes(codigoLista);
+//		return lr.GetParticipantes();
 	}
 
-	public void BorrarListaRegalos(ListaDeRegalos lr) {
-				
-		lr.setEstado("Inactivo");
-		ListaDeRegalos.updateEstado(lr);
-		Map<Integer, ParticipanteLista> participantes = this.BuscarParticipantesLista(lr.getCodigo());
+	public void BorrarListaRegalos(Integer lr) {
+		ListaDeRegalos.BajaLista(lr);
 		
-		for (Map.Entry<Integer, ParticipanteLista> e : participantes.entrySet()) {
-			this.BajarParticipanteLista(e.getKey(), lr.getCodigo());
-		}
+
 	}
 }

@@ -10,6 +10,9 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 
+import DTO.ListaDeRegalosDTO;
+import DTO.ParticipanteListaDTO;
+import DTO.UsuarioDTO;
 import controlador.ControladorListaRegalos;
 import controlador.ControladorUsuario;
 import controlador.SistemaRegalos;
@@ -50,22 +53,22 @@ public class ABMListaDeRegalosAdmin extends JFrame {
 	private JTable table;
 	private JTable table_1;
 
-	private Map<Integer,ParticipanteLista> participantes;
-	private Map<Integer,Usuario> usuarios;
+	private Map<Integer,ParticipanteListaDTO> participantes;
+	private Map<Integer,UsuarioDTO> usuarios;
 	private JFrame This;
 	private JFrame main;
 	
 	/**
 	 * Create the frame.
 	 */
-	public ABMListaDeRegalosAdmin(ListaDeRegalos lr, JFrame m) {
+	public ABMListaDeRegalosAdmin(ListaDeRegalosDTO lr, JFrame m) {
 		This = this;
 		main = m;
 		setResizable(false);
 		setTitle("Sistema de Listas de Regalos - Lista Administrada");
 		setIconImage(Toolkit.getDefaultToolkit().getImage(".\\img\\regalos.png"));
 		
-		this.participantes = ControladorListaRegalos.GetInstance().BuscarParticipantesLista(lr.getCodigo());
+		this.participantes = ControladorListaRegalos.GetInstance().BuscarParticipantesLista(lr.codigo);
 		this.usuarios = ControladorUsuario.GetInstance().GetUsuarios();
 
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -101,28 +104,28 @@ public class ABMListaDeRegalosAdmin extends JFrame {
 		tfCodigo.setBounds(168, 54, 116, 22);
 		contentPane.add(tfCodigo);
 		tfCodigo.setColumns(10);
-		tfCodigo.setText(String.valueOf(lr.getCodigo()));
+		tfCodigo.setText(String.valueOf(lr.codigo));
 		
 		tfNombreAgasajado = new JTextField();
 		tfNombreAgasajado.setEditable(false);
 		tfNombreAgasajado.setBounds(168, 83, 116, 22);
 		contentPane.add(tfNombreAgasajado);
 		tfNombreAgasajado.setColumns(10);
-		tfNombreAgasajado.setText(lr.getNombreAgasajado());
+		tfNombreAgasajado.setText(lr.nombreAgasajado);
 		
 		tfMontoParticipante = new JTextField();
 		tfMontoParticipante.setEditable(false);
 		tfMontoParticipante.setBounds(168, 112, 116, 22);
 		contentPane.add(tfMontoParticipante);
 		tfMontoParticipante.setColumns(10);
-		tfMontoParticipante.setText(String.valueOf(lr.getMontoARecaudarXIntegrante()));
+		tfMontoParticipante.setText(String.valueOf(lr.montoARecaudarXIntegrante));
 		
 		tfMontoRecaudado = new JTextField();
 		tfMontoRecaudado.setEditable(false);
 		tfMontoRecaudado.setBounds(169, 141, 116, 22);
 		contentPane.add(tfMontoRecaudado);
 		tfMontoRecaudado.setColumns(10);
-		tfMontoRecaudado.setText(String.valueOf(lr.getMontoRecaudado()));
+		tfMontoRecaudado.setText(String.valueOf(lr.montoRecaudado));
 		
 		JLabel lblFechaInicio = new JLabel("Fecha Inicio");
 		lblFechaInicio.setBounds(354, 86, 84, 16);
@@ -137,7 +140,7 @@ public class ABMListaDeRegalosAdmin extends JFrame {
 		contentPane.add(lblEstado);
 		
 		DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-		String aux = format.format(lr.getFechaInicio());		
+		String aux = format.format(lr.fechaInicio);		
 		
 		tfFechaInicio = new JTextField();
 		tfFechaInicio.setEditable(false);
@@ -146,7 +149,7 @@ public class ABMListaDeRegalosAdmin extends JFrame {
 		tfFechaInicio.setColumns(10);
 		tfFechaInicio.setText(aux);
 		
-		aux = format.format(lr.getFechaFin());
+		aux = format.format(lr.fechaFin);
 		tfFechaFin = new JTextField();
 		tfFechaFin.setEditable(false);
 		tfFechaFin.setBounds(460, 112, 116, 22);
@@ -159,7 +162,7 @@ public class ABMListaDeRegalosAdmin extends JFrame {
 		tfEstado.setBounds(460, 141, 116, 22);
 		contentPane.add(tfEstado);
 		tfEstado.setColumns(10);
-		tfEstado.setText(lr.getEstado());
+		tfEstado.setText(lr.estado);
 		
 		JLabel lblUsuarios = new JLabel("Usuarios");
 		lblUsuarios.setFont(new Font("Tahoma", Font.BOLD, 13));
@@ -190,14 +193,14 @@ public class ABMListaDeRegalosAdmin extends JFrame {
 		        int modelRow = Integer.valueOf( e.getActionCommand() );
 		        //obtengo la fila que se seleccionó y el usuario que corresponde
 		        Vector row = (Vector) ((DefaultTableModel)tbl.getModel()).getDataVector().elementAt(modelRow);
-		        Usuario usuario = ControladorUsuario.GetInstance().GetUsuario(Integer.valueOf(row.get(0).toString()));
+		        UsuarioDTO usuario = ControladorUsuario.GetInstance().GetUsuario(Integer.valueOf(row.get(0).toString()));
 		        
 		        //Agrego usuario como participante de la lista
-		        ControladorListaRegalos.GetInstance().AgregarParticipanteLista(Integer.valueOf(row.get(0).toString()), lr.getCodigo());
+		        ControladorListaRegalos.GetInstance().AgregarParticipanteLista(Integer.valueOf(row.get(0).toString()), lr.codigo);
 		        
 		        //Actualizo modelo de la tabla de participantes
 		        DefaultTableModel dtmP = (DefaultTableModel) table_1.getModel();
-		        dtmP.addRow(new Object[] {usuario.getCodigo(), usuario.getApellido(), usuario.getNombre(), "<<"});
+		        dtmP.addRow(new Object[] {usuario.codigo, usuario.apellido, usuario.nombre, "<<"});
 		        dtmP.fireTableDataChanged();
 		        
 		        //Actualizo modelo de la tabla de usuarios
@@ -227,10 +230,10 @@ public class ABMListaDeRegalosAdmin extends JFrame {
 		        int modelRow = Integer.valueOf( e.getActionCommand() );
 		        //obtengo la fila que seleccionó y el participante a remover de la lista.
 		        Vector row = (Vector) ((DefaultTableModel)tbl.getModel()).getDataVector().elementAt(modelRow);
-		        Usuario usuario = ControladorUsuario.GetInstance().GetUsuario(Integer.valueOf(row.get(0).toString()));
+		        UsuarioDTO usuario = ControladorUsuario.GetInstance().GetUsuario(Integer.valueOf(row.get(0).toString()));
 		        
 		        //Doy de baja el participante de la lista
-		        ControladorListaRegalos.GetInstance().BajarParticipanteLista(Integer.valueOf(row.get(0).toString()), lr.getCodigo());
+		        ControladorListaRegalos.GetInstance().BajarParticipanteLista(Integer.valueOf(row.get(0).toString()), lr.codigo);
 		        
 		        //Actualizo el modelo de la tabla de participantes
 		        DefaultTableModel dtm = (DefaultTableModel) tbl.getModel();
@@ -239,7 +242,7 @@ public class ABMListaDeRegalosAdmin extends JFrame {
 		        
 		        //Actualizo el modelo de la tabla de usuarios
 		        DefaultTableModel dtmU = (DefaultTableModel) table.getModel();
-		        dtmU.addRow(new Object[] {usuario.getCodigo(), usuario.getApellido(), usuario.getNombre(), ">>"});
+		        dtmU.addRow(new Object[] {usuario.codigo, usuario.apellido, usuario.nombre, ">>"});
 		        dtmU.fireTableDataChanged();
 		    }
 		};		
@@ -269,7 +272,7 @@ public class ABMListaDeRegalosAdmin extends JFrame {
 				
 			        if (result == JOptionPane.YES_OPTION) {
 			        	setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-						ControladorListaRegalos.GetInstance().BorrarListaRegalos(lr);
+						ControladorListaRegalos.GetInstance().BorrarListaRegalos(lr.codigo);
 						lblSeHaEliminado.setVisible(true);
 						
 						MainUsuario aux=(MainUsuario) m;
@@ -285,12 +288,12 @@ public class ABMListaDeRegalosAdmin extends JFrame {
 		panel.add(btnEliminarLista);
 		
 
-		if (lr.getMontoRecaudado() == Float.valueOf(0)) {
+		if (lr.montoRecaudado == Float.valueOf(0)) {
 			btnEliminarLista.setEnabled(true);
 		}
 	}
 	
-	private void CompletarModeloParticipantes(Map<Integer,ParticipanteLista> participantes, JTable tbl) {
+	private void CompletarModeloParticipantes(Map<Integer,ParticipanteListaDTO> participantes, JTable tbl) {
 		String[] columnaParticipantes = new String[] {
 				"Codigo","Apellido", "Nombre", ""
 			};
@@ -306,18 +309,18 @@ public class ABMListaDeRegalosAdmin extends JFrame {
 		
 		tbl.setModel(dtm);
 		
-		for (Map.Entry<Integer, ParticipanteLista> e : participantes.entrySet()) {
+		for (Map.Entry<Integer, ParticipanteListaDTO> e : participantes.entrySet()) {
 	        dtm.addRow(new Object[] {
-	        		e.getValue().getUsuario().getCodigo(),
-					e.getValue().getUsuario().getApellido(),
-					e.getValue().getUsuario().getNombre(),
+	        		e.getValue().usuario.codigo,
+					e.getValue().usuario.apellido,
+					e.getValue().usuario.nombre,
 					"<<"
 			});
 		}
 		
 	}
 
-	private void CompletarModeloUsuarios(Map<Integer,ParticipanteLista> participantes, Map<Integer,Usuario> usuarios, JTable tbl) {
+	private void CompletarModeloUsuarios(Map<Integer,ParticipanteListaDTO> participantes, Map<Integer,UsuarioDTO> usuarios, JTable tbl) {
 		String[] columnaUsuarios = new String[] {
 				"Codigo","Apellido", "Nombre", ""
 			};
@@ -332,14 +335,14 @@ public class ABMListaDeRegalosAdmin extends JFrame {
 		dtm.setColumnIdentifiers(columnaUsuarios);
 		
 		tbl.setModel(dtm);
-		Usuario usuarioActual = SistemaRegalos.GetInstance().getUsuarioLogueado();
+		UsuarioDTO usuarioActual = SistemaRegalos.GetInstance().getUsuarioLogueado();
 		
-		for (Map.Entry<Integer, Usuario> e : usuarios.entrySet()) {
-			if (!participantes.containsKey( e.getKey()) && e.getKey() != usuarioActual.getCodigo()) {
+		for (Map.Entry<Integer, UsuarioDTO> e : usuarios.entrySet()) {
+			if (!participantes.containsKey( e.getKey()) && e.getKey() != usuarioActual.codigo) {
 		        dtm.addRow(new Object[] {
-		        		e.getValue().getCodigo(),
-						e.getValue().getApellido(),
-						e.getValue().getNombre(),
+		        		e.getValue().codigo,
+						e.getValue().apellido,
+						e.getValue().nombre,
 						">>"
 				});
 			}

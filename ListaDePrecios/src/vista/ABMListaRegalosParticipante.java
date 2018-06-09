@@ -8,6 +8,8 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.MaskFormatter;
 
+import DTO.ListaDeRegalosDTO;
+import DTO.UsuarioDTO;
 import controlador.ControladorListaRegalos;
 import controlador.ControladorUsuario;
 import controlador.SistemaRegalos;
@@ -49,8 +51,8 @@ public class ABMListaRegalosParticipante extends JFrame {
 	private JFormattedTextField tfFechaAgasajo;
 	private JFormattedTextField tfMailAgasajado;
 
-	private ListaDeRegalos lr;
-	private Usuario u;
+	private ListaDeRegalosDTO lr;
+	private UsuarioDTO u;
 	private JFrame f;
 	private JFrame m;
 
@@ -58,7 +60,7 @@ public class ABMListaRegalosParticipante extends JFrame {
 	 * Create the frame.
 	 * @throws ParseException 
 	 */
-	public ABMListaRegalosParticipante(boolean nuevo, ListaDeRegalos listaregalos, JFrame main)  {
+	public ABMListaRegalosParticipante(boolean nuevo, ListaDeRegalosDTO listaregalos, JFrame main)  {
 		this.f = this;
 		this.lr= listaregalos;
 		this.m = main;
@@ -241,7 +243,7 @@ public class ABMListaRegalosParticipante extends JFrame {
 			        	u = SistemaRegalos.GetInstance().getUsuarioLogueado();
 						
 						//Doy de baja el usuario como participante de la lista (baja lógica)
-						ControladorListaRegalos.GetInstance().BajarParticipanteLista(u.getCodigo(), lr.getCodigo());			 
+						ControladorListaRegalos.GetInstance().BajarParticipanteLista(u.codigo, lr.codigo);			 
 						MainUsuario aux = (MainUsuario)m;
 						
 						aux.refrescar(aux.table_1, aux.table);
@@ -305,16 +307,16 @@ public class ABMListaRegalosParticipante extends JFrame {
 		if (nuevo) {
 			btnDarDeBaja.setVisible(false);
 		}else {
-			tfAgasajado.setText(lr.getNombreAgasajado());
-			tfMontoPart.setText(String.valueOf(lr.getMontoARecaudarXIntegrante()));
+			tfAgasajado.setText(lr.nombreAgasajado);
+			tfMontoPart.setText(String.valueOf(lr.montoARecaudarXIntegrante));
 			DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
 			
-			String aux = format.format(lr.getFechaFin());
+			String aux = format.format(lr.fechaFin);
 			tfFechaFin.setText(aux);
 			
-			aux = format.format(lr.getFechaAgasajo());
+			aux = format.format(lr.fechaAgasajo);
 			tfFechaAgasajo.setText(aux);
-			tfMailAgasajado.setText(lr.getMailAgasajado());
+			tfMailAgasajado.setText(lr.mailAgasajado);
 			tfAgasajado.setEditable(false);
 			tfMontoPart.setEditable(false);
 			tfFechaFin.setEditable(false);

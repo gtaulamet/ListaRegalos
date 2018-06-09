@@ -3,6 +3,11 @@ import java.awt.EventQueue;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
+
+import DTO.AdministradorDTO;
+import DTO.ListaDeRegalosDTO;
+import DTO.UsuarioDTO;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -15,9 +20,9 @@ import vista.Login;
 public class SistemaRegalos {
 	private static SistemaRegalos sistemaRegalos;
 	public int diasProximoAVencer;
-	private Usuario usuarioLogueado;
-	private Map<Integer, ListaDeRegalos> listaParticipante = new HashMap<Integer, ListaDeRegalos>();
-	private Map<Integer, ListaDeRegalos> listaAdministrador = new HashMap<Integer, ListaDeRegalos>();
+	private UsuarioDTO usuarioLogueado;
+	private Map<Integer, ListaDeRegalosDTO> listaParticipante = new HashMap<Integer, ListaDeRegalosDTO>();
+	private Map<Integer, ListaDeRegalosDTO> listaAdministrador = new HashMap<Integer, ListaDeRegalosDTO>();
 	
 	
 	private SistemaRegalos() {
@@ -25,28 +30,28 @@ public class SistemaRegalos {
 	}
 	
 	public boolean Login(String user, String pass) {
-		Usuario u = ControladorUsuario.GetInstance().GetUsuario(user);
+		UsuarioDTO u = ControladorUsuario.GetInstance().GetUsuario(user);
 		try {
 			String aux= generarPass(pass);
-			if (aux.equals(u.getPass())) {
+			if (aux.equals(u.pass)) {
 				this.usuarioLogueado = u;
-				this.listaParticipante = ControladorListaRegalos.GetInstance().GetListasDelParticipante(u.getCodigo());
-				this.listaAdministrador = ControladorListaRegalos.GetInstance().GetListasAdministrador(u.getCodigo());
+				this.listaParticipante = ControladorListaRegalos.GetInstance().GetListasDelParticipante(u.codigo);
+				this.listaAdministrador = ControladorListaRegalos.GetInstance().GetListasAdministrador(u.codigo);
 				return true;
 			}
 		}
 		catch(Exception e) {
-			
+			System.out.println(e.getMessage());
 		}
 		
 		return false;
 	}
 	
 	public boolean LoginAdmin(String user, String pass) {
-		Administrador a = ControladorUsuario.GetInstance().GetAdministrador(user);
+		AdministradorDTO a = ControladorUsuario.GetInstance().GetAdministrador(user);
 		try {
 			String aux= generarPass(pass);
-			if (aux.equals(a.getPass())) {
+			if (aux.equals(a.pass)) {
 				return true;
 			}
 		}
@@ -57,27 +62,27 @@ public class SistemaRegalos {
 		return false;
 	}
 	
-	public Map<Integer, ListaDeRegalos> getListaParticipante() {
-		this.listaParticipante = ControladorListaRegalos.GetInstance().GetListasDelParticipante(this.usuarioLogueado.getCodigo());
+	public Map<Integer, ListaDeRegalosDTO> getListaParticipante() {
+		this.listaParticipante = ControladorListaRegalos.GetInstance().GetListasDelParticipante(this.usuarioLogueado.codigo);
 		return this.listaParticipante;
 	}
 
-	public void setListaParticipante(Map<Integer, ListaDeRegalos> listaParticipante) {
+	public void setListaParticipante(Map<Integer, ListaDeRegalosDTO> listaParticipante) {
 		this.listaParticipante = listaParticipante;
 	}
 
-	public Map<Integer, ListaDeRegalos> getListaAdministrador() {
-		this.listaAdministrador = ControladorListaRegalos.GetInstance().GetListasAdministrador(this.usuarioLogueado.getCodigo());
+	public Map<Integer, ListaDeRegalosDTO> getListaAdministrador() {
+		this.listaAdministrador = ControladorListaRegalos.GetInstance().GetListasAdministrador(this.usuarioLogueado.codigo);
 		return this.listaAdministrador;
 	}
 
-	public void setListaAdministrador(Map<Integer, ListaDeRegalos> listaAdministrador) {
+	public void setListaAdministrador(Map<Integer, ListaDeRegalosDTO> listaAdministrador) {
 		this.listaAdministrador = listaAdministrador;
 	}
 	
 	
 	
-	public Usuario getUsuarioLogueado() {
+	public UsuarioDTO getUsuarioLogueado() {
 		return usuarioLogueado;
 	}
 	
