@@ -18,7 +18,7 @@ import persistencia.AdmPersistenciaParticipanteLista;
 public class ControladorListaRegalos {
 	private static ControladorListaRegalos controladorListaRegalos;
 	
-	public Map<Integer,ListaDeRegalos> listasDeRegalos;
+	public Map<Integer,ListaDeRegalosDTO> listasDeRegalos;
 	
 	public static ControladorListaRegalos GetInstance() {
 		if (controladorListaRegalos == null) {
@@ -28,7 +28,7 @@ public class ControladorListaRegalos {
 	}
 	
 	private ControladorListaRegalos() {
-		this.listasDeRegalos = new HashMap<Integer,ListaDeRegalos>(); 
+		this.listasDeRegalos = new HashMap<Integer,ListaDeRegalosDTO>(); 
 	}
 	
 	
