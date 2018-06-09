@@ -92,10 +92,11 @@ public class ListaDeRegalos implements IObservableMails, IObserverCalendario {
 		return listaDTO;
 		
 	}
-	
+	/*
 	private ParticipanteLista GetParticipante(Usuario u) {
 		return ParticipanteLista.buscarParticipante(u.getCodigo(), this.getCodigo());
 	}
+	*/
 	
 	public static void BajarParticipanteLista(Integer u, Integer l) {
 //		ListaDeRegalos lista = AdmPersistenciaListaRegalos.getInstancia().buscarAListaDeRegalos(l);

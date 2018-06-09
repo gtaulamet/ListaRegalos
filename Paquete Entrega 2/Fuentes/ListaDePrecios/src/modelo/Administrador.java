@@ -35,9 +35,9 @@ public class Administrador {
 		AdmPersistenciaUsuario.getInstancia().insertAdmin(admin);
 	}
 	
-	public static void delete(Administrador a) {
+	/*public static void delete(Administrador a) {
 		AdmPersistenciaUsuario.getInstancia().deleteAdmin(a);
-	}
+	}*/
 
 	public static Map<String,AdministradorDTO> buscarTodos(){
 		Map<String,Administrador> ads = AdmPersistenciaUsuario.getInstancia().buscarAdministradores();
