@@ -9,11 +9,11 @@ public class ControladorPagos implements IObserverMedioPago {
 	private static ControladorPagos controladorPagos;
 	public Vector<Pago> pagos;
 	
-	public ControladorPagos GetInstance() {
-		if (this.controladorPagos != null) {
-			this.controladorPagos = new ControladorPagos();
+	public static ControladorPagos GetInstance() {
+		if (controladorPagos == null) {
+			controladorPagos = new ControladorPagos();
 		}
-		return this.controladorPagos;
+		return controladorPagos;
 	}
 	
 	private ControladorPagos() {
@@ -23,7 +23,7 @@ public class ControladorPagos implements IObserverMedioPago {
 	@Override
 	public void NotificarPago(int listaDeRegalos, Date fecha, int usuario, float monto) {
 		// TODO Auto-generated method stub
-		
+		System.out.println("Notifica pago Lista: "+listaDeRegalos+" fecha: "+ fecha.toString() + " usuario: "+ usuario +" monto: "+monto);
 	}
 	public Vector<Pago> getPagos() {
 		return pagos;
