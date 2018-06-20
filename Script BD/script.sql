@@ -133,6 +133,7 @@ grant update on Administrador to AI
 grant update on Pago to AI
 grant update on Usuario to AI
 grant update on ParticipanteLista to AI
+grant execute to AI
 
 ALTER LOGIN [api] ENABLE
 GO
@@ -165,3 +166,50 @@ INSERT [dbo].[ParticipanteLista] ([usuarioId], [listaDeRegalosId], [pago], [esta
 INSERT [dbo].[ParticipanteLista] ([usuarioId], [listaDeRegalosId], [pago], [estado]) VALUES (4, 1, 0, N'Activo')
 INSERT [dbo].[ParticipanteLista] ([usuarioId], [listaDeRegalosId], [pago], [estado]) VALUES (4, 2, 0, N'Activo')
 --SET IDENTITY_INSERT [dbo].[Usuario] ON 
+
+USE [BD_ListaRegalos]
+GO
+
+/****** Object:  StoredProcedure [dbo].[CrearPago]    Script Date: 20/06/2018 13:37:13 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[CrearPago] @lr int, @u int, @f Date, @m decimal 
+
+AS
+BEGIN
+	SET NOCOUNT ON;
+	begin tran
+		--Inserto el pago
+		insert into Pago (usuarioId,listaDeRegalosId,monto,fecha) VALUES (@u,@lr,@m,@f);
+
+		if @@error != 0
+		begin
+			rollback tran;
+		end
+
+		--Actualizo el check de pago en participanteLista
+		update ParticipanteLista set pago = 1 where usuarioId = @u and listaDeRegalosId = @lr;
+		if @@error != 0
+		begin
+			rollback tran;
+		end
+
+		--Actualizo el monto recaudado en la lista de regalos
+		declare @monto as decimal;
+		select @monto = montoRecaudado  from ListaDeRegalos where codigo = @lr;
+		update ListaDeRegalos set montoRecaudado = @monto+@m where codigo = @lr;
+		if @@error != 0
+		begin
+			rollback tran;
+		end
+			
+	commit tran
+
+END
+GO
+
+

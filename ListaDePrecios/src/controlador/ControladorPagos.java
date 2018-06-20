@@ -21,9 +21,10 @@ public class ControladorPagos implements IObserverMedioPago {
 	}
 	
 	@Override
-	public void NotificarPago(int listaDeRegalos, Date fecha, int usuario, float monto) {
+	public boolean NotificarPago(int listaDeRegalos, Date fecha, int usuario, float monto) {
 		// TODO Auto-generated method stub
-		System.out.println("Notifica pago Lista: "+listaDeRegalos+" fecha: "+ fecha.toString() + " usuario: "+ usuario +" monto: "+monto);
+		return ControladorListaRegalos.GetInstance().NotificarPago(listaDeRegalos,fecha,usuario,monto);
+
 	}
 	public Vector<Pago> getPagos() {
 		return pagos;

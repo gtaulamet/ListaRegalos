@@ -220,4 +220,27 @@ public class AdmPersistenciaParticipanteLista extends AdministradorPersistencia
 			System.out.println("Error al dar de baja el participante de la lista");
 		}
 	}
+
+	public boolean CrearNuevoPago(int lr, int u, java.util.Date fecha, float monto) {
+		// TODO Auto-generated method stub
+		try
+		{
+			Connection con = PoolConnection.getPoolConnection().getConnection();
+			PreparedStatement s = con.prepareStatement("exec CrearPago ?,?,?,?");
+			//agregar campos
+			s.setInt(1, lr);
+			s.setInt(2, lr);
+			s.setDate(3,new java.sql.Date(fecha.getTime()));
+			s.setFloat(4, monto);
+			
+			s.execute();
+			PoolConnection.getPoolConnection().realeaseConnection(con);
+			return true;
+		}
+		catch (Exception e)
+		{
+			System.out.println("Error al crear un nuevo pago." + e.getMessage());
+		}
+		return false;
+	}
 }

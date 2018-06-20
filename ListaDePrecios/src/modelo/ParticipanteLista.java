@@ -48,8 +48,9 @@ public class ParticipanteLista {
 	}
 
 	
-	public void CrearNuevoPago(Date fecha, float monto) {
+	public static boolean CrearNuevoPago(int lr, int u, Date fecha, float monto) {
 		//todo
+		return AdmPersistenciaParticipanteLista.getInstancia().CrearNuevoPago(lr,u,fecha,monto);
 	}
 	
 	public static void insert(ParticipanteLista pl, int codigoLista) {

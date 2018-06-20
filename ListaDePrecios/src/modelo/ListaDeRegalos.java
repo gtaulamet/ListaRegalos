@@ -45,9 +45,9 @@ public class ListaDeRegalos implements IObservableMails, IObserverCalendario {
 		this.montoARecaudarXIntegrante = montoARecaudarXIntegrante;
 	}
 
-	public void CrearNuevoPago(Date fecha, Usuario u, float monto) {
-		//todo
-	}
+//	public void CrearNuevoPago(Date fecha, Usuario u, float monto) {
+//		//todo
+//	}
 	
 	public Map<Integer,ParticipanteListaDTO> GetParticipantesImpagos() {
 		//todo
@@ -281,7 +281,7 @@ public class ListaDeRegalos implements IObservableMails, IObserverCalendario {
 				usu.user = e.getValue().getAdministrador().getUser();
 				
 				partDTO.usuario = usu;
-				partsDTO.put(e.getKey(), partDTO);	
+				partsDTO.put(f.getKey(), partDTO);	
 			}
 			listaDTO.participantes = partsDTO;
 			 
@@ -303,54 +303,54 @@ public class ListaDeRegalos implements IObservableMails, IObserverCalendario {
 	}
 	public static ListaDeRegalosDTO buscarLista(int codigo) {
 		ListaDeRegalos lista =AdmPersistenciaListaRegalos.getInstancia().buscarAListaDeRegalos(codigo);
-		
-		ListaDeRegalosDTO listaDTO = new ListaDeRegalosDTO();
-		listaDTO.codigo = lista.getCodigo();
-		listaDTO.estado = lista.getEstado();
-		listaDTO.fechaAgasajo = lista.getFechaAgasajo();
-		listaDTO.fechaFin = lista.getFechaFin();
-		listaDTO.fechaInicio = lista.getFechaInicio();
-		listaDTO.mailAgasajado = lista.getMailAgasajado();
-		listaDTO.montoARecaudarXIntegrante = lista.getMontoARecaudarXIntegrante();
-		listaDTO.montoRecaudado = lista.getMontoRecaudado();
-		listaDTO.nombreAgasajado = lista.getNombreAgasajado();
-		
-		Map<Integer,ParticipanteLista> parts =lista.GetParticipantes();
-		Map<Integer,ParticipanteListaDTO> partsDTO = new HashMap<Integer, ParticipanteListaDTO>();
-		
-		for (Map.Entry<Integer, ParticipanteLista> f : parts.entrySet()) {
-			ParticipanteListaDTO partDTO = new ParticipanteListaDTO();
-			partDTO.estado = f.getValue().getEstado();
-			partDTO.pago = f.getValue().isPago();
+		if (lista != null) {
+			ListaDeRegalosDTO listaDTO = new ListaDeRegalosDTO();
+			listaDTO.codigo = lista.getCodigo();
+			listaDTO.estado = lista.getEstado();
+			listaDTO.fechaAgasajo = lista.getFechaAgasajo();
+			listaDTO.fechaFin = lista.getFechaFin();
+			listaDTO.fechaInicio = lista.getFechaInicio();
+			listaDTO.mailAgasajado = lista.getMailAgasajado();
+			listaDTO.montoARecaudarXIntegrante = lista.getMontoARecaudarXIntegrante();
+			listaDTO.montoRecaudado = lista.getMontoRecaudado();
+			listaDTO.nombreAgasajado = lista.getNombreAgasajado();
 			
-			UsuarioDTO usu = new UsuarioDTO();
-			usu.apellido =  f.getValue().getUsuario().getApellido();
-			usu.codigo = f.getValue().getUsuario().getCodigo();
-			usu.DNI = f.getValue().getUsuario().getDNI();
-			usu.mail = f.getValue().getUsuario().getMail();
-			usu.nombre = f.getValue().getUsuario().getNombre();
-			usu.pass = f.getValue().getUsuario().getPass();
-			usu.user = f.getValue().getUsuario().getUser();
+			Map<Integer,ParticipanteLista> parts =lista.GetParticipantes();
+			Map<Integer,ParticipanteListaDTO> partsDTO = new HashMap<Integer, ParticipanteListaDTO>();
 			
-			partDTO.usuario = usu;
-			partsDTO.put(f.getKey(), partDTO);	
-		}
-		
-		listaDTO.participantes = partsDTO;
-		
-		UsuarioDTO u = new UsuarioDTO();
-		u.apellido =  lista.getAdministrador().getApellido();
-		u.codigo = lista.getAdministrador().getCodigo();
-		u.DNI = lista.getAdministrador().getDNI();
-		u.mail = lista.getAdministrador().getMail();
-		u.nombre = lista.getAdministrador().getNombre();
-		u.pass = lista.getAdministrador().getPass();
-		u.user = lista.getAdministrador().getUser();
-		
-		listaDTO.administrador = u;
+			for (Map.Entry<Integer, ParticipanteLista> f : parts.entrySet()) {
+				ParticipanteListaDTO partDTO = new ParticipanteListaDTO();
+				partDTO.estado = f.getValue().getEstado();
+				partDTO.pago = f.getValue().isPago();
 				
+				UsuarioDTO usu = new UsuarioDTO();
+				usu.apellido =  f.getValue().getUsuario().getApellido();
+				usu.codigo = f.getValue().getUsuario().getCodigo();
+				usu.DNI = f.getValue().getUsuario().getDNI();
+				usu.mail = f.getValue().getUsuario().getMail();
+				usu.nombre = f.getValue().getUsuario().getNombre();
+				usu.pass = f.getValue().getUsuario().getPass();
+				usu.user = f.getValue().getUsuario().getUser();
 				
-		return listaDTO;
+				partDTO.usuario = usu;
+				partsDTO.put(f.getKey(), partDTO);	
+			}
+			
+			listaDTO.participantes = partsDTO;
+			
+			UsuarioDTO u = new UsuarioDTO();
+			u.apellido =  lista.getAdministrador().getApellido();
+			u.codigo = lista.getAdministrador().getCodigo();
+			u.DNI = lista.getAdministrador().getDNI();
+			u.mail = lista.getAdministrador().getMail();
+			u.nombre = lista.getAdministrador().getNombre();
+			u.pass = lista.getAdministrador().getPass();
+			u.user = lista.getAdministrador().getUser();
+			
+			listaDTO.administrador = u;
+			return listaDTO;			
+		}				
+		return null;
 	}
 	public static Map<Integer,ListaDeRegalosDTO> buscarListasAdministrador(int codigo){
 		Map<Integer,ListaDeRegalos> listas = AdmPersistenciaListaRegalos.getInstancia().buscarListasAdministrador(codigo);
@@ -420,5 +420,15 @@ public class ListaDeRegalos implements IObservableMails, IObserverCalendario {
 		for (Map.Entry<Integer, ParticipanteLista> e : participantes.entrySet()) {
 			lr.BajarParticipanteLista(e.getKey(), lr.getCodigo());
 		}
+	}
+
+	public static boolean CrearNuevoPago(int listaDeRegalos, Date fecha, int usuario, float monto) {
+		// TODO Auto-generated method stub
+		ParticipanteLista pl = ParticipanteLista.buscarParticipante(usuario, listaDeRegalos);
+		if (pl == null) {
+			return false;
+		}
+		return pl.CrearNuevoPago(listaDeRegalos,usuario,fecha, monto);
+		
 	}
 }

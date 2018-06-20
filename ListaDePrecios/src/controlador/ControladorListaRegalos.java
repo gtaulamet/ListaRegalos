@@ -119,4 +119,20 @@ public class ControladorListaRegalos {
 		
 
 	}
+
+	public boolean NotificarPago(int listaDeRegalos, Date fecha, int usuario, float monto) {
+		// TODO Auto-generated method stub
+		ListaDeRegalosDTO lDTO = GetListaRegalos(listaDeRegalos);
+		if (lDTO == null) {
+			return false;
+		} else if (lDTO.montoARecaudarXIntegrante != monto) {
+			return false;
+		}
+		UsuarioDTO uDTO = ControladorUsuario.GetInstance().buscarUsuario(usuario);
+		if (uDTO == null) {
+			return false;
+		}
+		return ListaDeRegalos.CrearNuevoPago(listaDeRegalos,fecha,usuario,monto);
+		
+	}
 }

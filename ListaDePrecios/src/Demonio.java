@@ -1,15 +1,21 @@
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.sql.Date;
 import java.sql.Time;
 import java.util.Calendar;
+import java.util.Locale;
 
 import javax.xml.stream.util.EventReaderDelegate;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import controlador.ControladorPagos;
@@ -22,73 +28,75 @@ public class Demonio extends Thread{
 		// TODO Auto-generated method stub
 		
 		Demonio d = new Demonio();
-		while (true) {
-			
-			d.run();	
-		}
+		d.start();	
 		
 	}
 	
 	@SuppressWarnings("deprecation")
 	public Demonio() {
-		
+		//setDaemon(true);
 	}
 	
 	@Override
     public void run() {
-		//Manejo de tiempos para ejecución del demonio
-		Calendar cal = Calendar.getInstance();
-		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-		
-		java.util.Date ahora = cal.getTime();
-		cal.add(Calendar.MINUTE,2);
-		java.util.Date proximo = cal.getTime();
-		proximo.setSeconds(0);
-		ahora.setSeconds(0);
-		
-		if (this.horario == "" || this.horario == null) {
-			this.horario = sdf.format(ahora);
-		}
-		//-------------------------------------------
-
-		
-		if (sdf.format(ahora).equals(horario)) {
-			//ejecución de tarea para cuando se cumple el tiempo establecido
-			System.out.println(sdf.format(ahora)+" - Hello from a thread! Proximo: "+ sdf.format(proximo));
+		while (true) {
+			//Manejo de tiempos para ejecución del demonio
+			Calendar cal = Calendar.getInstance();
+			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
 			
-			//Procesamiento de archivos de pagos
-			try {
-				procesarArchivoPagos(".//IN//TCPagos.dat");
-//				procesarArchivoPagos("TDPagos.dat");
-//				procesarArchivoPagos("EPagos.dat");
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (Throwable e) {
-				e.printStackTrace();
+			java.util.Date ahora = cal.getTime();
+			cal.add(Calendar.MINUTE,2);
+			java.util.Date proximo = cal.getTime();
+			proximo.setSeconds(0);
+			ahora.setSeconds(0);
+			
+			if (this.horario == "" || this.horario == null) {
+				this.horario = sdf.format(ahora);
 			}
-
-			//Envio automatico de emails
+			//-------------------------------------------
+	
 			
-			
-			
-			horario=sdf.format(proximo);
+			if (sdf.format(ahora).equals(horario)) {
+				//ejecución de tarea para cuando se cumple el tiempo establecido
+				System.out.println(sdf.format(ahora)+" - Demonio de pagos y envios de Email automaticos - Proximo: "+ sdf.format(proximo));
+				
+				//Procesamiento de archivos de pagos
+				try {
+					procesarArchivoPagos(".//IN//TCPagos.dat");
+	//				procesarArchivoPagos(".//IN//TDPagos.dat");
+	//				procesarArchivoPagos(".//IN//EPagos.dat");
+				} catch (IOException e) {
+					e.printStackTrace();
+				} catch (Throwable e) {
+					e.printStackTrace();
+				}
+	
+				//Envio automatico de emails
+				
+				
+				
+				horario=sdf.format(proximo);
+			}
 		}
-		
         
     }
-//
-//	private void esperarXsegundos(int segundos) {
-//		try {
-//			Thread.sleep(segundos * 1000);
-//		} catch (InterruptedException ex) {
-//			Thread.currentThread().interrupt();
-//		}
-//	}
 
 	private void procesarArchivoPagos(String ruta) throws Throwable {
 		// TODO Auto-generated method stub
+		FileReader fReader;
+		String[] paths= ruta.split("//");
+		DateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.ROOT);
+		Calendar cal = Calendar.getInstance();
+		java.util.Date now = cal.getTime();
+		String newfile= ".\\OUT\\"+sdf.format(now)+" "+ paths[2];
 
-		BufferedReader br = new BufferedReader(new FileReader(ruta));
+		try {
+			fReader = new FileReader(ruta);
+		}catch(Exception e) {
+			return;
+		}
+		
+		BufferedReader br = new BufferedReader(fReader);
 		try {
 		    StringBuilder sb = new StringBuilder();
 		    String line = br.readLine();
@@ -103,21 +111,34 @@ public class Demonio extends Thread{
 		        
 		        if (!proceso) {
 		        	//hacer un append de la linea que no se pudo procesar.
+		        	System.out.println("Error en Notificación de pago --> Lista: "+datos[0]+" fecha: "+ datos[1] + " usuario: "+ datos[2] +" monto: "+datos[3]);
+		        	
+		        	try(FileWriter fw = new FileWriter(".\\LOGERROR\\LOG.txt", true);
+		        		    BufferedWriter bw = new BufferedWriter(fw);
+		        		    PrintWriter out = new PrintWriter(bw))
+	        									{
+								        		    out.println(newfile+"-->"+line);
+	        									} catch (IOException e) {
+	        										//exception handling left as an exercise for the reader
+	        										System.out.println("Error al querer escribir archivo de errores");
+	        									}
+		        	
+		        }else {
+		        	System.out.println("Notificación de pago --> Lista: "+datos[0]+" fecha: "+ datos[1] + " usuario: "+ datos[2] +" monto: "+datos[3]);
 		        }
-		        
-		        
+		        	
 		        sb.delete(0, sb.length());
 		        line = br.readLine();
 		    }
-		    String everything = sb.toString();
-		    
-		    System.out.println(everything);
+
 		} finally {
 		    br.close();
 		}		
 		
-		//ControladorPagos.GetInstance().NotificarPago(1, new java.util.Date(), 1, 100);
+		File filepago = new File(ruta);
 		
+		filepago.renameTo(new File(newfile));
+		filepago.delete();
 	}
 
 	private boolean procesarDatos(String[] datos) throws Exception {
@@ -149,9 +170,8 @@ public class Demonio extends Thread{
 		java.util.Date f = (java.util.Date) formatter.parse(datos[1]);
 		float m = Float.valueOf(datos[3]);
 		
-		//Esto deberia devolver un valor que diga si pudo o no insertar el pago.
-		ControladorPagos.GetInstance().NotificarPago(idL, f, idU, m);
+		//Esto deberia devolver un True o False para determinar si pudo o no insertar el pago.
+		return ControladorPagos.GetInstance().NotificarPago(idL, f, idU, m);
 		
-		return OK;
 	}
 }
