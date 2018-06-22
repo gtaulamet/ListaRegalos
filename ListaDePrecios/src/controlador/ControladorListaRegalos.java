@@ -135,4 +135,13 @@ public class ControladorListaRegalos {
 		return ListaDeRegalos.CrearNuevoPago(listaDeRegalos,fecha,usuario,monto);
 		
 	}
+	
+	public void EnviarEmailAgasajado(Date fecha) {
+		Map<Integer, ListaDeRegalosDTO>  listas = ListaDeRegalos.BuscarListaAgasajo(fecha);
+		for (Map.Entry<Integer, ListaDeRegalosDTO> e : listas.entrySet()) {
+			String mensaje = "Hola "+ e.getValue().nombreAgasajado + " Felicitaciones, te regalaron $" + e.getValue().montoRecaudado + " para que disfrutes.";
+			
+			System.out.println(mensaje);
+		}
+	}
 }

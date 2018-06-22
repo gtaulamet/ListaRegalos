@@ -18,10 +18,13 @@ import javax.xml.stream.util.EventReaderDelegate;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+
+import controlador.ControladorListaRegalos;
 import controlador.ControladorPagos;
 
 public class Demonio extends Thread{
 	public String horario;
+	public String horarioMail;
 	
 	
 	public static void main(String[] args) {
@@ -44,21 +47,36 @@ public class Demonio extends Thread{
 			Calendar cal = Calendar.getInstance();
 			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
 			
+			SimpleDateFormat sdfDia = new SimpleDateFormat("yyyy-MM-dd");
+			
 			java.util.Date ahora = cal.getTime();
+			java.util.Date ahoraMail = cal.getTime();
 			cal.add(Calendar.MINUTE,2);
 			java.util.Date proximo = cal.getTime();
 			proximo.setSeconds(0);
 			ahora.setSeconds(0);
+			ahoraMail.setHours(0);
+			ahoraMail.setMinutes(0);
+			ahoraMail.setSeconds(0);
+			
+			
+			//MAIL
+			cal.add(Calendar.DATE,1);
+			java.util.Date proximoDia = cal.getTime();
 			
 			if (this.horario == "" || this.horario == null) {
 				this.horario = sdf.format(ahora);
+			}
+			
+			if (this.horarioMail == "" || this.horarioMail == null) {
+				this.horarioMail = sdfDia.format(ahoraMail);;
 			}
 			//-------------------------------------------
 	
 			
 			if (sdf.format(ahora).equals(horario)) {
 				//ejecución de tarea para cuando se cumple el tiempo establecido
-				System.out.println(sdf.format(ahora)+" - Demonio de pagos y envios de Email automaticos - Proximo: "+ sdf.format(proximo));
+				System.out.println(sdf.format(ahora)+" - Demonio de pagos - Proximo: "+ sdf.format(proximo));
 				
 				//Procesamiento de archivos de pagos
 				try {
@@ -70,12 +88,23 @@ public class Demonio extends Thread{
 				} catch (Throwable e) {
 					e.printStackTrace();
 				}
-	
-				//Envio automatico de emails
-				
-				
-				
 				horario=sdf.format(proximo);
+			}
+			if (sdfDia.format(ahoraMail).equals(horarioMail)) {
+				//ejecución de tarea para cuando se cumple el tiempo establecido - cada dia
+				//Controlar para cambiar el estado de la lista
+				System.out.println(sdf.format(ahoraMail)+" - Demonio de MAIL - Proximo: "+ sdfDia.format(proximoDia));
+				
+				//Envio automatico de emails
+				try {
+					envioEmailAgasajado(ahoraMail);
+				} catch (IOException e) {
+					e.printStackTrace();
+				} catch (Throwable e) {
+					e.printStackTrace();
+				}
+	
+				horarioMail=sdfDia.format(proximoDia);
 			}
 		}
         
@@ -172,6 +201,13 @@ public class Demonio extends Thread{
 		
 		//Esto deberia devolver un True o False para determinar si pudo o no insertar el pago.
 		return ControladorPagos.GetInstance().NotificarPago(idL, f, idU, m);
+		
+	}
+	
+	private void envioEmailAgasajado(java.util.Date ahoraMail) throws Exception {
+		//Validar contra todas las listas si es la fecha del agasajo
+		
+		ControladorListaRegalos.GetInstance().EnviarEmailAgasajado(ahoraMail);
 		
 	}
 }
