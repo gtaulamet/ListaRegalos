@@ -1,5 +1,8 @@
 package modelo;
 import java.util.List;
+import java.util.Map;
+
+import DTO.ParticipanteListaDTO;
 
 //
 //
@@ -17,6 +20,6 @@ import java.util.List;
 
 public interface IObserverMail {
 	public void SendMailFinalizo(ListaDeRegalos l);
-	public void SendMailsIniciol(List<ParticipanteLista> p);
-	public void SendMailsProximoFinalizarl(List<ParticipanteLista> p);
+	public void SendMailsInicio(Map<Integer,ParticipanteLista> p);
+	public void SendMailsProximoFinalizar(Map<Integer,ParticipanteListaDTO> p);
 }

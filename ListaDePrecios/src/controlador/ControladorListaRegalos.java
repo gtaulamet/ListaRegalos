@@ -137,11 +137,11 @@ public class ControladorListaRegalos {
 	}
 	
 	public void EnviarEmailAgasajado(Date fecha) {
-		Map<Integer, ListaDeRegalosDTO>  listas = ListaDeRegalos.BuscarListaAgasajo(fecha);
-		for (Map.Entry<Integer, ListaDeRegalosDTO> e : listas.entrySet()) {
-			String mensaje = "Hola "+ e.getValue().nombreAgasajado + " Felicitaciones, te regalaron $" + e.getValue().montoRecaudado + " para que disfrutes.";
-			
-			System.out.println(mensaje);
-		}
+		boolean proceso = ListaDeRegalos.SendMailListasAgasajo(fecha);
+//		for (Map.Entry<Integer, ListaDeRegalosDTO> e : listas.entrySet()) {
+//			String mensaje = "Hola "+ e.getValue().nombreAgasajado + " Felicitaciones, te regalaron $" + e.getValue().montoRecaudado + " para que disfrutes.";
+//			
+//			System.out.println(mensaje);
+//		}
 	}
 }

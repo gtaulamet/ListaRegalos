@@ -11,6 +11,7 @@ import DTO.UsuarioDTO;
 import persistencia.AdmPersistenciaListaRegalos;
 import persistencia.AdmPersistenciaParticipanteLista;
 import persistencia.AdmPersistenciaUsuario;
+import controlador.DESPACHADORMAILS;
 
 public class ListaDeRegalos implements IObservableMails, IObserverCalendario {
 	private int codigo;
@@ -147,9 +148,26 @@ public class ListaDeRegalos implements IObservableMails, IObserverCalendario {
 	}
 
 	@Override
-	public void SendMails() {
+	public void SendMails(int i) {
 		// TODO Auto-generated method stub
-		
+		switch (i){
+			case 1:
+				for (IObserverMail o : observers){
+					o.SendMailFinalizo(this);
+				}
+				break;
+			case 2: 
+				for (IObserverMail o : observers){
+					o.SendMailsProximoFinalizar(this.GetParticipantesImpagos());
+				}
+				break;
+			case 3:
+				for (IObserverMail o : observers){
+					o.SendMailsInicio(this.GetParticipantes());
+				}
+				break;
+			default: break;
+		}
 	}
 	
 
@@ -432,58 +450,71 @@ public class ListaDeRegalos implements IObservableMails, IObserverCalendario {
 		
 	}
 	
-	public static Map<Integer,ListaDeRegalosDTO> BuscarListaAgasajo (Date fecha) {
-		Map<Integer,ListaDeRegalos> listas = AdmPersistenciaListaRegalos.getInstancia().BuscarListaAgasajo(fecha);
-		Map<Integer,ListaDeRegalosDTO> listasDTO = new HashMap<Integer, ListaDeRegalosDTO>();
-		
-		for (Map.Entry<Integer, ListaDeRegalos> e : listas.entrySet()) {
-			ListaDeRegalosDTO listaDTO = new ListaDeRegalosDTO();
-			listaDTO.codigo = e.getValue().getCodigo();
-			listaDTO.estado = e.getValue().getEstado();
-			listaDTO.fechaAgasajo = e.getValue().getFechaAgasajo();
-			listaDTO.fechaFin = e.getValue().getFechaFin();
-			listaDTO.fechaInicio = e.getValue().getFechaInicio();
-			listaDTO.mailAgasajado = e.getValue().getMailAgasajado();
-			listaDTO.montoARecaudarXIntegrante = e.getValue().getMontoARecaudarXIntegrante();
-			listaDTO.montoRecaudado = e.getValue().getMontoRecaudado();
-			listaDTO.nombreAgasajado = e.getValue().getNombreAgasajado();
-			
-			Map<Integer,ParticipanteLista> parts =e.getValue().GetParticipantes();
-			Map<Integer,ParticipanteListaDTO> partsDTO = new HashMap<Integer, ParticipanteListaDTO>();
-			
-			for (Map.Entry<Integer, ParticipanteLista> f : parts.entrySet()) {
-				ParticipanteListaDTO partDTO = new ParticipanteListaDTO();
-				partDTO.estado = f.getValue().getEstado();
-				partDTO.pago = f.getValue().isPago();
-				
-				UsuarioDTO usu = new UsuarioDTO();
-				usu.apellido =  e.getValue().getAdministrador().getApellido();
-				usu.codigo = e.getValue().getAdministrador().getCodigo();
-				usu.DNI = e.getValue().getAdministrador().getDNI();
-				usu.mail = e.getValue().getAdministrador().getMail();
-				usu.nombre = e.getValue().getAdministrador().getNombre();
-				usu.pass = e.getValue().getAdministrador().getPass();
-				usu.user = e.getValue().getAdministrador().getUser();
-				
-				partDTO.usuario = usu;
-				partsDTO.put(f.getKey(), partDTO);	
+	public static boolean SendMailListasAgasajo (Date fecha) {
+		try {
+			Map<Integer,ListaDeRegalos> listas = AdmPersistenciaListaRegalos.getInstancia().BuscarListaAgasajo(fecha);
+	
+			for (Map.Entry<Integer, ListaDeRegalos> e : listas.entrySet()) {
+				ListaDeRegalos l = AdmPersistenciaListaRegalos.getInstancia().buscarAListaDeRegalos(e.getValue().getCodigo());
+				l.SendMails(1); //tipo 1 = Agasajo
+					
 			}
-			listaDTO.participantes = partsDTO;
-			 
-			
-			UsuarioDTO u = new UsuarioDTO();
-			u.apellido =  e.getValue().getAdministrador().getApellido();
-			u.codigo = e.getValue().getAdministrador().getCodigo();
-			u.DNI = e.getValue().getAdministrador().getDNI();
-			u.mail = e.getValue().getAdministrador().getMail();
-			u.nombre = e.getValue().getAdministrador().getNombre();
-			u.pass = e.getValue().getAdministrador().getPass();
-			u.user = e.getValue().getAdministrador().getUser();
-			
-			listaDTO.administrador = u;
-			listasDTO.put(listaDTO.codigo, listaDTO);
+			return true;
+		} catch (Exception ex){
+			return false;
 		}
+//		Map<Integer,ListaDeRegalosDTO> listasDTO = new HashMap<Integer, ListaDeRegalosDTO>();
+//		
+//		for (Map.Entry<Integer, ListaDeRegalos> e : listas.entrySet()) {
+//			ListaDeRegalosDTO listaDTO = new ListaDeRegalosDTO();
+//			listaDTO.codigo = e.getValue().getCodigo();
+//			listaDTO.estado = e.getValue().getEstado();
+//			listaDTO.fechaAgasajo = e.getValue().getFechaAgasajo();
+//			listaDTO.fechaFin = e.getValue().getFechaFin();
+//			listaDTO.fechaInicio = e.getValue().getFechaInicio();
+//			listaDTO.mailAgasajado = e.getValue().getMailAgasajado();
+//			listaDTO.montoARecaudarXIntegrante = e.getValue().getMontoARecaudarXIntegrante();
+//			listaDTO.montoRecaudado = e.getValue().getMontoRecaudado();
+//			listaDTO.nombreAgasajado = e.getValue().getNombreAgasajado();
+//			
+//			Map<Integer,ParticipanteLista> parts =e.getValue().GetParticipantes();
+//			Map<Integer,ParticipanteListaDTO> partsDTO = new HashMap<Integer, ParticipanteListaDTO>();
+//			
+//			for (Map.Entry<Integer, ParticipanteLista> f : parts.entrySet()) {
+//				ParticipanteListaDTO partDTO = new ParticipanteListaDTO();
+//				partDTO.estado = f.getValue().getEstado();
+//				partDTO.pago = f.getValue().isPago();
+//				
+//				UsuarioDTO usu = new UsuarioDTO();
+//				usu.apellido =  e.getValue().getAdministrador().getApellido();
+//				usu.codigo = e.getValue().getAdministrador().getCodigo();
+//				usu.DNI = e.getValue().getAdministrador().getDNI();
+//				usu.mail = e.getValue().getAdministrador().getMail();
+//				usu.nombre = e.getValue().getAdministrador().getNombre();
+//				usu.pass = e.getValue().getAdministrador().getPass();
+//				usu.user = e.getValue().getAdministrador().getUser();
+//				
+//				partDTO.usuario = usu;
+//				partsDTO.put(f.getKey(), partDTO);	
+//			}
+//			listaDTO.participantes = partsDTO;
+//			 
+//			
+//			UsuarioDTO u = new UsuarioDTO();
+//			u.apellido =  e.getValue().getAdministrador().getApellido();
+//			u.codigo = e.getValue().getAdministrador().getCodigo();
+//			u.DNI = e.getValue().getAdministrador().getDNI();
+//			u.mail = e.getValue().getAdministrador().getMail();
+//			u.nombre = e.getValue().getAdministrador().getNombre();
+//			u.pass = e.getValue().getAdministrador().getPass();
+//			u.user = e.getValue().getAdministrador().getUser();
+//			
+//			listaDTO.administrador = u;
+//			listasDTO.put(listaDTO.codigo, listaDTO);
+//		}
 		
-		return listasDTO; 
+//		return listasDTO; 
 	}
+
+
 }
