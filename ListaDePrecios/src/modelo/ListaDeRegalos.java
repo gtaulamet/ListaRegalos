@@ -27,7 +27,6 @@ public class ListaDeRegalos implements IObservableMails, IObserverCalendario {
 	private Map<Integer,ParticipanteLista> participantes;
 	private Usuario administrador;
 	private float montoARecaudarXIntegrante;
-	/*****/
 	
 	
 	public ListaDeRegalos() {
@@ -167,7 +166,7 @@ public class ListaDeRegalos implements IObservableMails, IObserverCalendario {
 				break;
 			case 3:
 				for (IObserverMail o : observers){
-					o.SendMailsInicio(this.GetParticipantes());
+					o.SendMailsInicio(this);
 				}
 				break;
 			default: break;
@@ -456,7 +455,6 @@ public class ListaDeRegalos implements IObservableMails, IObserverCalendario {
 	
 	public static boolean SendMailListasAgasajo (Date fecha) {
 		try {
-			//VER SI SE AGREGA ACA EL OBSERVER O DONDE
 			Map<Integer,ListaDeRegalos> listas = AdmPersistenciaListaRegalos.getInstancia().BuscarListaAgasajo(fecha);
 			DESPACHADORMAILS o = DESPACHADORMAILS.getInstancia();
 		
@@ -469,6 +467,22 @@ public class ListaDeRegalos implements IObservableMails, IObserverCalendario {
 			return false;
 		}
 	}
+	
+	
+	public static boolean SendMailInicioLista (Date fecha) {
+		try {
 
+			Map<Integer,ListaDeRegalos> listas = AdmPersistenciaListaRegalos.getInstancia().BuscarListaInicio(fecha);
+			DESPACHADORMAILS o = DESPACHADORMAILS.getInstancia();
+		
+			for (Map.Entry<Integer, ListaDeRegalos> e : listas.entrySet()) {
+				e.getValue().Attach(o);
+				e.getValue().SendMails(3); //tipo 3 = Inicio
+			}
+			return true;
+		} catch (Exception ex){
+			return false;
+		}
+	}
 
 }

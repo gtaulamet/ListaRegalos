@@ -98,6 +98,8 @@ public class Demonio extends Thread{
 				//Envio automatico de emails
 				try {
 					envioEmailAgasajado(ahoraMail);
+					envioEmailInicioLista(ahoraMail);
+					envioEmailProximoAVencer(ahoraMail);
 				} catch (IOException e) {
 					e.printStackTrace();
 				} catch (Throwable e) {
@@ -205,9 +207,14 @@ public class Demonio extends Thread{
 	}
 	
 	private void envioEmailAgasajado(java.util.Date ahoraMail) throws Exception {
-		//Validar contra todas las listas si es la fecha del agasajo
-		
 		ControladorListaRegalos.GetInstance().EnviarEmailAgasajado(ahoraMail);
-		
+	}
+	
+	private void envioEmailInicioLista(java.util.Date ahoraMail) throws Exception {
+		ControladorListaRegalos.GetInstance().EnviarEmailInicioLista(ahoraMail);
+	}
+	
+	private void envioEmailProximoAVencer(java.util.Date ahoraMail) throws Exception {
+		ControladorListaRegalos.GetInstance().EnviarEmailAgasajado(ahoraMail);
 	}
 }

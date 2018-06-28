@@ -64,7 +64,7 @@ public class DESPACHADORMAILS implements IObserverMail {
 		try{
 			MimeMessage message = new MimeMessage(session);
 			message.setFrom(new InternetAddress(remitente));
-			message.addRecipient(Message.RecipientType.TO, new InternetAddress(destinatario));
+			message.addRecipients(Message.RecipientType.TO, InternetAddress.parse(destinatario));
 			message.setSubject(asunto);
 			message.setText(cuerpo);
 			Transport t = session.getTransport("smtp");
@@ -93,8 +93,22 @@ public class DESPACHADORMAILS implements IObserverMail {
 
 
 	@Override
-	public void SendMailsInicio(Map<Integer,ParticipanteLista> p) {
-		// TODO Auto-generated method stub
+	public void SendMailsInicio(ListaDeRegalos l) {
+		
+		String cuerpo;
+		String destinatario="";
+		String asunto;
+		Map<Integer,ParticipanteLista> participantes =  l.GetParticipantes();
+		
+		cuerpo="Hola, Sos parte de la lista de regalo "+l.getCodigo() + ". Para agasajar a "+ l.getNombreAgasajado() +" Con un monto de $" + l.getMontoARecaudarXIntegrante()+". Saludos";
+		asunto = "Participación para una nuevo agasajo";
+		for (Map.Entry<Integer, ParticipanteLista> e : participantes.entrySet()) {
+		
+			
+			destinatario += e.getValue().getUsuario().getMail()+", ";
+		}
+			this.sendEmail(destinatario, asunto, cuerpo);
+		
 	}
 
 	@Override
