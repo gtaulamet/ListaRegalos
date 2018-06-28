@@ -81,8 +81,8 @@ public class Demonio extends Thread{
 				//Procesamiento de archivos de pagos
 				try {
 					procesarArchivoPagos(".//IN//TCPagos.dat");
-	//				procesarArchivoPagos(".//IN//TDPagos.dat");
-	//				procesarArchivoPagos(".//IN//EPagos.dat");
+					procesarArchivoPagos(".//IN//TDPagos.dat");
+					procesarArchivoPagos(".//IN//EPagos.dat");
 				} catch (IOException e) {
 					e.printStackTrace();
 				} catch (Throwable e) {
@@ -90,6 +90,7 @@ public class Demonio extends Thread{
 				}
 				horario=sdf.format(proximo);
 			}
+			
 			if (sdfDia.format(ahoraMail).equals(horarioMail)) {
 				//ejecución de tarea para cuando se cumple el tiempo establecido - cada dia
 				//Controlar para cambiar el estado de la lista

@@ -154,17 +154,19 @@ INSERT [dbo].[ListaDeRegalos] ([nombreAgasajado], [fechaAgasajo], [mailAgasajado
 INSERT [dbo].[ListaDeRegalos] ([nombreAgasajado], [fechaAgasajo], [mailAgasajado], [montoRecaudado], [fechaInicio], [fechaFin], [estado], [montoARecaudarXInteg], [administradorId]) VALUES (N'Gustavo Taulamet', CAST(N'2018-06-04T00:00:00.000' AS DateTime), N'gt@hotmail.com', CAST(0 AS Decimal(18, 0)), CAST(N'2018-06-04T00:00:00.000' AS DateTime), CAST(N'2018-06-01T00:00:00.000' AS DateTime), N'Activo', CAST(1000 AS Decimal(18, 0)), 4)
 INSERT [dbo].[ListaDeRegalos] ([nombreAgasajado], [fechaAgasajo], [mailAgasajado], [montoRecaudado], [fechaInicio], [fechaFin], [estado], [montoARecaudarXInteg], [administradorId]) VALUES (N'Pedro Espinoza', CAST(N'2018-07-15T00:00:00.000' AS DateTime), N'pespinoza@gmail.com', CAST(0 AS Decimal(18, 0)), CAST(N'2018-06-04T00:00:00.000' AS DateTime), CAST(N'2018-07-10T00:00:00.000' AS DateTime), N'Activo', CAST(130 AS Decimal(18, 0)), 1)
 INSERT [dbo].[ListaDeRegalos] ([nombreAgasajado], [fechaAgasajo], [mailAgasajado], [montoRecaudado], [fechaInicio], [fechaFin], [estado], [montoARecaudarXInteg], [administradorId]) VALUES (N'Juan Sosa', CAST(N'2018-08-25T00:00:00.000' AS DateTime), N'juan.gonzalez@gmail.com', CAST(0 AS Decimal(18, 0)), CAST(N'2018-06-04T00:00:00.000' AS DateTime), CAST(N'2018-08-20T00:00:00.000' AS DateTime), N'Activo', CAST(110 AS Decimal(18, 0)), 1)
-INSERT [dbo].[ListaDeRegalos] ([nombreAgasajado], [fechaAgasajo], [mailAgasajado], [montoRecaudado], [fechaInicio], [fechaFin], [estado], [montoARecaudarXInteg], [administradorId]) VALUES (N'Claudia Galapa', CAST(N'2018-10-10T00:00:00.000' AS DateTime), N'clauditag98@hotmail.com', CAST(0 AS Decimal(18, 0)), CAST(N'2018-06-04T00:00:00.000' AS DateTime), CAST(N'2018-10-10T00:00:00.000' AS DateTime), N'Activo', CAST(0 AS Decimal(18, 0)), 1)
+INSERT [dbo].[ListaDeRegalos] ([nombreAgasajado], [fechaAgasajo], [mailAgasajado], [montoRecaudado], [fechaInicio], [fechaFin], [estado], [montoARecaudarXInteg], [administradorId]) VALUES (N'Claudia Galapa', CAST(N'2018-10-10T00:00:00.000' AS DateTime), N'clauditag98@hotmail.com', CAST(0 AS Decimal(18, 0)), CAST(N'2018-06-04T00:00:00.000' AS DateTime), CAST(N'2018-10-10T00:00:00.000' AS DateTime), N'Activo', CAST(100 AS Decimal(18, 0)), 1)
 
 
-INSERT [dbo].[ParticipanteLista] ([usuarioId], [listaDeRegalosId], [pago], [estado]) VALUES (1, 1, 0, N'Activo')
-INSERT [dbo].[ParticipanteLista] ([usuarioId], [listaDeRegalosId], [pago], [estado]) VALUES (1, 2, 0, N'Inactivo')
+INSERT [dbo].[ParticipanteLista] ([usuarioId], [listaDeRegalosId], [pago], [estado]) VALUES (1, 2, 0, N'Activo')
 INSERT [dbo].[ParticipanteLista] ([usuarioId], [listaDeRegalosId], [pago], [estado]) VALUES (2, 1, 0, N'Inactivo')
 INSERT [dbo].[ParticipanteLista] ([usuarioId], [listaDeRegalosId], [pago], [estado]) VALUES (2, 2, 0, N'Activo')
+INSERT [dbo].[ParticipanteLista] ([usuarioId], [listaDeRegalosId], [pago], [estado]) VALUES (2, 3, 0, N'Activo')
 INSERT [dbo].[ParticipanteLista] ([usuarioId], [listaDeRegalosId], [pago], [estado]) VALUES (3, 1, 0, N'Inactivo')
 INSERT [dbo].[ParticipanteLista] ([usuarioId], [listaDeRegalosId], [pago], [estado]) VALUES (3, 2, 0, N'Activo')
 INSERT [dbo].[ParticipanteLista] ([usuarioId], [listaDeRegalosId], [pago], [estado]) VALUES (4, 1, 0, N'Activo')
-INSERT [dbo].[ParticipanteLista] ([usuarioId], [listaDeRegalosId], [pago], [estado]) VALUES (4, 2, 0, N'Activo')
+INSERT [dbo].[ParticipanteLista] ([usuarioId], [listaDeRegalosId], [pago], [estado]) VALUES (4, 3, 0, N'Activo')
+INSERT [dbo].[ParticipanteLista] ([usuarioId], [listaDeRegalosId], [pago], [estado]) VALUES (2, 4, 0, N'Activo')
+INSERT [dbo].[ParticipanteLista] ([usuarioId], [listaDeRegalosId], [pago], [estado]) VALUES (3, 5, 0, N'Activo')
 --SET IDENTITY_INSERT [dbo].[Usuario] ON 
 
 USE [BD_ListaRegalos]
@@ -184,8 +186,15 @@ BEGIN
 	SET NOCOUNT ON;
 	begin tran
 		--Inserto el pago
+		declare @cant as integer;
+		
+		select @cant = count(*) from Pago where usuarioId = @u and listaDeRegalosId = @lr;
+		if @cant != 0
+		begin
+			return
+		end
 		insert into Pago (usuarioId,listaDeRegalosId,monto,fecha) VALUES (@u,@lr,@m,@f);
-
+		
 		if @@error != 0
 		begin
 			rollback tran;
@@ -211,5 +220,4 @@ BEGIN
 
 END
 GO
-
 

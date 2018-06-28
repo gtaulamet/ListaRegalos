@@ -446,7 +446,7 @@ public class ListaDeRegalos implements IObservableMails, IObserverCalendario {
 	public static boolean CrearNuevoPago(int listaDeRegalos, Date fecha, int usuario, float monto) {
 		// TODO Auto-generated method stub
 		ParticipanteLista pl = ParticipanteLista.buscarParticipante(usuario, listaDeRegalos);
-		if (pl == null) {
+		if (pl == null || pl.isPago()) {
 			return false;
 		}
 		return pl.CrearNuevoPago(listaDeRegalos,usuario,fecha, monto);

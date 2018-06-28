@@ -229,7 +229,7 @@ public class AdmPersistenciaParticipanteLista extends AdministradorPersistencia
 			PreparedStatement s = con.prepareStatement("exec CrearPago ?,?,?,?");
 			//agregar campos
 			s.setInt(1, lr);
-			s.setInt(2, lr);
+			s.setInt(2, u);
 			s.setDate(3,new java.sql.Date(fecha.getTime()));
 			s.setFloat(4, monto);
 			
@@ -239,7 +239,7 @@ public class AdmPersistenciaParticipanteLista extends AdministradorPersistencia
 		}
 		catch (Exception e)
 		{
-			System.out.println("Error al crear un nuevo pago." + e.getMessage());
+//			System.out.println("Error al crear un nuevo pago." + e.getMessage());
 		}
 		return false;
 	}
