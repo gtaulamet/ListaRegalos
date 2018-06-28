@@ -17,6 +17,7 @@ import java.util.List;
 
 
 public interface IObservableMails {
+	public ArrayList<IObserverMail> observers = new ArrayList<IObserverMail>();
 	public void Attach(IObserverMail o);
 	public void Deattach(IObserverMail o);
 	public void SendMails(int i);

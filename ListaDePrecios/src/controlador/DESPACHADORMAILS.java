@@ -11,6 +11,7 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import javax.swing.DebugGraphics;
 
 import DTO.ParticipanteListaDTO;
 
@@ -18,8 +19,18 @@ import DTO.ParticipanteListaDTO;
 public class DESPACHADORMAILS implements IObserverMail {
 	
 	private final Properties properties = new Properties();
-	
+	private static DESPACHADORMAILS instancia;
 
+	private DESPACHADORMAILS() {
+		
+	}
+	
+	public static DESPACHADORMAILS getInstancia() {
+		if (instancia == null) {
+			instancia = new DESPACHADORMAILS();
+		}
+		return instancia;
+	}
 	private String password;
 
 	private Session session;

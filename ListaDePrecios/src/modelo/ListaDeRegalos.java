@@ -28,7 +28,7 @@ public class ListaDeRegalos implements IObservableMails, IObserverCalendario {
 	private Usuario administrador;
 	private float montoARecaudarXIntegrante;
 	/*****/
-	private static ArrayList<IObserverMail> observers = new ArrayList<IObserverMail>();
+	
 	
 	public ListaDeRegalos() {
 		
@@ -458,7 +458,7 @@ public class ListaDeRegalos implements IObservableMails, IObserverCalendario {
 		try {
 			//VER SI SE AGREGA ACA EL OBSERVER O DONDE
 			Map<Integer,ListaDeRegalos> listas = AdmPersistenciaListaRegalos.getInstancia().BuscarListaAgasajo(fecha);
-			DESPACHADORMAILS o = new DESPACHADORMAILS();
+			DESPACHADORMAILS o = DESPACHADORMAILS.getInstancia();
 		
 			for (Map.Entry<Integer, ListaDeRegalos> e : listas.entrySet()) {
 				e.getValue().Attach(o);
