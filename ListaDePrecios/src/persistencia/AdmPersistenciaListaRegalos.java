@@ -144,7 +144,7 @@ public class AdmPersistenciaListaRegalos extends AdministradorPersistencia
 	}
 		
 	
-	public ListaDeRegalos buscarAListaDeRegalos(int codigo)
+	public ListaDeRegalos buscarListaDeRegalos(int codigo)
 	{
 		try
 		{

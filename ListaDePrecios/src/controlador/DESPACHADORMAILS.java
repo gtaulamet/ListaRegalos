@@ -26,48 +26,11 @@ public class DESPACHADORMAILS implements IObserverMail {
 	
 	public static void main(String[] args) {
 		DESPACHADORMAILS d = new DESPACHADORMAILS();
-	//d.testmail();
-		d.sendEmail();
+	//	String cuerpo="Felicitaciones ";
+		//String destinatario= "pablointiar@gmaiL.com";
+		//String asunto = "Tienes un agasajo";
+		//d.sendEmail(destinatario,asunto,cuerpo);
 	}
-	
-	public void testmail (){
-		 try
-	        {
-	            // Propiedades de la conexión
-	            Properties props = new Properties();
-	            props.setProperty("mail.smtp.host", "smtp.gmail.com");
-	            props.setProperty("mail.smtp.starttls.enable", "true");
-	            props.setProperty("mail.smtp.port", "25");
-	            props.setProperty("mail.smtp.user", "pgplaystation@gmail.com");
-	            props.setProperty("mail.smtp.auth", "true");
-
-	            // Preparamos la sesion
-	            Session session = Session.getDefaultInstance(props);
-
-	            // Construimos el mensaje
-	            MimeMessage message = new MimeMessage(session);
-	            message.setFrom(new InternetAddress("pablointiar@gmail.com"));
-	            message.addRecipient(
-	                Message.RecipientType.TO,
-	                new InternetAddress("pgplaystation@gmail.com"));
-	            message.setSubject("Hola");
-	            message.setText(
-	                "Mensajito con Java Mail" + "de los buenos." + "poque si");
-
-	            // Lo enviamos.
-	            Transport t = session.getTransport("smtp");
-	            t.connect("pgplaystation@gmail.com", "silvetti");
-	            t.sendMessage(message, message.getAllRecipients());
-
-	            // Cierre.
-	            t.close();
-	        }
-	        catch (Exception e)
-	        {
-	            e.printStackTrace();
-	        }
-	}
-	
 	
 	private void init() {
 
@@ -76,29 +39,29 @@ public class DESPACHADORMAILS implements IObserverMail {
 		properties.put("mail.smtp.port",587);
 		properties.put("mail.smtp.user", "pgplaystation@gmail.com");
 		properties.put("mail.smtp.password", "silvetti"); 
-		//properties.put("mail.smtp.mail.sender","mail@gmail.com");
-		//properties.put("mail.smtp.user", "pgplaystation@gmail.com");
 		properties.put("mail.smtp.auth", "true");
 
 		session = Session.getDefaultInstance(properties);
 		password = "silvetti";
 	}
 
-	public void sendEmail(){
-
+	public void sendEmail(String destinatario, String asunto, String cuerpo){
+		 
+		String remitente = "pgplaystation@gmail.com";
+		String clave = "silvetti";
 		init();
 		try{
 			MimeMessage message = new MimeMessage(session);
-			message.setFrom(new InternetAddress("pgplaystation@gmail.com"));
-			message.addRecipient(Message.RecipientType.TO, new InternetAddress("pablointiar@gmail.com"));
-			message.setSubject("Prueba 1");
-			message.setText("Texto 1");
+			message.setFrom(new InternetAddress(remitente));
+			message.addRecipient(Message.RecipientType.TO, new InternetAddress(destinatario));
+			message.setSubject(asunto);
+			message.setText(cuerpo);
 			Transport t = session.getTransport("smtp");
-			 t.connect("smtp.gmail.com", "pgplaystation@gmail.com", "silvetti");
-			//t.connect((String)properties.get("mail.smtp.user"), password);
+			t.connect("smtp.gmail.com", remitente, clave);
 			t.sendMessage(message, message.getAllRecipients());
 			t.close();
 		}catch (MessagingException me)
+
 		{
 			me.printStackTrace();
 			//Aqui se deberia o mostrar un mensaje de error o en lugar
@@ -109,11 +72,14 @@ public class DESPACHADORMAILS implements IObserverMail {
 		
 	}
 	
-	@Override
-	public void SendMailFinalizo(ListaDeRegalos l) {
-		// TODO Auto-generated method stub
-		
+	@Override	
+	public void SendMailAgasajo(ListaDeRegalos l) {
+		String cuerpo="Felicitaciones "+l.getNombreAgasajado() + "Tienes un regalo de $" + l.getMontoRecaudado()+" para gastar. Saludos";
+		String destinatario= l.getMailAgasajado();
+		String asunto = "Tienes un agasajo";
+		this.sendEmail(destinatario, asunto, cuerpo);
 	}
+
 
 	@Override
 	public void SendMailsInicio(Map<Integer,ParticipanteLista> p) {

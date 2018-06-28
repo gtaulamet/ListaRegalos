@@ -1,4 +1,5 @@
 package modelo;
+import java.util.ArrayList;
 import java.util.List;
 
 //
@@ -16,7 +17,6 @@ import java.util.List;
 
 
 public interface IObservableMails {
-	public List<IObserverMail> observers = null;
 	public void Attach(IObserverMail o);
 	public void Deattach(IObserverMail o);
 	public void SendMails(int i);
