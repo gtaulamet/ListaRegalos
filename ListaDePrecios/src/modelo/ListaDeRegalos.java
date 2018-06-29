@@ -135,9 +135,9 @@ public class ListaDeRegalos implements IObservableMails, IObserverCalendario {
 	}
 
 	@Override
-	public void ModificarEstado() {
-		// TODO Auto-generated method stub
-		
+	public void ModificarEstado(String estado) {
+		this.setEstado(estado);
+		ListaDeRegalos.updateEstado(this);
 	}
 
 	@Override
@@ -510,6 +510,9 @@ public class ListaDeRegalos implements IObservableMails, IObserverCalendario {
 
 			//TODO: Estaria bien que actualicemos las listas todas juntas x un sp? 
 			// creo que no estariamos aplicando el observer. Me parece que es 1 x 1 que hay que actualizarla
+			for (Map.Entry<Integer, ListaDeRegalos> e : listas.entrySet()) {
+				e.getValue().ModificarEstado("Finalizada");
+			}
 			
 		
 			return true;
