@@ -45,10 +45,12 @@ public class Demonio extends Thread{
 			Calendar cal = Calendar.getInstance();
 			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
 			
+			Calendar cal2 = (Calendar)cal.clone();
 			SimpleDateFormat sdfDia = new SimpleDateFormat("yyyy-MM-dd");
 			
 			java.util.Date ahora = cal.getTime();
-			java.util.Date ahoraMail = cal.getTime();
+			java.util.Date ahoraMail = cal2.getTime();
+			
 			cal.add(Calendar.MINUTE,2);
 			java.util.Date proximo = cal.getTime();
 			proximo.setSeconds(0);
@@ -59,10 +61,12 @@ public class Demonio extends Thread{
 			
 			
 			//MAIL
-			cal.add(Calendar.DAY_OF_YEAR,1);
-			java.util.Date proximoDia = cal.getTime();
+			cal2.add(Calendar.DAY_OF_YEAR,1);
+			java.util.Date proximoDia = cal2.getTime();
 			
-			System.out.println("cal "+ sdf.format(cal.getTime()) +"------"+ sdf.format(ahora)+" - ahora "+ sdfDia.format(ahoraMail) + "ahora mail");
+//			System.out.println("cal "+ sdfDia.format(cal.getTime()) +"------"+ sdf.format(ahora)+" - ahora "+ sdfDia.format(ahoraMail) + "ahora mail");
+//			System.out.println("cal2 "+ sdfDia.format(cal2.getTime()) +"------"+ sdf.format(ahora)+" - ahora "+ sdfDia.format(ahoraMail) + "ahora mail");
+
 			
 			if (this.horario == "" || this.horario == null) {
 				this.horario = sdf.format(ahora);
