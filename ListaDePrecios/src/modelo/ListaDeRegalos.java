@@ -53,9 +53,11 @@ public class ListaDeRegalos implements IObservableMails, IObserverCalendario {
 //		//todo
 //	}
 	
-	public Map<Integer,ParticipanteListaDTO> GetParticipantesImpagos() {
-		//todo
-		return null;
+	public Map<Integer,ParticipanteLista> GetParticipantesImpagos() {
+		Map<Integer,ParticipanteLista> lista = ParticipanteLista.buscarImpagosXLista(this.getCodigo());
+		this.participantes = lista;
+		
+		return this.participantes;
 	}
 	
 	public Map<Integer,ParticipanteLista> GetParticipantes() {
@@ -161,7 +163,7 @@ public class ListaDeRegalos implements IObservableMails, IObserverCalendario {
 				break;
 			case 2: 
 				for (IObserverMail o : observers){
-					o.SendMailsProximoFinalizar(this.GetParticipantesImpagos());
+					o.SendMailsProximoFinalizar(this);
 				}
 				break;
 			case 3:
@@ -484,5 +486,38 @@ public class ListaDeRegalos implements IObservableMails, IObserverCalendario {
 			return false;
 		}
 	}
+	
+	public static boolean SendMailListaAVencer (Date fecha) {
+		try {
+
+			Map<Integer,ListaDeRegalos> listas = AdmPersistenciaListaRegalos.getInstancia().BuscarListaAVencer(fecha);
+			DESPACHADORMAILS o = DESPACHADORMAILS.getInstancia();
+		
+			for (Map.Entry<Integer, ListaDeRegalos> e : listas.entrySet()) {
+				e.getValue().Attach(o);
+				e.getValue().SendMails(2); //tipo 2 = A Vencer
+			}
+			return true;
+		} catch (Exception ex){
+			return false;
+		}
+	}
+	
+	public static boolean 	ModificarEstadoLista (Date fecha) {
+		try {
+
+			Map<Integer,ListaDeRegalos> listas = AdmPersistenciaListaRegalos.getInstancia().BuscarListaAVencer(fecha);
+
+			//TODO: Estaria bien que actualicemos las listas todas juntas x un sp? 
+			// creo que no estariamos aplicando el observer. Me parece que es 1 x 1 que hay que actualizarla
+			
+		
+			return true;
+		} catch (Exception ex){
+			return false;
+		}
+	}	
+
+	
 
 }

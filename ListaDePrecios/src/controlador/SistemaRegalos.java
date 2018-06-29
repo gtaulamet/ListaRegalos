@@ -92,28 +92,7 @@ public class SistemaRegalos {
 		}
 		return sistemaRegalos;
 	}
-	/*
-	 public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Login frame = new Login();
-					frame.setVisible(true);
-					Map<Integer, Usuario> aux= AdmPersistenciaUsuario.getInstancia().buscarTodos();
-					
-					for (Map.Entry<Integer, Usuario> e : aux.entrySet()) {
-						System.out.println(e.getValue().getApellido());
-
-						
-						System.out.println("pass: "+generarPass(e.getValue().getPass()));
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-	*/
+	
 	public static String generarPass(String pass) {
 		String passwordToHash = pass;
 	    String generatedPassword = null;

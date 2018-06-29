@@ -21,6 +21,7 @@ import java.text.SimpleDateFormat;
 
 import controlador.ControladorListaRegalos;
 import controlador.ControladorPagos;
+import controlador.SistemaRegalos;
 
 public class Demonio extends Thread{
 	public String horario;
@@ -61,8 +62,10 @@ public class Demonio extends Thread{
 			
 			
 			//MAIL
-			cal.add(Calendar.DATE,1);
+			cal.add(Calendar.DAY_OF_YEAR,1);
 			java.util.Date proximoDia = cal.getTime();
+			
+			System.out.println("cal "+ sdf.format(cal.getTime()) +"------"+ sdf.format(ahora)+" - ahora "+ sdfDia.format(ahoraMail) + "ahora mail");
 			
 			if (this.horario == "" || this.horario == null) {
 				this.horario = sdf.format(ahora);
@@ -101,6 +104,7 @@ public class Demonio extends Thread{
 					envioEmailAgasajado(ahoraMail);
 					envioEmailInicioLista(ahoraMail);
 					envioEmailProximoAVencer(ahoraMail);
+					modificarEstadoLista(ahoraMail);
 				} catch (IOException e) {
 					e.printStackTrace();
 				} catch (Throwable e) {
@@ -216,6 +220,16 @@ public class Demonio extends Thread{
 	}
 	
 	private void envioEmailProximoAVencer(java.util.Date ahoraMail) throws Exception {
-		ControladorListaRegalos.GetInstance().EnviarEmailAgasajado(ahoraMail);
+		int cantDias =SistemaRegalos.GetInstance().diasProximoAVencer;
+	     Calendar calendar = Calendar.getInstance();
+	     calendar.setTime(ahoraMail); 
+      	 calendar.add(Calendar.DAY_OF_YEAR, cantDias);  
+	
+		ControladorListaRegalos.GetInstance().EnviarEmailProximoAVencer(calendar.getTime());
+	}
+	
+	private void modificarEstadoLista(java.util.Date ahoraMail) throws Exception {
+			
+		ControladorListaRegalos.GetInstance().ModificarEstado(ahoraMail);
 	}
 }

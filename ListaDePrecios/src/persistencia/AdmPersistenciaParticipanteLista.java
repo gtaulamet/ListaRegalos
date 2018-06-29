@@ -200,7 +200,39 @@ public class AdmPersistenciaParticipanteLista extends AdministradorPersistencia
 		}
 		return null;
 	}
-	
+
+	public Map<Integer,ParticipanteLista> buscarImpagosXLista(int codigo){
+			try {
+				Connection con = PoolConnection.getPoolConnection().getConnection();
+				PreparedStatement s = con.prepareStatement("select * from BD_ListaRegalos.dbo.ParticipanteLista where listaDeRegalosId = ? and estado like 'Activo' and pago = 0");
+				s.setInt(1,codigo);
+				
+				ResultSet result = s.executeQuery();
+				ParticipanteLista p = null;
+				
+				Map<Integer,ParticipanteLista> participantes = new HashMap<Integer,ParticipanteLista>();
+				
+				while (result.next())
+				{
+					int usuario = result.getInt(1);
+					boolean pago = result.getBoolean(3);
+					String estado= result.getString(4);
+					
+					Usuario us = AdmPersistenciaUsuario.getInstancia().buscarAUsuario(usuario);
+					
+					p = new  ParticipanteLista(us, pago, estado);
+					
+					participantes.put(usuario,p);
+				}
+				
+				PoolConnection.getPoolConnection().realeaseConnection(con);
+				return participantes;
+			}
+			catch(Exception e) {
+				System.out.println();
+			}
+			return null;
+		}
 	
 	public void darBajaParticipanteLista(int u, int lr) {
 		try

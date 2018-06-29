@@ -74,4 +74,9 @@ public class ParticipanteLista {
 	public static void darDeBaja(int u, int lr) {
 		AdmPersistenciaParticipanteLista.getInstancia().darBajaParticipanteLista(u, lr);
 	}
+	
+	public static Map<Integer,ParticipanteLista> buscarImpagosXLista(int lista){
+		return AdmPersistenciaParticipanteLista.getInstancia().buscarImpagosXLista(lista);
+	}
+	
 }

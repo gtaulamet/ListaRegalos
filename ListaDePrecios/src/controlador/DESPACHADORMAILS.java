@@ -37,10 +37,6 @@ public class DESPACHADORMAILS implements IObserverMail {
 	
 	public static void main(String[] args) {
 		DESPACHADORMAILS d = new DESPACHADORMAILS();
-	//	String cuerpo="Felicitaciones ";
-		//String destinatario= "pablointiar@gmaiL.com";
-		//String asunto = "Tienes un agasajo";
-		//d.sendEmail(destinatario,asunto,cuerpo);
 	}
 	
 	private void init() {
@@ -112,8 +108,22 @@ public class DESPACHADORMAILS implements IObserverMail {
 	}
 
 	@Override
-	public void SendMailsProximoFinalizar(Map<Integer,ParticipanteListaDTO> p) {
-		// TODO Auto-generated method stub
+	public void SendMailsProximoFinalizar(ListaDeRegalos l) {
+		String cuerpo;
+		String destinatario="";
+		String asunto;
+		Map<Integer,ParticipanteLista> participantes =  l.GetParticipantesImpagos();
+		
+		cuerpo="Hola, Sos parte de la lista de regalo "+l.getCodigo() + ". Para agasajar a "+ l.getNombreAgasajado() +" Con un monto de $" + l.getMontoARecaudarXIntegrante()+"."
+				+ " Tenes tiempo hasta el "+ l.getFechaFin() +" para realizar el pago. Saludos";
+		asunto = "Aviso de finalización de lista para agasajo";
+		for (Map.Entry<Integer, ParticipanteLista> e : participantes.entrySet()) {
+		
+			
+			destinatario += e.getValue().getUsuario().getMail()+", ";
+		}
+			this.sendEmail(destinatario, asunto, cuerpo);
+		
 		
 	}
 }

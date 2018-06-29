@@ -143,5 +143,14 @@ public class ControladorListaRegalos {
 	public void EnviarEmailInicioLista(Date fecha) {
 		boolean proceso = ListaDeRegalos.SendMailInicioLista(fecha);
 	}
-
+	
+	public void EnviarEmailProximoAVencer(Date fecha) {
+		boolean proceso = ListaDeRegalos.SendMailListaAVencer(fecha);
+	}
+	
+	public void ModificarEstado(Date fecha) {
+		boolean proceso = ListaDeRegalos.ModificarEstadoLista(fecha);
+	}
+	
+	
 }
