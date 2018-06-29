@@ -146,16 +146,33 @@ INSERT [dbo].[Administrador] ([username], [pass]) VALUES (N'admin', N'8a5da52ed1
 SET IDENTITY_INSERT [dbo].[Usuario] OFF
 INSERT [dbo].[Usuario] ( [username], [pass], [nombre], [apellido], [DNI], [mail],[estado]) VALUES ( N'gtaulamet', N'8a5da52ed126447d359e70c05721a8aa', N'Gustavo', N'Taulamet', 324234324, N'gustavo.taulamet@gmail.com', 'Activo')
 INSERT [dbo].[Usuario] ( [username], [pass], [nombre], [apellido], [DNI], [mail],[estado]) VALUES ( N'ssuarez', N'8a5da52ed126447d359e70c05721a8aa', N'Sergio', N'Suarez', 324322344, N'gtaulamet@siema.com.ar', 'Activo')
-INSERT [dbo].[Usuario] ( [username], [pass], [nombre], [apellido], [DNI], [mail],[estado]) VALUES ( N'pintilisano', N'8a5da52ed126447d359e70c05721a8aa', N'Pablo', N'Intilisano', 432432434, N'pablointiar@gmail.con', 'Activo')
+INSERT [dbo].[Usuario] ( [username], [pass], [nombre], [apellido], [DNI], [mail],[estado]) VALUES ( N'pintilisano', N'8a5da52ed126447d359e70c05721a8aa', N'Pablo', N'Intilisano', 432432434, N'pablointiar@gmail.com', 'Activo')
 INSERT [dbo].[Usuario] ( [username], [pass], [nombre], [apellido], [DNI], [mail],[estado]) VALUES ( N'jsalzano', N'8a5da52ed126447d359e70c05721a8aa', N'Jorge', N'Salzano', 324323234, N'pgplaystation@gmail.com', 'Activo')
 
 SET IDENTITY_INSERT [dbo].[ListaDeRegalos] OFF
+/*
 INSERT [dbo].[ListaDeRegalos] ([nombreAgasajado], [fechaAgasajo], [mailAgasajado], [montoRecaudado], [fechaInicio], [fechaFin], [estado], [montoARecaudarXInteg], [administradorId]) VALUES (N'Juan Gomez', CAST(N'2018-06-20T00:00:00.000' AS DateTime), N'gustavo.taulamet@gmail.com', CAST(0 AS Decimal(18, 0)), CAST(N'2018-06-04T00:00:00.000' AS DateTime), CAST(N'2018-06-15T00:00:00.000' AS DateTime), N'Activo', CAST(100 AS Decimal(18, 0)), 1)
 INSERT [dbo].[ListaDeRegalos] ([nombreAgasajado], [fechaAgasajo], [mailAgasajado], [montoRecaudado], [fechaInicio], [fechaFin], [estado], [montoARecaudarXInteg], [administradorId]) VALUES (N'Gustavo Taulamet', CAST(N'2018-06-04T00:00:00.000' AS DateTime), N'gustavo.taulamet@gmail.com', CAST(0 AS Decimal(18, 0)), CAST(N'2018-06-04T00:00:00.000' AS DateTime), CAST(N'2018-06-01T00:00:00.000' AS DateTime), N'Activo', CAST(1000 AS Decimal(18, 0)), 4)
 INSERT [dbo].[ListaDeRegalos] ([nombreAgasajado], [fechaAgasajo], [mailAgasajado], [montoRecaudado], [fechaInicio], [fechaFin], [estado], [montoARecaudarXInteg], [administradorId]) VALUES (N'Pedro Espinoza', CAST(N'2018-07-15T00:00:00.000' AS DateTime), N'gustavo.taulamet@gmail.com', CAST(0 AS Decimal(18, 0)), CAST(N'2018-06-04T00:00:00.000' AS DateTime), CAST(N'2018-07-10T00:00:00.000' AS DateTime), N'Activo', CAST(130 AS Decimal(18, 0)), 1)
 INSERT [dbo].[ListaDeRegalos] ([nombreAgasajado], [fechaAgasajo], [mailAgasajado], [montoRecaudado], [fechaInicio], [fechaFin], [estado], [montoARecaudarXInteg], [administradorId]) VALUES (N'Juan Sosa', CAST(N'2018-08-25T00:00:00.000' AS DateTime), N'gustavo.taulamet@gmail.com', CAST(0 AS Decimal(18, 0)), CAST(N'2018-06-04T00:00:00.000' AS DateTime), CAST(N'2018-08-20T00:00:00.000' AS DateTime), N'Activo', CAST(110 AS Decimal(18, 0)), 1)
 INSERT [dbo].[ListaDeRegalos] ([nombreAgasajado], [fechaAgasajo], [mailAgasajado], [montoRecaudado], [fechaInicio], [fechaFin], [estado], [montoARecaudarXInteg], [administradorId]) VALUES (N'Claudia Galapa', CAST(N'2018-10-10T00:00:00.000' AS DateTime), N'gustavo.taulamet@gmail.com', CAST(0 AS Decimal(18, 0)), CAST(N'2018-06-04T00:00:00.000' AS DateTime), CAST(N'2018-10-10T00:00:00.000' AS DateTime), N'Activo', CAST(100 AS Decimal(18, 0)), 1)
+*/
 
+--AGASAJO HOY
+INSERT [dbo].[ListaDeRegalos] ([nombreAgasajado], [fechaAgasajo], [mailAgasajado], [montoRecaudado], [fechaInicio], [fechaFin], [estado], [montoARecaudarXInteg], [administradorId]) VALUES 
+(N'Juan Gomez', CONVERT(VARCHAR(20), GETDATE(), 105), N'gustavo.taulamet@gmail.com', CAST(0 AS Decimal(18, 0)), CONVERT(VARCHAR(20), DATEADD(DAY,-5,GETDATE()), 105), CONVERT(VARCHAR(20), DATEADD(DAY,-2,GETDATE()), 105), N'Finalizada', CAST(100 AS Decimal(18, 0)), 1)
+--INICIA HOY
+INSERT [dbo].[ListaDeRegalos] ([nombreAgasajado], [fechaAgasajo], [mailAgasajado], [montoRecaudado], [fechaInicio], [fechaFin], [estado], [montoARecaudarXInteg], [administradorId]) VALUES 
+(N'Gustavo Taulamet', CONVERT(VARCHAR(20), DATEADD(DAY,4,GETDATE()), 105), N'gustavo.taulamet@gmail.com', CAST(0 AS Decimal(18, 0)), CONVERT(VARCHAR(20), GETDATE(), 105), CONVERT(VARCHAR(20), DATEADD(DAY,2,GETDATE()), 105), N'Activo', CAST(1000 AS Decimal(18, 0)), 4)
+--PROXIMO A VENCER
+INSERT [dbo].[ListaDeRegalos] ([nombreAgasajado], [fechaAgasajo], [mailAgasajado], [montoRecaudado], [fechaInicio], [fechaFin], [estado], [montoARecaudarXInteg], [administradorId]) VALUES 
+(N'Pedro Espinoza', CONVERT(VARCHAR(20), DATEADD(DAY,6,GETDATE()), 105), N'gustavo.taulamet@gmail.com', CAST(0 AS Decimal(18, 0)), CONVERT(VARCHAR(20), DATEADD(DAY,-1,GETDATE()), 105), CONVERT(VARCHAR(20), DATEADD(DAY,3,GETDATE()), 105), N'Activo', CAST(130 AS Decimal(18, 0)), 1)
+--FINALIZA HOY
+INSERT [dbo].[ListaDeRegalos] ([nombreAgasajado], [fechaAgasajo], [mailAgasajado], [montoRecaudado], [fechaInicio], [fechaFin], [estado], [montoARecaudarXInteg], [administradorId]) VALUES 
+(N'Juan Sosa', CONVERT(VARCHAR(20), DATEADD(DAY,4,GETDATE()), 105), N'gustavo.taulamet@gmail.com', CAST(0 AS Decimal(18, 0)), CONVERT(VARCHAR(20), DATEADD(DAY,-2,GETDATE()), 105), CONVERT(VARCHAR(20), GETDATE(), 105), N'Activo', CAST(110 AS Decimal(18, 0)), 1)
+--
+INSERT [dbo].[ListaDeRegalos] ([nombreAgasajado], [fechaAgasajo], [mailAgasajado], [montoRecaudado], [fechaInicio], [fechaFin], [estado], [montoARecaudarXInteg], [administradorId]) VALUES 
+(N'Claudia Galapa', CONVERT(VARCHAR(20), DATEADD(DAY,5,GETDATE()), 105), N'gustavo.taulamet@gmail.com', CAST(0 AS Decimal(18, 0)), CONVERT(VARCHAR(20), DATEADD(DAY,2,GETDATE()), 105), CONVERT(VARCHAR(20), DATEADD(DAY,4,GETDATE()), 105), N'Activo', CAST(100 AS Decimal(18, 0)), 1)
 
 INSERT [dbo].[ParticipanteLista] ([usuarioId], [listaDeRegalosId], [pago], [estado]) VALUES (1, 2, 0, N'Activo')
 INSERT [dbo].[ParticipanteLista] ([usuarioId], [listaDeRegalosId], [pago], [estado]) VALUES (2, 1, 0, N'Inactivo')
