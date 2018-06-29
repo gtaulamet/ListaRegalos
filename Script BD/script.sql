@@ -221,3 +221,22 @@ BEGIN
 END
 GO
 
+
+USE [BD_ListaRegalos]
+GO
+
+/****** Object:  StoredProcedure [dbo].[CrearPago]    Script Date: 20/06/2018 13:37:13 ******/
+SET ANSI_NULLS ON
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+CREATE PROCEDURE [dbo].[ActualizarEstado] @f Date 
+
+AS
+BEGIN
+	SET NOCOUNT ON;
+	update ListaDeRegalos set estado = 'Finalizada' where fechaFin = @f;
+END
+GO
