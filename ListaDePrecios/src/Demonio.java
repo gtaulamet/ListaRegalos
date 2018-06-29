@@ -102,10 +102,11 @@ public class Demonio extends Thread{
 				
 				//Envio automatico de emails
 				try {
+					modificarEstadoLista(ahoraMail);
 					envioEmailAgasajado(ahoraMail);
 					envioEmailInicioLista(ahoraMail);
 					envioEmailProximoAVencer(ahoraMail);
-					modificarEstadoLista(ahoraMail);
+					
 				} catch (IOException e) {
 					e.printStackTrace();
 				} catch (Throwable e) {
