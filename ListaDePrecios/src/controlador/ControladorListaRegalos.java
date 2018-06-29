@@ -18,8 +18,6 @@ import persistencia.AdmPersistenciaParticipanteLista;
 public class ControladorListaRegalos {
 	private static ControladorListaRegalos controladorListaRegalos;
 	
-	public Map<Integer,ListaDeRegalosDTO> listasDeRegalos;
-	
 	public static ControladorListaRegalos GetInstance() {
 		if (controladorListaRegalos == null) {
 			controladorListaRegalos = new ControladorListaRegalos();
@@ -28,7 +26,6 @@ public class ControladorListaRegalos {
 	}
 	
 	private ControladorListaRegalos() {
-		this.listasDeRegalos = new HashMap<Integer,ListaDeRegalosDTO>(); 
 	}
 	
 	
@@ -43,37 +40,17 @@ public class ControladorListaRegalos {
 	}
 	
 	public Map<Integer,ListaDeRegalosDTO> GetListasDelParticipante(int u) {
-		listasDeRegalos.clear();
-
 		//map con todos los participanteLista en los que el usuario esta referido
-//		//Integer=codigoLista
-//		Map<Integer,ParticipanteLista> pl = ParticipanteLista.buscarTodosXUsuario(u);
-//		Set<Map.Entry<Integer,ParticipanteLista>>	lista = pl.entrySet();
-//		
-//		for(Map.Entry<Integer, ParticipanteLista> e : lista){
-//			ListaDeRegalos aux = ListaDeRegalos.buscarLista(e.getKey());
-//			if (aux.getEstado()!="Inactivo")
-//				listasDeRegalos.put(e.getKey(), aux);
-//		}
 		
 		return ListaDeRegalos.buscarListasParticipo(u);
 	}
 	
 	public void BajarParticipanteLista(int usuario, int codigoLista) {
-//		ListaDeRegalosDTO lr = this.GetListaRegalos(codigoLista);
-//		Usuario u = ControladorUsuario.GetInstance().GetUsuario(usuario);
-		
 		ListaDeRegalos.BajarParticipanteLista(usuario,codigoLista);
-		
-//		lr.BajarParticipanteLista(u);
 	}
 	
 	public void AgregarParticipanteLista(int usuario, int codigoLista) {
-//		Usuario u = ControladorUsuario.GetInstance().GetUsuario(usuario);
 		ListaDeRegalos.AgregarParticipanteLista(usuario,codigoLista);
-//		ListaDeRegalos lr = this.GetListaRegalos(codigoLista);
-//		lr.AgregarParticipanteLista(u);
-		
 	}
 	
 	public Map<Integer,ListaDeRegalosDTO> GetListasAdministrador(int u){
@@ -109,9 +86,7 @@ public class ControladorListaRegalos {
 	}
 
 	public Map<Integer,ParticipanteListaDTO> BuscarParticipantesLista(int codigoLista){
-//		ListaDeRegalosDTO lr = this.GetListaRegalos(codigoLista);
 		return ListaDeRegalos.GetParticipantes(codigoLista);
-//		return lr.GetParticipantes();
 	}
 
 	public void BorrarListaRegalos(Integer lr) {
@@ -121,7 +96,6 @@ public class ControladorListaRegalos {
 	}
 
 	public boolean NotificarPago(int listaDeRegalos, Date fecha, int usuario, float monto) {
-		// TODO Auto-generated method stub
 		ListaDeRegalosDTO lDTO = GetListaRegalos(listaDeRegalos);
 		if (lDTO == null) {
 			return false;
@@ -151,6 +125,4 @@ public class ControladorListaRegalos {
 	public void ModificarEstado(Date fecha) {
 		boolean proceso = ListaDeRegalos.ModificarEstadoLista(fecha);
 	}
-	
-	
 }

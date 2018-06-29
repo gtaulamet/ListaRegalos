@@ -29,11 +29,8 @@ public class Demonio extends Thread{
 	
 	
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		
 		Demonio d = new Demonio();
 		d.start();	
-		
 	}
 	
 	@SuppressWarnings("deprecation")
