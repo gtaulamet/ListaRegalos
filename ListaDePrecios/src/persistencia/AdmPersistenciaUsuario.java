@@ -290,21 +290,5 @@ public class AdmPersistenciaUsuario extends AdministradorPersistencia
 			System.out.println();
 		}
 	}
-	public void deleteAdmin(Object d) 
-	{
-		try
-		{
-			Administrador u = (Administrador)d;
-			Connection con = PoolConnection.getPoolConnection().getConnection();
-			PreparedStatement s = con.prepareStatement("delete from BD_ListaRegalos.dbo.Administrador where username = ?");
-			s.setString(1, u.getUser());
-			s.execute();
-			PoolConnection.getPoolConnection().realeaseConnection(con);
-		}
-		catch (Exception e)
-		{
-			System.out.println();
-		}
-		
-	}
+
 }

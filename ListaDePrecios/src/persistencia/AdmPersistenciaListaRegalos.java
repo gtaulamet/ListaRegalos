@@ -30,20 +30,7 @@ public class AdmPersistenciaListaRegalos extends AdministradorPersistencia
 	@Override
 	public void delete(Object d) 
 	{
-		try
-		{
-			ListaDeRegalos l = (ListaDeRegalos)d;
-			Connection con = PoolConnection.getPoolConnection().getConnection();
-			PreparedStatement s = con.prepareStatement("delete from BD_ListaRegalos.dbo.ListaDeRegalos where codigo = ?");
-			s.setInt(1, l.getCodigo());
-			s.execute();
-			PoolConnection.getPoolConnection().realeaseConnection(con);
-		}
-		catch (Exception e)
-		{
-			System.out.println();
-		}
-		
+	
 	}
 
 	@Override
