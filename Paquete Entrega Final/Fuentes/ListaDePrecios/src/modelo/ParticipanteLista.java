@@ -43,11 +43,6 @@ public class ParticipanteLista {
 	}
 
 	
-	public List<Pago> GetPagos() {
-		return null;
-	}
-
-	
 	public static boolean CrearNuevoPago(int lr, int u, Date fecha, float monto) {
 		//todo
 		return AdmPersistenciaParticipanteLista.getInstancia().CrearNuevoPago(lr,u,fecha,monto);

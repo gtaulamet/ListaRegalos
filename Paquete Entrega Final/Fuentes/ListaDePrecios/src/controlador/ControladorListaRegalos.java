@@ -12,6 +12,7 @@ import DTO.UsuarioDTO;
 import modelo.ListaDeRegalos;
 import modelo.ParticipanteLista;
 import modelo.Usuario;
+import persistencia.AdmPersistenciaListaRegalos;
 import persistencia.AdmPersistenciaParticipanteLista;
 
 
@@ -111,18 +112,51 @@ public class ControladorListaRegalos {
 	}
 	
 	public void EnviarEmailAgasajado(Date fecha) {
-		boolean proceso = ListaDeRegalos.SendMailListasAgasajo(fecha);
+		Map<Integer, ListaDeRegalosDTO> listas = ListaDeRegalos.getListasAgasajo(fecha);
+		
+		for (Map.Entry<Integer, ListaDeRegalosDTO> e : listas.entrySet()) {
+			SendMails(1,e.getValue().codigo); //tipo 1 = Agasajo
+		}
+		
 	}
 	
 	public void EnviarEmailInicioLista(Date fecha) {
-		boolean proceso = ListaDeRegalos.SendMailInicioLista(fecha);
+		Map<Integer, ListaDeRegalosDTO> listas = ListaDeRegalos.getListasInicio(fecha);
+		
+		for (Map.Entry<Integer, ListaDeRegalosDTO> e : listas.entrySet()) {
+			SendMails(3,e.getValue().codigo); //tipo 3 = Inicio
+		}
+		
 	}
 	
 	public void EnviarEmailProximoAVencer(Date fecha) {
-		boolean proceso = ListaDeRegalos.SendMailListaAVencer(fecha);
+		Map<Integer, ListaDeRegalosDTO> listas = ListaDeRegalos.getListasAVencer(fecha);
+		
+		for (Map.Entry<Integer, ListaDeRegalosDTO> e : listas.entrySet()) {
+			SendMails(2,e.getValue().codigo); //tipo 2 = A vencer
+		}
+		
 	}
 	
 	public void ModificarEstado(Date fecha) {
 		boolean proceso = ListaDeRegalos.ModificarEstadoLista(fecha);
+	}
+	
+	private static void SendMails(int i, int lr) {
+		// TODO Auto-generated method stub
+		DESPACHADORMAILS o = DESPACHADORMAILS.getInstancia();
+		ListaDeRegalosDTO lista = ListaDeRegalos.buscarLista(lr);
+		switch (i){
+			case 1:
+					o.SendMailAgasajo(lista);
+				break;
+			case 2: 
+					o.SendMailsProximoFinalizar(lista);
+				break;
+			case 3:
+					o.SendMailsInicio(lista);
+				break;
+			default: break;
+		}
 	}
 }

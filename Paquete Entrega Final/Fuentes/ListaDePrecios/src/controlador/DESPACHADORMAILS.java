@@ -1,7 +1,6 @@
 package controlador;
 import java.util.Map;
 
-import modelo.IObserverMail;
 import modelo.ListaDeRegalos;
 import modelo.ParticipanteLista;
 import java.util.Properties;
@@ -13,10 +12,11 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.swing.DebugGraphics;
 
+import DTO.ListaDeRegalosDTO;
 import DTO.ParticipanteListaDTO;
 
 
-public class DESPACHADORMAILS implements IObserverMail {
+public class DESPACHADORMAILS {
 	
 	private final Properties properties = new Properties();
 	private static DESPACHADORMAILS instancia;
@@ -34,10 +34,7 @@ public class DESPACHADORMAILS implements IObserverMail {
 	private String password;
 
 	private Session session;
-	
-	public static void main(String[] args) {
-		DESPACHADORMAILS d = new DESPACHADORMAILS();
-	}
+
 	
 	private void init() {
 
@@ -79,50 +76,48 @@ public class DESPACHADORMAILS implements IObserverMail {
 		
 	}
 	
-	@Override	
-	public void SendMailAgasajo(ListaDeRegalos l) {
-		String cuerpo="Felicitaciones "+l.getNombreAgasajado() + "Tienes un regalo de $" + l.getMontoRecaudado()+" para gastar. Saludos";
-		String destinatario= l.getMailAgasajado();
+	public void SendMailAgasajo(ListaDeRegalosDTO l) {
+		String cuerpo="Felicitaciones "+l.nombreAgasajado + "Tienes un regalo de $" + l.montoRecaudado+" para gastar. Saludos";
+		String destinatario= l.mailAgasajado;
 		String asunto = "Tienes un agasajo";
 		this.sendEmail(destinatario, asunto, cuerpo);
 	}
 
 
-	@Override
-	public void SendMailsInicio(ListaDeRegalos l) {
+	public void SendMailsInicio(ListaDeRegalosDTO l) {
 		
 		String cuerpo;
 		String destinatario="";
 		String asunto;
-		Map<Integer,ParticipanteLista> participantes =  l.GetParticipantes();
+		Map<Integer,ParticipanteListaDTO> participantes =  ControladorListaRegalos.GetInstance().BuscarParticipantesLista(l.codigo);
 		
-		cuerpo="Hola, Sos parte de la lista de regalo "+l.getCodigo() + ". Para agasajar a "+ l.getNombreAgasajado() +" Con un monto de $" + l.getMontoARecaudarXIntegrante()+". Saludos";
+		cuerpo="Hola, Sos parte de la lista de regalo "+l.codigo + ". Para agasajar a "+ l.nombreAgasajado +" Con un monto de $" + l.montoARecaudarXIntegrante+". Saludos";
 		asunto = "Participación para una nuevo agasajo";
-		for (Map.Entry<Integer, ParticipanteLista> e : participantes.entrySet()) {
+		for (Map.Entry<Integer, ParticipanteListaDTO> e : participantes.entrySet()) {
 		
 			
-			destinatario += e.getValue().getUsuario().getMail()+", ";
+			destinatario += e.getValue().usuario.mail+", ";
 		}
 			this.sendEmail(destinatario, asunto, cuerpo);
 		
 	}
 
-	@Override
-	public void SendMailsProximoFinalizar(ListaDeRegalos l) {
+	public void SendMailsProximoFinalizar(ListaDeRegalosDTO l) {
 		String cuerpo;
 		String destinatario="";
 		String asunto;
-		Map<Integer,ParticipanteLista> participantes =  l.GetParticipantesImpagos();
+		Map<Integer,ParticipanteListaDTO> participantes =  ListaDeRegalos.GetParticipantesImpagos(l.codigo);
 		
-		cuerpo="Hola, Sos parte de la lista de regalo "+l.getCodigo() + ". Para agasajar a "+ l.getNombreAgasajado() +" Con un monto de $" + l.getMontoARecaudarXIntegrante()+"."
-				+ " Tenes tiempo hasta el "+ l.getFechaFin() +" para realizar el pago. Saludos";
+		cuerpo="Hola, Sos parte de la lista de regalo "+l.codigo + ". Para agasajar a "+ l.nombreAgasajado +" Con un monto de $" + l.montoARecaudarXIntegrante+"."
+				+ " Tenes tiempo hasta el "+ l.fechaFin +" para realizar el pago. Saludos";
 		asunto = "Aviso de finalización de lista para agasajo";
-		for (Map.Entry<Integer, ParticipanteLista> e : participantes.entrySet()) {
+		for (Map.Entry<Integer, ParticipanteListaDTO> e : participantes.entrySet()) {
 		
 			
-			destinatario += e.getValue().getUsuario().getMail()+", ";
+			destinatario += e.getValue().usuario.mail+", ";
 		}
-			this.sendEmail(destinatario, asunto, cuerpo);
+		
+		this.sendEmail(destinatario, asunto, cuerpo);
 		
 		
 	}
